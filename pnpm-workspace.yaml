@@ -1,0 +1,9 @@
+# pnpm workspace configuration
+# Defines which directories contain packages in this monorepo
+
+packages:
+  # Applications (standalone apps, not publishable libraries)
+  - "apps/*"
+
+  # Publishable packages (@stargazer/core, @stargazer/cli, @stargazer/action)
+  - "packages/*"
