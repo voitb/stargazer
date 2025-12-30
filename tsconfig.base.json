@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Stargazer Base Config",
+  "compilerOptions": {
+    // Target modern JavaScript (Node 20+)
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+
+    // Strict type checking
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+
+    // Module interop
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+
+    // Declaration files
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+
+    // Skip lib checks for faster builds
+    "skipLibCheck": true
+  },
+  "exclude": ["node_modules", "dist", "build", ".turbo"]
+}

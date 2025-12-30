@@ -1,0 +1,20 @@
+{
+  "name": "@stargazer/action",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "GitHub Action for Stargazer - automated PR reviews",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "echo 'Placeholder - not yet implemented'",
+    "dev": "echo 'Placeholder - not yet implemented'",
+    "lint": "echo 'Placeholder - not yet implemented'",
+    "check": "echo 'Placeholder - not yet implemented'",
+    "test": "echo 'Placeholder - not yet implemented'"
+  },
+  "keywords": ["github-action", "code-review", "ai", "stargazer"],
+  "license": "MIT",
+  "dependencies": {
+    "@stargazer/core": "workspace:*"
+  }
+}
