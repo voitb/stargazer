@@ -48,11 +48,12 @@ throw new StargazerError('API_ERROR', 'Failed');
 // NEW (functional) - DO THIS
 // packages/core/src/shared/result.ts
 
-export type Result<T, E = StargazerError> =
+export type Result<T, E = ApiError> =
   | { readonly ok: true; readonly data: T }
   | { readonly ok: false; readonly error: E };
 
-export type StargazerError = {
+// Simple error type - no branded names, just structure
+export type ApiError = {
   readonly code: ErrorCode;
   readonly message: string;
   readonly cause?: unknown;
@@ -284,7 +285,7 @@ stargazer/
 │   │       │
 │   │       ├── shared/           # NO index.ts!
 │   │       │   ├── result.ts     # Result<T,E>, ok(), err()
-│   │       │   ├── types.ts      # Logger, common types
+│   │       │   ├── types.ts      # Common types
 │   │       │   └── errors.ts     # ErrorCode type
 │   │       │
 │   │       ├── gemini/           # NO index.ts!
@@ -444,7 +445,7 @@ export async function withRetry<T>(
   options: {
     maxRetries?: number;
     baseDelay?: number;
-    shouldRetry?: (error: StargazerError) => boolean;
+    shouldRetry?: (error: ApiError) => boolean;
   } = {}
 ): Promise<Result<T>> {
   const {
@@ -522,7 +523,7 @@ const result = await withRetry(
 
 // Result type
 export { ok, err, isOk, isErr } from './shared/result';
-export type { Result, StargazerError, ErrorCode } from './shared/result';
+export type { Result, ApiError, ErrorCode } from './shared/result';
 
 // Review
 export type { ReviewResult, Issue, IssueSeverity } from './review/types';
@@ -557,7 +558,7 @@ export type { Stargazer, StargazerOptions } from './stargazer';
 
 | Previous | New |
 |----------|-----|
-| `class StargazerError extends Error` | `type StargazerError = { code, message, cause }` |
+| `class StargazerError extends Error` | `type ApiError = { code, message, cause }` |
 | `class GeminiClient` | `createGeminiClient()` factory function |
 | `class Stargazer` | `createStargazer()` factory function |
 | Internal barrels (`index.ts` in folders) | NO internal barrels - direct imports only |

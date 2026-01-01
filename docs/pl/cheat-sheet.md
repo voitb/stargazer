@@ -22,10 +22,10 @@ export GEMINI_API_KEY=twoj-klucz-tutaj
 
 ```typescript
 import { ok, err } from './shared/result';
-import type { Result, StargazerError } from './shared/result';
+import type { Result, ApiError } from './shared/result';
 
 // Definicja
-type Result<T, E = StargazerError> =
+type Result<T, E = ApiError> =
   | { readonly ok: true; readonly data: T }
   | { readonly ok: false; readonly error: E };
 
@@ -229,7 +229,7 @@ packages/core/src/
 ├── index.ts                 # JEDYNY publiczny barrel
 ├── shared/                  # BEZ index.ts!
 │   ├── result.ts           # Result<T,E>, ok(), err()
-│   └── types.ts            # Logger, wspólne typy
+│   └── types.ts            # Wspólne typy
 ├── gemini/                  # BEZ index.ts!
 │   ├── client.ts           # createGeminiClient()
 │   └── types.ts            # Interfejs GeminiClient
@@ -273,7 +273,7 @@ packages/core/src/
 ### Tworzenie Błędu
 
 ```typescript
-const createError = (code: ErrorCode, message: string, cause?: unknown): StargazerError =>
+const createError = (code: ErrorCode, message: string, cause?: unknown): ApiError =>
   ({ code, message, cause });
 ```
 

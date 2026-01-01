@@ -41,11 +41,12 @@ throw new StargazerError('API_ERROR', 'Failed');
 // NOWE (funkcyjne) - RÓB TO
 // packages/core/src/shared/result.ts
 
-export type Result<T, E = StargazerError> =
+export type Result<T, E = ApiError> =
   | { readonly ok: true; readonly data: T }
   | { readonly ok: false; readonly error: E };
 
-export type StargazerError = {
+// Prosty typ błędu - bez brandowanych nazw
+export type ApiError = {
   readonly code: ErrorCode;
   readonly message: string;
   readonly cause?: unknown;
@@ -221,7 +222,7 @@ stargazer/
 │   │       │
 │   │       ├── shared/           # BEZ index.ts!
 │   │       │   ├── result.ts     # Result<T,E>, ok(), err()
-│   │       │   ├── types.ts      # Logger, wspólne typy
+│   │       │   ├── types.ts      # Wspólne typy
 │   │       │   └── errors.ts     # Typ ErrorCode
 │   │       │
 │   │       ├── gemini/           # BEZ index.ts!
@@ -412,7 +413,7 @@ export function createGeminiClient(
 
 // Typ Result
 export { ok, err, isOk, isErr } from './shared/result';
-export type { Result, StargazerError, ErrorCode } from './shared/result';
+export type { Result, ApiError, ErrorCode } from './shared/result';
 
 // Review
 export type { ReviewResult, Issue, IssueSeverity } from './review/types';
@@ -447,7 +448,7 @@ export type { Stargazer, StargazerOptions } from './stargazer';
 
 | Poprzednie | Nowe |
 |------------|------|
-| `class StargazerError extends Error` | `type StargazerError = { code, message, cause }` |
+| `class StargazerError extends Error` | `type ApiError = { code, message, cause }` |
 | `class GeminiClient` | `createGeminiClient()` factory function |
 | `class Stargazer` | `createStargazer()` factory function |
 | Wewnętrzne barrel files (`index.ts` w folderach) | BEZ wewnętrznych barrels - tylko bezpośrednie importy |

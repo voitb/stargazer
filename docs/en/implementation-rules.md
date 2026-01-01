@@ -33,7 +33,7 @@
 
 ```typescript
 import { ok, err } from '../shared/result';
-import type { Result, StargazerError } from '../shared/result';
+import type { Result, ApiError } from '../shared/result';
 
 // ❌ WRONG - throws exception
 async function getData(): Promise<Data> {

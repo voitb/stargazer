@@ -562,11 +562,12 @@ Tech Stack:
 // Result Type - Functional Error Handling
 // ============================================
 
-export type Result<T, E = StargazerError> =
+export type Result<T, E = ApiError> =
   | { readonly ok: true; readonly data: T }
   | { readonly ok: false; readonly error: E };
 
-export type StargazerError = {
+// Simple error type - no branded names
+export type ApiError = {
   readonly code: ErrorCode;
   readonly message: string;
   readonly cause?: unknown;
@@ -606,7 +607,7 @@ export const createError = (
   code: ErrorCode,
   message: string,
   cause?: unknown
-): StargazerError => ({ code, message, cause });
+): ApiError => ({ code, message, cause });
 ```
 
 ### 7.1 packages/core/src/gemini/client.ts (Functional)
@@ -1319,8 +1320,7 @@ function trimToTokenLimit(
 
 // Result type (functional error handling)
 export { ok, err, isOk, isErr } from './shared/result';          // direct!
-export type { Result, StargazerError, ErrorCode } from './shared/result';
-export type { Logger } from './shared/types';
+export type { Result, ApiError, ErrorCode } from './shared/result';
 
 // Review types & functions
 export type { ReviewResult, Issue, IssueSeverity, IssueCategory, ReviewContext } from './review/types';

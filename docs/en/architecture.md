@@ -35,11 +35,12 @@ We use Tagged Unions for explicit error handling instead of exceptions:
 
 ```typescript
 // types/result.ts
-export type Result<T, E = StargazerError> =
+export type Result<T, E = ApiError> =
   | { readonly ok: true; readonly data: T }
   | { readonly ok: false; readonly error: E };
 
-export type StargazerError = {
+// Simple error type - no branded names
+export type ApiError = {
   readonly code: ErrorCode;
   readonly message: string;
   readonly cause?: unknown;
