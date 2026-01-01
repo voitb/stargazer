@@ -1,6 +1,7 @@
 import { createServerFn } from '@tanstack/react-start'
-import { loadBoard, getTasksDir } from '../lib/board-loader'
-import type { Board } from '../lib/schemas/task'
+import { loadBoard } from '../lib/board-loader'
+import { resolveConfigSync, getTasksDir, getColumns } from '../lib/config'
+import type { Board } from '@/schemas/task'
 
 /**
  * Server function to get the Kanban board with all tasks
@@ -8,6 +9,11 @@ import type { Board } from '../lib/schemas/task'
  * This function runs only on the server and has access to the file system.
  * It reads all markdown files from the tasks directory and returns them
  * organized by column.
+ *
+ * Configuration is loaded from:
+ * 1. Environment variables (LUNAMARK_TASKS_DIR)
+ * 2. lunamark.config.ts file
+ * 3. Default values
  *
  * @example
  * ```tsx
@@ -17,7 +23,13 @@ import type { Board } from '../lib/schemas/task'
  */
 export const getBoard = createServerFn({ method: 'GET' }).handler(
   async (): Promise<Board> => {
-    const tasksDir = getTasksDir()
-    return loadBoard(tasksDir)
+    // Resolve configuration (finds config file, applies env vars)
+    const config = resolveConfigSync()
+
+    // Get resolved paths from config
+    const tasksDir = getTasksDir(config)
+    const columns = getColumns(config)
+
+    return loadBoard({ tasksDir, columns })
   }
 )

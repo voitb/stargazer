@@ -1,5 +1,8 @@
 # Architecture
 
+> **TL;DR**: 100% functional (no classes), `Result<T, E>` for errors, Vite-style plugin hooks,
+> Zod 4 with OpenAPI 3.0 target. For details, see [State-of-the-Art Architecture](./state-of-art-architecture.md).
+
 Stargazer follows a **100% functional architecture** with modern TypeScript patterns.
 
 ## Core Principles

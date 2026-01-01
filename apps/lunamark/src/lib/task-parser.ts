@@ -1,5 +1,5 @@
 import matter from 'gray-matter'
-import { TaskMetadataSchema, type Task, type TaskMetadata } from './schemas/task'
+import { TaskMetadataSchema, type Task, type TaskMetadata } from '@/schemas/task'
 
 /**
  * Result type for operations that can fail

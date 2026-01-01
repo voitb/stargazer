@@ -5,23 +5,42 @@ import {
   DEFAULT_COLUMNS,
   type Board,
   type Column,
+  type ColumnConfig,
   type Task,
   type TaskStatus,
-} from './schemas/task'
+} from '@/schemas/task'
+
+/**
+ * Options for loading the board
+ */
+export interface LoadBoardOptions {
+  /** Absolute path to the tasks directory */
+  tasksDir: string
+  /** Custom column configuration (optional, defaults to DEFAULT_COLUMNS) */
+  columns?: ColumnConfig[]
+}
 
 /**
  * Load all tasks from a directory and organize them into a Board
  *
- * @param tasksDir - Absolute path to the tasks directory
+ * @param options - Load options with tasksDir and optional columns
  * @returns Board with tasks organized by column
  *
  * @example
  * ```ts
- * const board = await loadBoard('/path/to/tasks')
- * console.log(board.columns[0].tasks.length)
+ * // Basic usage
+ * const board = await loadBoard({ tasksDir: '/path/to/tasks' })
+ *
+ * // With custom columns
+ * const board = await loadBoard({
+ *   tasksDir: '/path/to/tasks',
+ *   columns: [{ id: 'todo', title: 'To Do', color: 'gray' }, ...]
+ * })
  * ```
  */
-export async function loadBoard(tasksDir: string): Promise<Board> {
+export async function loadBoard(options: LoadBoardOptions): Promise<Board> {
+  const { tasksDir, columns: columnConfig = DEFAULT_COLUMNS } = options
+
   // Ensure directory exists
   if (!fs.existsSync(tasksDir)) {
     await fs.promises.mkdir(tasksDir, { recursive: true })
@@ -33,7 +52,6 @@ export async function loadBoard(tasksDir: string): Promise<Board> {
 
   // Parse each file into a Task
   const tasks: Task[] = []
-  const errors: string[] = []
 
   for (const file of mdFiles) {
     const filePath = path.join(tasksDir, file)
@@ -43,7 +61,6 @@ export async function loadBoard(tasksDir: string): Promise<Board> {
     if (result.ok) {
       tasks.push(result.data)
     } else {
-      errors.push(result.error)
       console.warn(`[Lunamark] ${result.error}`)
     }
   }
@@ -52,7 +69,7 @@ export async function loadBoard(tasksDir: string): Promise<Board> {
   const tasksByStatus = groupTasksByStatus(tasks)
 
   // Build columns with tasks
-  const columns: Column[] = DEFAULT_COLUMNS.map((config) => ({
+  const columns: Column[] = columnConfig.map((config) => ({
     ...config,
     tasks: sortTasksByOrder(tasksByStatus.get(config.id) || []),
   }))
@@ -128,21 +145,5 @@ export async function findTaskFilePath(
   return task?.filePath || null
 }
 
-/**
- * Get the tasks directory path from environment or default
- *
- * Uses import.meta.dirname to resolve relative to the source file location,
- * not process.cwd() which can vary based on where the command was run from.
- */
-export function getTasksDir(): string {
-  // Check environment variable first
-  const envDir = process.env.LUNAMARK_TASKS_DIR
-
-  if (envDir) {
-    return path.isAbsolute(envDir) ? envDir : path.resolve(process.cwd(), envDir)
-  }
-
-  // Resolve relative to the app's root (2 levels up from src/lib/)
-  const appRoot = path.resolve(import.meta.dirname, '..', '..')
-  return path.resolve(appRoot, 'tasks')
-}
+// Note: getTasksDir() has been moved to src/lib/config.ts
+// Import from there: import { getTasksDir, resolveConfigSync } from './config'
