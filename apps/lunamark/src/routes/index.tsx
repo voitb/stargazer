@@ -1,9 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { getBoard } from '../server/board'
-import { KanbanBoard } from '../components/KanbanBoard'
+import { getBoard } from '@/server/board'
+import { KanbanBoard } from '@/components/kanban/KanbanBoard'
+import { useBoard } from '@/hooks/useBoard'
 
 export const Route = createFileRoute('/')({
-  // Load board data on the server before rendering
+  // Load board data on the server before rendering (SSR)
   loader: async () => {
     return { board: await getBoard() }
   },
@@ -11,7 +12,12 @@ export const Route = createFileRoute('/')({
 })
 
 function BoardPage() {
-  const { board } = Route.useLoaderData()
+  // Use loader data as initial/fallback, but subscribe to React Query for updates
+  const { board: loaderBoard } = Route.useLoaderData()
+  const { data: queryBoard } = useBoard()
+
+  // Prefer React Query data (for updates after mutations), fall back to loader data
+  const board = queryBoard ?? loaderBoard
 
   return (
     <div className="min-h-screen bg-gray-100">

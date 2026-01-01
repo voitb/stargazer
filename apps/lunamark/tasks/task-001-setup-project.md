@@ -1,14 +1,15 @@
 ---
 id: task-001
 title: Set up project structure
-status: done
+status: in-progress
 priority: high
-labels: [setup, infrastructure]
-assignee: alex
-created: 2025-01-15
+labels:
+  - setup
+  - infrastructure
+created: '2025-01-15'
 order: 10
+assignee: alex
 ---
-
 ## Description
 
 Initialize the Lunamark project with TanStack Start and set up the basic folder structure.

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import { getBoard } from '../serverFunctions/board'
-import type { Board } from '../lib/schemas/task'
+import { getBoard } from '../server/board'
+import type { Board } from '@/schemas/task'
 
 /**
  * Query key for the board data

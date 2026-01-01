@@ -1,14 +1,15 @@
 ---
 id: task-003
 title: Build Kanban board UI
-status: in-progress
+status: review
 priority: high
-labels: [frontend, ui]
+labels:
+  - frontend
+  - ui
+created: '2025-01-15'
+order: 30
 assignee: sam
-created: 2025-01-15
-order: 10
 ---
-
 ## Description
 
 Create the main Kanban board interface with columns and draggable task cards.

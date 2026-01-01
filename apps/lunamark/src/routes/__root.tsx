@@ -1,10 +1,22 @@
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
+import {
+  HeadContent,
+  Outlet,
+  Scripts,
+  createRootRouteWithContext,
+} from '@tanstack/react-router'
+import { QueryClientProvider, type QueryClient } from '@tanstack/react-query'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
+import { useFileWatcher } from '@/hooks/useFileWatcher'
 
-import appCss from '../styles.css?url'
+import appCss from '@/styles.css?url'
 
-export const Route = createRootRoute({
+/**
+ * Root route with QueryClient context for TanStack Query integration
+ */
+export const Route = createRootRouteWithContext<{
+  queryClient: QueryClient
+}>()({
   head: () => ({
     meta: [
       {
@@ -26,8 +38,32 @@ export const Route = createRootRoute({
     ],
   }),
 
-  shellComponent: RootDocument,
+  component: RootComponent,
 })
+
+function RootComponent() {
+  const { queryClient } = Route.useRouteContext()
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <FileWatcherProvider>
+        <RootDocument>
+          <Outlet />
+        </RootDocument>
+      </FileWatcherProvider>
+    </QueryClientProvider>
+  )
+}
+
+/**
+ * Wrapper component that enables real-time file watching
+ * Must be inside QueryClientProvider since it uses useQueryClient
+ */
+function FileWatcherProvider({ children }: { children: React.ReactNode }) {
+  // Enable file watching for real-time sync with external editors
+  useFileWatcher({ enabled: true, debounceMs: 200 })
+  return <>{children}</>
+}
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (

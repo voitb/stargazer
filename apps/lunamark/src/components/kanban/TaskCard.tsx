@@ -1,9 +1,16 @@
 import { useSortable } from '@dnd-kit/react/sortable'
-import type { Task, TaskPriority } from '../lib/schemas/task'
+import type { Task, TaskPriority } from '@/schemas/task'
+import { DropIndicator } from './DropIndicator'
 
 interface TaskCardProps {
   task: Task
   column: string
+  /** Array index within the column (not task.metadata.order) */
+  index: number
+  /** Whether this is the last task in the column (shows bottom drop indicator) */
+  isLast?: boolean
+  /** Callback when the card is clicked (for editing) */
+  onClick?: () => void
 }
 
 /**
@@ -18,11 +25,15 @@ const priorityColors: Record<TaskPriority, string> = {
 
 /**
  * Draggable task card for the Kanban board
+ *
+ * Uses @dnd-kit/react for accessible drag-and-drop.
+ * The index prop should be the position in the column's task array,
+ * NOT task.metadata.order (which is for persistence sorting).
  */
-export function TaskCard({ task, column }: TaskCardProps) {
-  const { ref, isDragging } = useSortable({
+export function TaskCard({ task, column, index, isLast, onClick }: TaskCardProps) {
+  const { ref, isDragging, isDropTarget } = useSortable({
     id: task.id,
-    index: task.metadata.order,
+    index, // Use actual array position, not metadata.order
     group: column,
     type: 'item',
     accept: ['item'],
@@ -30,16 +41,18 @@ export function TaskCard({ task, column }: TaskCardProps) {
   })
 
   return (
-    <div
-      ref={ref}
-      className={`
-        bg-white rounded-lg border border-gray-200 p-3 shadow-sm
-        cursor-grab active:cursor-grabbing
-        transition-all duration-200
-        hover:shadow-md hover:border-gray-300
-        ${isDragging ? 'opacity-50 shadow-lg ring-2 ring-blue-400' : ''}
-      `}
-    >
+    <div ref={ref}>
+      <DropIndicator isVisible={isDropTarget} />
+      <div
+        onClick={onClick}
+        className={`
+          bg-white rounded-lg border border-gray-200 p-3 shadow-sm
+          cursor-grab active:cursor-grabbing
+          transition-all duration-200
+          hover:shadow-md hover:border-gray-300
+          ${isDragging ? 'opacity-50 shadow-lg ring-2 ring-blue-400' : ''}
+        `}
+      >
       {/* Title */}
       <h3 className="font-medium text-gray-900 text-sm mb-2 line-clamp-2">
         {task.metadata.title}
@@ -95,6 +108,9 @@ export function TaskCard({ task, column }: TaskCardProps) {
           </span>
         )}
       </div>
+    </div>
+      {/* Show bottom drop indicator for last item in column */}
+      {isLast && <DropIndicator isVisible={isDropTarget && !isDragging} />}
     </div>
   )
 }
