@@ -52,11 +52,16 @@ export type StargazerError = {
 };
 
 export type ErrorCode =
-  | 'API_ERROR'
-  | 'SCHEMA_VALIDATION'
-  | 'CONFIG_INVALID'
-  | 'GIT_ERROR'
-  | 'RATE_LIMITED';
+  | 'API_ERROR'           // Błąd API Gemini
+  | 'SCHEMA_VALIDATION'   // Walidacja Zod nie powiodła się
+  | 'CONFIG_INVALID'      // Nieprawidłowa konfiguracja
+  | 'GIT_ERROR'           // Operacja Git nie powiodła się
+  | 'RATE_LIMITED'        // Limit API (429)
+  | 'UNAUTHORIZED'        // Nieprawidłowy klucz API (401)
+  | 'BAD_REQUEST'         // Nieprawidłowe żądanie (400)
+  | 'EMPTY_RESPONSE'      // API zwróciło pustą odpowiedź
+  | 'TIMEOUT'             // Przekroczono limit czasu
+  | 'FILE_NOT_FOUND';     // Plik nie istnieje
 
 // Funkcje pomocnicze
 export const ok = <T>(data: T): Result<T, never> => ({ ok: true, data });

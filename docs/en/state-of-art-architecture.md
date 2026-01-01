@@ -1,12 +1,19 @@
 # Stargazer - State-of-the-Art Architecture
 
+> **TL;DR**: Use `Result<T, E>` for errors (never throw), factory functions `createX()` (no classes),
+> direct imports `'../shared/result'` (no barrels), Zod 4 with `z.toJSONSchema(schema, { target: 'openapi-3.0' })`.
+> See [Implementation Rules](./implementation-rules.md) and [Cheat Sheet](./cheat-sheet.md) for quick reference.
+
 ## Executive Summary
 
 Architecture refactored from class-based to **100% functional approach** with Tagged Unions, simple plugin system (Vite-style), and Zod 4.
 
-**Scope**: MVP for hackathon (Core + CLI + Action)
-**License**: Full MIT open source
-**Monetization**: Hosting-as-a-Service + Usage-based billing (future)
+| Aspect | Details |
+|--------|---------|
+| **Scope** | MVP for hackathon (Core + CLI + Action) |
+| **License** | MIT open source |
+| **Monetization** | Hosting-as-a-Service (future) |
+| **Tech Stack** | TypeScript 5.x, Zod 4, @google/genai, pnpm + Turborepo |
 
 ---
 
@@ -52,11 +59,16 @@ export type StargazerError = {
 };
 
 export type ErrorCode =
-  | 'API_ERROR'
-  | 'SCHEMA_VALIDATION'
-  | 'CONFIG_INVALID'
-  | 'GIT_ERROR'
-  | 'RATE_LIMITED';
+  | 'API_ERROR'           // Gemini API call failed
+  | 'SCHEMA_VALIDATION'   // Zod validation failed
+  | 'CONFIG_INVALID'      // Invalid configuration
+  | 'GIT_ERROR'           // Git operation failed
+  | 'RATE_LIMITED'        // API rate limit hit (429)
+  | 'UNAUTHORIZED'        // API key invalid (401)
+  | 'BAD_REQUEST'         // Malformed request (400)
+  | 'EMPTY_RESPONSE'      // API returned empty response
+  | 'TIMEOUT'             // Request timed out
+  | 'FILE_NOT_FOUND';     // File doesn't exist
 
 // Helper functions
 export const ok = <T>(data: T): Result<T, never> => ({ ok: true, data });
@@ -83,6 +95,62 @@ if (!result.ok) {
   return;
 }
 console.log(result.data); // TypeScript knows it's ReviewResult
+```
+
+---
+
+## Visual Overview
+
+### Data Flow (PR Review)
+
+```mermaid
+graph LR
+    A[PR Opened] --> B[Get Diff]
+    B --> C[Select Context]
+    C --> D[Load Conventions]
+    D --> E[beforeReview Hook]
+    E --> F[Gemini API]
+    F --> G[filterIssues Hook]
+    G --> H[afterReview Hook]
+    H --> I[Post Review]
+```
+
+### Package Dependencies
+
+```mermaid
+graph TD
+    CLI["@stargazer/cli"] --> Core["@stargazer/core"]
+    Action["@stargazer/action"] --> Core
+    Core --> Zod["zod/v4"]
+    Core --> Gemini["@google/genai"]
+```
+
+### Plugin Hook Execution Order
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Stargazer
+    participant Plugin1
+    participant Plugin2
+    participant Gemini
+
+    User->>Stargazer: review(context)
+    Stargazer->>Plugin1: beforeReview(ctx)
+    Plugin1-->>Stargazer: modified ctx
+    Stargazer->>Plugin2: beforeReview(ctx)
+    Plugin2-->>Stargazer: modified ctx
+    Stargazer->>Gemini: generate(prompt, schema)
+    Gemini-->>Stargazer: ReviewResult
+    Stargazer->>Plugin1: filterIssues(issues)
+    Plugin1-->>Stargazer: filtered issues
+    Stargazer->>Plugin2: filterIssues(issues)
+    Plugin2-->>Stargazer: filtered issues
+    Stargazer->>Plugin1: afterReview(result)
+    Plugin1-->>Stargazer: modified result
+    Stargazer->>Plugin2: afterReview(result)
+    Plugin2-->>Stargazer: final result
+    Stargazer-->>User: Result<ReviewResult>
 ```
 
 ---
@@ -360,6 +428,53 @@ export function createGeminiClient(
     },
   };
 }
+```
+
+### Retry Logic with Exponential Backoff
+
+For handling rate limits gracefully:
+
+```typescript
+// packages/core/src/shared/retry.ts
+
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+export async function withRetry<T>(
+  fn: () => Promise<Result<T>>,
+  options: {
+    maxRetries?: number;
+    baseDelay?: number;
+    shouldRetry?: (error: StargazerError) => boolean;
+  } = {}
+): Promise<Result<T>> {
+  const {
+    maxRetries = 3,
+    baseDelay = 1000,
+    shouldRetry = (e) => e.code === 'RATE_LIMITED',
+  } = options;
+
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    const result = await fn();
+
+    // Success or non-retryable error
+    if (result.ok || !shouldRetry(result.error)) {
+      return result;
+    }
+
+    // Wait with exponential backoff before retry
+    const delay = baseDelay * Math.pow(2, attempt);
+    await sleep(delay);
+  }
+
+  // Final attempt
+  return fn();
+}
+
+// Usage
+const result = await withRetry(
+  () => geminiClient.generate(prompt, Schema),
+  { maxRetries: 3, baseDelay: 1000 }
+);
 ```
 
 ---

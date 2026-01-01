@@ -1,0 +1,24 @@
+{
+  "name": "@stargazer/core",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Core review engine library for Stargazer - AI-powered code review",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "echo 'Placeholder - not yet implemented'",
+    "dev": "echo 'Placeholder - not yet implemented'",
+    "lint": "echo 'Placeholder - not yet implemented'",
+    "check": "echo 'Placeholder - not yet implemented'",
+    "test": "echo 'Placeholder - not yet implemented'"
+  },
+  "keywords": ["code-review", "ai", "gemini", "stargazer"],
+  "license": "MIT"
+}
