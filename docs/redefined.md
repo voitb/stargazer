@@ -573,12 +573,16 @@ export type StargazerError = {
 };
 
 export type ErrorCode =
-  | 'API_ERROR'
-  | 'SCHEMA_VALIDATION'
-  | 'CONFIG_INVALID'
-  | 'GIT_ERROR'
-  | 'RATE_LIMITED'
-  | 'FILE_NOT_FOUND';
+  | 'API_ERROR'           // Gemini API call failed
+  | 'SCHEMA_VALIDATION'   // Zod validation failed
+  | 'CONFIG_INVALID'      // Invalid configuration
+  | 'GIT_ERROR'           // Git operation failed
+  | 'RATE_LIMITED'        // API rate limit hit (429)
+  | 'UNAUTHORIZED'        // API key invalid (401)
+  | 'BAD_REQUEST'         // Malformed request (400)
+  | 'EMPTY_RESPONSE'      // API returned empty response
+  | 'TIMEOUT'             // Request timed out
+  | 'FILE_NOT_FOUND';     // File doesn't exist
 
 // ============================================
 // Helper Functions
@@ -866,7 +870,7 @@ ${f.content}
   const fullPrompt = DISCOVERY_PROMPT + codeContext;
 
   // Use Pro model for discovery (more accurate, one-time cost)
-  const result = await geminiClient.generateStructured(
+  const result = await geminiClient.generate(
     fullPrompt,
     ProjectConventionsSchema,
     { model: "pro", temperature: 0.1 }
@@ -1017,7 +1021,7 @@ export async function reviewPullRequest(
   });
 
   // Call Gemini
-  const rawResult = await geminiClient.generateStructured(
+  const rawResult = await geminiClient.generate(
     prompt,
     ReviewResultSchema,
     {

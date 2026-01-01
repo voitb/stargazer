@@ -1,0 +1,22 @@
+{
+  "name": "@stargazer/cli",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Command-line tool for Stargazer - local code review",
+  "bin": {
+    "stargazer": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "echo 'Placeholder - not yet implemented'",
+    "dev": "echo 'Placeholder - not yet implemented'",
+    "lint": "echo 'Placeholder - not yet implemented'",
+    "check": "echo 'Placeholder - not yet implemented'",
+    "test": "echo 'Placeholder - not yet implemented'"
+  },
+  "keywords": ["cli", "code-review", "ai", "stargazer"],
+  "license": "MIT",
+  "dependencies": {
+    "@stargazer/core": "workspace:*"
+  }
+}
