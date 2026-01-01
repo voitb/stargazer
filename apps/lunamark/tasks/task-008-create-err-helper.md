@@ -1,13 +1,13 @@
 ---
 id: task-008
 title: Create err() helper
-status: todo
+status: done
 priority: high
 labels:
   - core
   - helpers
 created: '2026-01-01'
-order: 80
+order: 16250
 ---
 ## Description
 
@@ -15,7 +15,7 @@ Create the `err()` helper function for creating error results.
 
 ## Acceptance Criteria
 
-- [ ] Add `err()` to `packages/core/src/shared/result.ts`
+- [x] Add `err()` to `packages/core/src/shared/result.ts`
 - [ ] Add unit test
 - [ ] Test passes
 

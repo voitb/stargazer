@@ -1,6 +1,6 @@
+import { useRef } from 'react'
 import { move } from '@dnd-kit/helpers'
-import type { Task, TaskStatus } from '@/schemas/task'
-import type { MoveTaskInput } from '@/schemas/task'
+import type { Task, TaskStatus, MoveTaskInput } from '@/schemas/task'
 import { findTaskColumn } from '@/lib/dnd/utils'
 import { calculateNewOrder } from '@/lib/kanban/task-ordering'
 
@@ -13,14 +13,6 @@ interface UseDragHandlersParams {
   setActiveTask: (task: Task | null) => void
 }
 
-/**
- * Hook that provides drag-and-drop event handlers for the Kanban board
- *
- * Handles:
- * - dragStart: Sets active task for DragOverlay
- * - dragOver: Updates local items state for visual reordering
- * - dragEnd: Persists changes to server and clears active task
- */
 export function useDragHandlers({
   items,
   setItems,
@@ -29,9 +21,15 @@ export function useDragHandlers({
   moveTask,
   setActiveTask,
 }: UseDragHandlersParams) {
+  const currentItems = useRef<Record<TaskStatus, string[]>>(items)
+  const dragStartItems = useRef<Record<TaskStatus, string[]>>(items)
 
   function handleDragStart(event: Parameters<typeof move>[1]) {
     const { source } = event.operation
+
+    dragStartItems.current = { ...items }
+    currentItems.current = { ...items }
+
     if (source?.type === 'item') {
       const task = tasksMap.get(source.id as string)
       setActiveTask(task ?? null)
@@ -40,17 +38,18 @@ export function useDragHandlers({
 
   function handleDragOver(event: Parameters<typeof move>[1]) {
     const { source } = event.operation
-
-    // Only handle item drags, not column drags
     if (source?.type === 'column') return
 
-    setItems((current) => move(current, event))
+    setItems((current) => {
+      const next = move(current, event)
+      currentItems.current = next
+      return next
+    })
   }
 
   function handleDragEnd(event: Parameters<typeof move>[1]) {
     const { source } = event.operation
 
-    // Only handle item drags
     if (source?.type === 'column' || !source) {
       setActiveTask(null)
       return
@@ -58,26 +57,32 @@ export function useDragHandlers({
 
     const taskId = source.id as string
 
-    // Find which column the task is now in from the updated items state
-    const newStatus = findTaskColumn(items, taskId)
-    if (!newStatus) {
+    if ('canceled' in event && event.canceled) {
+      setItems(dragStartItems.current)
       setActiveTask(null)
       return
     }
 
-    // Calculate new order based on position in the column
-    const columnItems = items[newStatus] || []
+    const finalItems = currentItems.current
+
+    const newStatus = findTaskColumn(finalItems, taskId)
+    if (!newStatus) {
+      setItems(dragStartItems.current)
+      setActiveTask(null)
+      return
+    }
+
+    const columnItems = finalItems[newStatus]
     const taskIndex = columnItems.indexOf(taskId)
-    const newOrder = calculateNewOrder(taskIndex)
+    const prevTaskId = columnItems[taskIndex - 1]
+    const nextTaskId = columnItems[taskIndex + 1]
 
-    // Persist to server
-    moveTask({
-      taskId,
-      newStatus,
-      newOrder,
-    })
+    const prevOrder = prevTaskId ? tasksMap.get(prevTaskId)?.metadata.order : undefined
+    const nextOrder = nextTaskId ? tasksMap.get(nextTaskId)?.metadata.order : undefined
+    const newOrder = calculateNewOrder(prevOrder, nextOrder)
 
-    // Update local tasksMap with new status/order
+    moveTask({ taskId, newStatus, newOrder })
+
     setTasksMap((prev) => {
       const task = prev.get(taskId)
       if (!task) return prev
@@ -85,11 +90,7 @@ export function useDragHandlers({
       const updated = new Map(prev)
       updated.set(taskId, {
         ...task,
-        metadata: {
-          ...task.metadata,
-          status: newStatus,
-          order: newOrder,
-        },
+        metadata: { ...task.metadata, status: newStatus, order: newOrder },
       })
       return updated
     })

@@ -1,13 +1,13 @@
 ---
 id: task-006
 title: Create Result type
-status: todo
+status: done
 priority: high
 labels:
   - core
   - types
 created: '2026-01-01'
-order: 60
+order: 17500
 ---
 ## Description
 
@@ -15,9 +15,9 @@ Create the `Result<T, E>` tagged union type for functional error handling.
 
 ## Acceptance Criteria
 
-- [ ] Create `packages/core/src/shared/result.ts`
-- [ ] Define `Result<T, E>` type
-- [ ] TypeScript compiles with correct type inference
+- [x] Create `packages/core/src/shared/result.ts`
+- [x] Define `Result<T, E>` type
+- [x] TypeScript compiles with correct type inference
 
 ## Implementation
 

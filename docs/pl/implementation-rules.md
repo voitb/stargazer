@@ -12,6 +12,7 @@
 | Zod | `import * as z from 'zod/v4'` | `import { z } from 'zod'` |
 | Gemini | `responseJsonSchema` | `responseSchema` |
 | Typy | właściwości `readonly` | mutowalne interfejsy |
+| Komentarze | Minimalne inline `//` | Bloki JSDoc, nadmierna dokumentacja |
 
 ---
 
@@ -451,6 +452,28 @@ export type ErrorCode =
 
 ---
 
+## 11. Jakość Kodu (Bez AI Slop)
+
+### MUSI
+
+- ✅ Pisz kod, który napisałby człowiek
+- ✅ Podążaj za istniejącymi wzorcami w pliku
+- ✅ Komentarze minimalne i znaczące
+- ✅ Używaj prostych, bezpośrednich rozwiązań
+- ✅ Łatwy do przeczytania i zrozumienia
+- ✅ Bezpieczeństwo utrzymane odpowiednio
+
+### NIGDY
+
+- ❌ NIE dodawaj komentarzy, których człowiek by nie dodał
+- ❌ NIE używaj defensywnych try/catch w zaufanych/zwalidowanych ścieżkach kodu
+- ❌ NIE używaj `as any` do obejścia problemów z typami
+- ❌ NIE pisz niespójnego stylu z resztą pliku
+- ❌ NIE twórz nadmiernie skomplikowanych rozwiązań
+- ❌ NIE używaj bloków JSDoc (używaj inline comments oszczędnie)
+
+---
+
 ## Checklista NIGDY NIE RÓB
 
 1. ❌ NIGDY nie używaj `console.log` w kodzie biblioteki (tylko w CLI)
@@ -478,3 +501,5 @@ export type ErrorCode =
 - [ ] Tylko named exports (brak default exports)
 - [ ] Spójne konwencje nazewnictwa
 - [ ] Wszystkie funkcje async używają async/await
+- [ ] Brak bloków JSDoc, minimalne komentarze
+- [ ] Kod wygląda jak napisany przez człowieka (bez AI slop)

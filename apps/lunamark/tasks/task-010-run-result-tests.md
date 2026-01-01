@@ -1,13 +1,13 @@
 ---
 id: task-010
 title: Run all Result tests
-status: todo
+status: done
 priority: high
 labels:
   - core
   - testing
 created: '2026-01-01'
-order: 100
+order: 55
 ---
 ## Description
 
@@ -15,8 +15,8 @@ Verify all Result type helpers pass tests.
 
 ## Acceptance Criteria
 
-- [ ] All tests in `result.test.ts` pass
-- [ ] TypeScript compiles without errors
+- [x] All tests in `result.test.ts` pass (15 tests)
+- [x] TypeScript compiles without errors
 
 ## Test
 

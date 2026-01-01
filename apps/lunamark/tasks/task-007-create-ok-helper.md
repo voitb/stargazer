@@ -1,13 +1,13 @@
 ---
 id: task-007
 title: Create ok() helper
-status: todo
+status: done
 priority: high
 labels:
   - core
   - helpers
 created: '2026-01-01'
-order: 70
+order: 12500
 ---
 ## Description
 
@@ -15,7 +15,7 @@ Create the `ok()` helper function for creating success results.
 
 ## Acceptance Criteria
 
-- [ ] Add `ok()` to `packages/core/src/shared/result.ts`
+- [x] Add `ok()` to `packages/core/src/shared/result.ts`
 - [ ] Add unit test in `packages/core/src/shared/result.test.ts`
 - [ ] Test passes
 

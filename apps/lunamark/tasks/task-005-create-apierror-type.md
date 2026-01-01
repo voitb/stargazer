@@ -1,13 +1,13 @@
 ---
 id: task-005
 title: Create ApiError type
-status: todo
+status: done
 priority: high
 labels:
   - core
   - types
 created: '2026-01-01'
-order: 50
+order: 15000
 ---
 ## Description
 
@@ -15,8 +15,8 @@ Create the simple `ApiError` type for error handling.
 
 ## Acceptance Criteria
 
-- [ ] Add `ApiError` type to `packages/core/src/shared/error-codes.ts`
-- [ ] TypeScript compiles
+- [x] Add `ApiError` type to `packages/core/src/shared/error-codes.ts`
+- [x] TypeScript compiles
 
 ## Implementation
 

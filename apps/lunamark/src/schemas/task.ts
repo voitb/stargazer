@@ -39,7 +39,7 @@ export const TaskMetadataSchema = z.object({
   assignee: z.string().optional().nullable(),
   created: dateToString.optional().default(() => new Date().toISOString().split('T')[0]),
   due: dateToString.optional().nullable(),
-  order: z.number().int().nonnegative().optional().default(0),
+  order: z.number().nonnegative().optional().default(0),
 })
 export type TaskMetadata = z.infer<typeof TaskMetadataSchema>
 
@@ -133,6 +133,6 @@ export type UpdateTaskInput = z.infer<typeof UpdateTaskInputSchema>
 export const MoveTaskInputSchema = z.object({
   taskId: z.string(),
   newStatus: TaskStatusSchema,
-  newOrder: z.number().int().nonnegative(),
+  newOrder: z.number().nonnegative(),
 })
 export type MoveTaskInput = z.infer<typeof MoveTaskInputSchema>

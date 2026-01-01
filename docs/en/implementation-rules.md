@@ -12,6 +12,7 @@
 | Zod | `import * as z from 'zod/v4'` | `import { z } from 'zod'` |
 | Gemini | `responseJsonSchema` | `responseSchema` |
 | Types | `readonly` properties | mutable interfaces |
+| Comments | Minimal inline `//` only | JSDoc blocks, excessive docs |
 
 ---
 
@@ -451,6 +452,28 @@ export type ErrorCode =
 
 ---
 
+## 11. Code Quality (No AI Slop)
+
+### MUST
+
+- ✅ Write code a human would write
+- ✅ Follow existing patterns in the file
+- ✅ Keep comments minimal and meaningful
+- ✅ Use simple, direct solutions
+- ✅ Easy to read and understand
+- ✅ Security maintained appropriately
+
+### NEVER
+
+- ❌ NO extra comments a human wouldn't add or inconsistent with file style
+- ❌ NO defensive try/catch blocks in trusted/validated codepaths
+- ❌ NO `as any` casts to bypass type issues
+- ❌ NO inconsistent style with rest of file
+- ❌ NO over-complicated solutions
+- ❌ NO JSDoc blocks (use inline comments sparingly)
+
+---
+
 ## NEVER Do Checklist
 
 1. ❌ NEVER use `console.log` in library code (only in CLI)
@@ -478,3 +501,5 @@ export type ErrorCode =
 - [ ] Named exports only (no default exports)
 - [ ] Consistent naming conventions
 - [ ] All async functions use async/await
+- [ ] No JSDoc blocks, minimal comments
+- [ ] Code looks human-written (no AI slop)

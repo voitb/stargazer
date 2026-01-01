@@ -1,13 +1,13 @@
 ---
 id: task-004
 title: Create ErrorCode type
-status: todo
+status: done
 priority: high
 labels:
   - core
   - types
 created: '2026-01-01'
-order: 40
+order: 20000
 ---
 ## Description
 
@@ -15,9 +15,9 @@ Create the `ErrorCode` type that defines all possible error codes.
 
 ## Acceptance Criteria
 
-- [ ] Create `packages/core/src/shared/error-codes.ts`
-- [ ] Define `ErrorCode` union type
-- [ ] TypeScript compiles
+- [x] Create `packages/core/src/shared/error-codes.ts`
+- [x] Define `ErrorCode` union type
+- [x] TypeScript compiles
 
 ## Implementation
 

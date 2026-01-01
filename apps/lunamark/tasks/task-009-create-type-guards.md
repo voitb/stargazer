@@ -1,7 +1,7 @@
 ---
 id: task-009
 title: Create isOk() and isErr() guards
-status: todo
+status: done
 priority: high
 labels:
   - core
@@ -15,8 +15,8 @@ Create type guard functions for narrowing Result types.
 
 ## Acceptance Criteria
 
-- [ ] Add `isOk()` and `isErr()` to `packages/core/src/shared/result.ts`
-- [ ] Type narrowing works correctly after guard
+- [x] Add `isOk()` and `isErr()` to `packages/core/src/shared/result.ts`
+- [x] Type narrowing works correctly after guard
 - [ ] Add unit tests
 
 ## Implementation
