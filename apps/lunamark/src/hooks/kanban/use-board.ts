@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import type { Board } from "@/schemas/task";
-import { getBoard } from "../server/board";
+import { getBoard } from "../../server/board";
 
 export const BOARD_QUERY_KEY = ["board"] as const;
 

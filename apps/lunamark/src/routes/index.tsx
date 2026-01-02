@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { KanbanBoard } from "@/components/kanban/kanban-board";
-import { useBoard } from "@/hooks/use-board";
+import { useBoard } from "@/hooks/kanban/use-board";
 import { getBoard } from "@/server/board";
 
 export const Route = createFileRoute("/")({

@@ -1,6 +1,6 @@
 import type { QueryClient } from "@tanstack/react-query";
 import type { Board } from "@/schemas/task";
-import { BOARD_QUERY_KEY } from "../use-board";
+import { BOARD_QUERY_KEY } from "../kanban/use-board";
 
 export type BoardMutationContext = { previousBoard: Board | undefined };
 

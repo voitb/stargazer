@@ -4,14 +4,13 @@ import {
 	PointerSensor,
 } from "@dnd-kit/dom";
 import { DragDropProvider, DragOverlay } from "@dnd-kit/react";
-import { useState } from "react";
 import { TaskEditor } from "@/components/task-editor/task-editor";
 import { useBoardState } from "@/hooks/kanban/use-board-state";
-import { useDragHandlers } from "@/hooks/kanban/use-drag-handlers";
+import { useKanbanDrag } from "@/hooks/kanban/use-kanban-drag";
 import { useTaskEditor } from "@/hooks/kanban/use-task-editor";
 import { useMoveTask } from "@/hooks/tasks";
 import { buildColumns } from "@/lib/dnd/utils";
-import type { Board, Task } from "@/schemas/task";
+import type { Board } from "@/schemas/task";
 import { Column } from "./column";
 import { TaskCardContent } from "./task-card-content";
 
@@ -29,20 +28,19 @@ interface KanbanBoardProps {
 }
 
 export function KanbanBoard({ initialBoard }: KanbanBoardProps) {
-	const [activeTask, setActiveTask] = useState<Task | null>(null);
 	const taskEditor = useTaskEditor();
 
 	const { items, setItems, tasksMap, setTasksMap } =
 		useBoardState(initialBoard);
 	const { mutate: moveTask } = useMoveTask();
-	const { handleDragStart, handleDragOver, handleDragEnd } = useDragHandlers({
-		items,
-		setItems,
-		tasksMap,
-		setTasksMap,
-		moveTask,
-		setActiveTask,
-	});
+	const { handleDragStart, handleDragOver, handleDragEnd, activeTask } =
+		useKanbanDrag({
+			items,
+			tasksMap,
+			onItemsChange: setItems,
+			onTasksMapChange: setTasksMap,
+			onTaskMove: moveTask,
+		});
 
 	const columns = buildColumns(initialBoard.columns, items, tasksMap);
 

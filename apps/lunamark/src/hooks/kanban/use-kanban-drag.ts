@@ -1,7 +1,8 @@
 import { move } from "@dnd-kit/helpers";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import type {
 	DragEndEvent,
+	DragHandlers,
 	DragOverEvent,
 	DragStartEvent,
 } from "@/lib/dnd/types";
@@ -9,23 +10,26 @@ import { findTaskColumn } from "@/lib/dnd/utils";
 import { calculateNewOrder } from "@/lib/kanban/task-ordering";
 import type { MoveTaskInput, Task, TaskStatus } from "@/schemas/task";
 
-interface UseDragHandlersParams {
+interface UseKanbanDragParams {
 	items: Record<TaskStatus, string[]>;
-	setItems: React.Dispatch<React.SetStateAction<Record<TaskStatus, string[]>>>;
 	tasksMap: Map<string, Task>;
-	setTasksMap: React.Dispatch<React.SetStateAction<Map<string, Task>>>;
-	moveTask: (input: MoveTaskInput) => void;
-	setActiveTask: (task: Task | null) => void;
+	onItemsChange: (items: Record<TaskStatus, string[]>) => void;
+	onTasksMapChange: (updater: (prev: Map<string, Task>) => Map<string, Task>) => void;
+	onTaskMove: (input: MoveTaskInput) => void;
 }
 
-export function useDragHandlers({
+interface UseKanbanDragReturn extends DragHandlers {
+	activeTask: Task | null;
+}
+
+export function useKanbanDrag({
 	items,
-	setItems,
 	tasksMap,
-	setTasksMap,
-	moveTask,
-	setActiveTask,
-}: UseDragHandlersParams) {
+	onItemsChange,
+	onTasksMapChange,
+	onTaskMove,
+}: UseKanbanDragParams): UseKanbanDragReturn {
+	const [activeTask, setActiveTask] = useState<Task | null>(null);
 	const currentItems = useRef<Record<TaskStatus, string[]>>(items);
 	const dragStartItems = useRef<Record<TaskStatus, string[]>>(items);
 
@@ -45,11 +49,9 @@ export function useDragHandlers({
 		const { source } = event.operation;
 		if (source?.type === "column") return;
 
-		setItems((current) => {
-			const next = move(current, event);
-			currentItems.current = next;
-			return next;
-		});
+		const next = move(currentItems.current, event);
+		currentItems.current = next;
+		onItemsChange(next);
 	}
 
 	function handleDragEnd(event: DragEndEvent) {
@@ -63,7 +65,7 @@ export function useDragHandlers({
 		const taskId = source.id as string;
 
 		if (event.canceled) {
-			setItems(dragStartItems.current);
+			onItemsChange(dragStartItems.current);
 			setActiveTask(null);
 			return;
 		}
@@ -72,7 +74,7 @@ export function useDragHandlers({
 
 		const newStatus = findTaskColumn(finalItems, taskId);
 		if (!newStatus) {
-			setItems(dragStartItems.current);
+			onItemsChange(dragStartItems.current);
 			setActiveTask(null);
 			return;
 		}
@@ -90,9 +92,9 @@ export function useDragHandlers({
 			: undefined;
 		const newOrder = calculateNewOrder(prevOrder, nextOrder);
 
-		moveTask({ taskId, newStatus, newOrder });
+		onTaskMove({ taskId, newStatus, newOrder });
 
-		setTasksMap((prev) => {
+		onTasksMapChange((prev) => {
 			const task = prev.get(taskId);
 			if (!task) return prev;
 
@@ -107,5 +109,5 @@ export function useDragHandlers({
 		setActiveTask(null);
 	}
 
-	return { handleDragStart, handleDragOver, handleDragEnd };
+	return { handleDragStart, handleDragOver, handleDragEnd, activeTask };
 }
