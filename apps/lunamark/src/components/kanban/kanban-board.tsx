@@ -8,9 +8,10 @@ import { useState } from "react";
 import { TaskEditor } from "@/components/task-editor/task-editor";
 import { useBoardState } from "@/hooks/kanban/use-board-state";
 import { useDragHandlers } from "@/hooks/kanban/use-drag-handlers";
+import { useTaskEditor } from "@/hooks/kanban/use-task-editor";
 import { useMoveTask } from "@/hooks/tasks";
 import { buildColumns } from "@/lib/dnd/utils";
-import type { Board, Task, TaskStatus } from "@/schemas/task";
+import type { Board, Task } from "@/schemas/task";
 import { Column } from "./column";
 import { TaskCardContent } from "./task-card-content";
 
@@ -29,11 +30,7 @@ interface KanbanBoardProps {
 
 export function KanbanBoard({ initialBoard }: KanbanBoardProps) {
 	const [activeTask, setActiveTask] = useState<Task | null>(null);
-	const [editorState, setEditorState] = useState<{
-		isOpen: boolean;
-		task?: Task;
-		initialStatus?: TaskStatus;
-	}>({ isOpen: false });
+	const taskEditor = useTaskEditor();
 
 	const { items, setItems, tasksMap, setTasksMap } =
 		useBoardState(initialBoard);
@@ -49,18 +46,6 @@ export function KanbanBoard({ initialBoard }: KanbanBoardProps) {
 
 	const columns = buildColumns(initialBoard.columns, items, tasksMap);
 
-	function handleOpenCreate(status: TaskStatus) {
-		setEditorState({ isOpen: true, initialStatus: status });
-	}
-
-	function handleOpenEdit(task: Task) {
-		setEditorState({ isOpen: true, task });
-	}
-
-	function handleCloseEditor() {
-		setEditorState({ isOpen: false });
-	}
-
 	return (
 		<>
 			<DragDropProvider
@@ -74,8 +59,8 @@ export function KanbanBoard({ initialBoard }: KanbanBoardProps) {
 						<Column
 							key={column.id}
 							column={column}
-							onAddTask={() => handleOpenCreate(column.id)}
-							onEditTask={handleOpenEdit}
+							onAddTask={() => taskEditor.openCreate(column.id)}
+							onEditTask={taskEditor.openEdit}
 						/>
 					))}
 				</div>
@@ -85,10 +70,10 @@ export function KanbanBoard({ initialBoard }: KanbanBoardProps) {
 			</DragDropProvider>
 
 			<TaskEditor
-				isOpen={editorState.isOpen}
-				task={editorState.task}
-				initialStatus={editorState.initialStatus}
-				onClose={handleCloseEditor}
+				isOpen={taskEditor.isOpen}
+				task={taskEditor.task}
+				initialStatus={taskEditor.initialStatus}
+				onClose={taskEditor.close}
 			/>
 		</>
 	);
