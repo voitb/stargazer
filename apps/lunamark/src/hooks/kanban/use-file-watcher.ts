@@ -1,60 +1,80 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useCallback, useEffect, useRef } from "react";
+import { useEffect } from "react";
+import type { FileChange } from "@/lib/file-watcher";
 import { BOARD_QUERY_KEY } from "./use-board";
+
+type WatchMessage = FileChange | { type: "connected" };
 
 interface UseFileWatcherOptions {
 	enabled?: boolean;
 	debounceMs?: number;
 }
 
-export function useFileWatcher(options: UseFileWatcherOptions = {}) {
+const MAX_RETRIES = 10;
+const RETRY_DELAY_MS = 1000;
+const BACKOFF_MULTIPLIER = 1.5;
+
+export function useFileWatcher(options: UseFileWatcherOptions = {}): void {
 	const { enabled = true, debounceMs = 200 } = options;
 	const queryClient = useQueryClient();
-	const eventSourceRef = useRef<EventSource | null>(null);
-	const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-	const invalidateBoard = useCallback(() => {
-		if (debounceTimerRef.current) {
-			clearTimeout(debounceTimerRef.current);
-		}
-
-		debounceTimerRef.current = setTimeout(() => {
-			queryClient.invalidateQueries({ queryKey: BOARD_QUERY_KEY });
-		}, debounceMs);
-	}, [queryClient, debounceMs]);
 
 	useEffect(() => {
-		if (typeof window === "undefined" || !enabled) return;
+		if (!enabled || typeof window === "undefined") return;
 
-		const eventSource = new EventSource("/api/watch");
-		eventSourceRef.current = eventSource;
+		let eventSource: EventSource | null = null;
+		let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+		let reconnectTimeout: ReturnType<typeof setTimeout> | null = null;
+		let reconnectCount = 0;
 
-		eventSource.onmessage = (event) => {
-			try {
-				const data = JSON.parse(event.data);
+		const scheduleReconnect = () => {
+			if (reconnectCount >= MAX_RETRIES) return;
 
-				if (data.type === "connected") {
-					return;
-				}
-
-				if (
-					data.type === "add" ||
-					data.type === "change" ||
-					data.type === "unlink"
-				) {
-					invalidateBoard();
-				}
-			} catch {}
+			const delay = RETRY_DELAY_MS * Math.pow(BACKOFF_MULTIPLIER, reconnectCount);
+			reconnectCount += 1;
+			reconnectTimeout = setTimeout(connect, delay);
 		};
+
+		const handleMessage = (event: MessageEvent) => {
+			const message = JSON.parse(event.data) as WatchMessage;
+			if (message.type === "connected") return;
+
+			const isFileChange =
+				message.type === "add" ||
+				message.type === "change" ||
+				message.type === "unlink";
+
+			if (!isFileChange) return;
+
+			if (debounceTimer) clearTimeout(debounceTimer);
+			debounceTimer = setTimeout(() => {
+				queryClient.invalidateQueries({ queryKey: BOARD_QUERY_KEY });
+			}, debounceMs);
+		};
+
+		const connect = () => {
+			if (eventSource) return;
+
+			eventSource = new EventSource("/api/watch");
+
+			eventSource.onopen = () => {
+				reconnectCount = 0;
+			};
+
+			eventSource.onmessage = handleMessage;
+
+			eventSource.onerror = () => {
+				eventSource?.close();
+				eventSource = null;
+				scheduleReconnect();
+			};
+		};
+
+		connect();
 
 		return () => {
-			eventSource.close();
-			eventSourceRef.current = null;
-
-			if (debounceTimerRef.current) {
-				clearTimeout(debounceTimerRef.current);
-				debounceTimerRef.current = null;
-			}
+			if (reconnectTimeout) clearTimeout(reconnectTimeout);
+			if (debounceTimer) clearTimeout(debounceTimer);
+			eventSource?.close();
 		};
-	}, [enabled, invalidateBoard]);
+	}, [enabled, debounceMs, queryClient]);
 }
