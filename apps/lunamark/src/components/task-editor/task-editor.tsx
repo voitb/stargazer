@@ -1,6 +1,6 @@
 import { X } from "lucide-react";
 import { useCallback, useEffect, useId, useState } from "react";
-import { useCreateTask, useDeleteTask, useUpdateTask } from "@/hooks/use-tasks";
+import { useCreateTask, useDeleteTask, useUpdateTask } from "@/hooks/tasks";
 import { cn } from "@/lib/utils";
 import type { Task, TaskPriority, TaskStatus } from "@/schemas/task";
 

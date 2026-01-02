@@ -9,7 +9,7 @@ import { useState } from "react";
 import { TaskEditor } from "@/components/task-editor/task-editor";
 import { useBoardState } from "@/hooks/kanban/use-board-state";
 import { useDragHandlers } from "@/hooks/kanban/use-drag-handlers";
-import { useMoveTask } from "@/hooks/use-tasks";
+import { useMoveTask } from "@/hooks/tasks";
 import { buildColumns } from "@/lib/dnd/utils";
 import type { Board, Task, TaskStatus } from "@/schemas/task";
 import { Column } from "./column";
