@@ -32,11 +32,12 @@ Używamy Tagged Unions dla jawnej obsługi błędów zamiast wyjątków:
 
 ```typescript
 // types/result.ts
-export type Result<T, E = StargazerError> =
+export type Result<T, E = ApiError> =
   | { readonly ok: true; readonly data: T }
   | { readonly ok: false; readonly error: E };
 
-export type StargazerError = {
+// Prosty typ błędu - bez brandowanych nazw
+export type ApiError = {
   readonly code: ErrorCode;
   readonly message: string;
   readonly cause?: unknown;

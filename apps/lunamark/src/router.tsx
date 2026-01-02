@@ -1,32 +1,27 @@
-import { createRouter } from '@tanstack/react-router'
-import { QueryClient } from '@tanstack/react-query'
+import { QueryClient } from "@tanstack/react-query";
+import { createRouter } from "@tanstack/react-router";
+import { routeTree } from "./routeTree.gen";
 
-// Import the generated route tree
-import { routeTree } from './routeTree.gen'
-
-// Create a single QueryClient instance
 const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      refetchOnWindowFocus: true,
-    },
-  },
-})
+	defaultOptions: {
+		queries: {
+			staleTime: 5 * 60 * 1000,
+			refetchOnWindowFocus: true,
+		},
+	},
+});
 
-// Create a new router instance
 export const getRouter = () => {
-  const router = createRouter({
-    routeTree,
-    context: {
-      queryClient,
-    },
-    scrollRestoration: true,
-    defaultPreloadStaleTime: 0,
-  })
+	const router = createRouter({
+		routeTree,
+		context: {
+			queryClient,
+		},
+		scrollRestoration: true,
+		defaultPreloadStaleTime: 0,
+	});
 
-  return router
-}
+	return router;
+};
 
-// Export for use in components
-export { queryClient }
+export { queryClient };
