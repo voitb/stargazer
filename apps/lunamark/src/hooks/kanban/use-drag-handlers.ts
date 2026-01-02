@@ -1,5 +1,10 @@
 import { move } from "@dnd-kit/helpers";
 import { useRef } from "react";
+import type {
+	DragEndEvent,
+	DragOverEvent,
+	DragStartEvent,
+} from "@/lib/dnd/types";
 import { findTaskColumn } from "@/lib/dnd/utils";
 import { calculateNewOrder } from "@/lib/kanban/task-ordering";
 import type { MoveTaskInput, Task, TaskStatus } from "@/schemas/task";
@@ -24,7 +29,7 @@ export function useDragHandlers({
 	const currentItems = useRef<Record<TaskStatus, string[]>>(items);
 	const dragStartItems = useRef<Record<TaskStatus, string[]>>(items);
 
-	function handleDragStart(event: Parameters<typeof move>[1]) {
+	function handleDragStart(event: DragStartEvent) {
 		const { source } = event.operation;
 
 		dragStartItems.current = { ...items };
@@ -36,7 +41,7 @@ export function useDragHandlers({
 		}
 	}
 
-	function handleDragOver(event: Parameters<typeof move>[1]) {
+	function handleDragOver(event: DragOverEvent) {
 		const { source } = event.operation;
 		if (source?.type === "column") return;
 
@@ -47,7 +52,7 @@ export function useDragHandlers({
 		});
 	}
 
-	function handleDragEnd(event: Parameters<typeof move>[1]) {
+	function handleDragEnd(event: DragEndEvent) {
 		const { source } = event.operation;
 
 		if (source?.type === "column" || !source) {
@@ -57,7 +62,7 @@ export function useDragHandlers({
 
 		const taskId = source.id as string;
 
-		if ("canceled" in event && event.canceled) {
+		if (event.canceled) {
 			setItems(dragStartItems.current);
 			setActiveTask(null);
 			return;

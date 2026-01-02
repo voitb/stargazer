@@ -1,4 +1,3 @@
-import { closestCorners } from "@dnd-kit/collision";
 import {
 	KeyboardSensor,
 	PointerActivationConstraints,
@@ -66,7 +65,6 @@ export function KanbanBoard({ initialBoard }: KanbanBoardProps) {
 		<>
 			<DragDropProvider
 				sensors={sensors}
-				collisionDetection={closestCorners}
 				onDragStart={handleDragStart}
 				onDragOver={handleDragOver}
 				onDragEnd={handleDragEnd}
