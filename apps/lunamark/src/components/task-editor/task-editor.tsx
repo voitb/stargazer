@@ -1,8 +1,8 @@
 import { X } from "lucide-react";
-import { useCallback, useEffect, useId, useState } from "react";
-import { useCreateTask, useDeleteTask, useUpdateTask } from "@/hooks/tasks";
+import { useId } from "react";
+import { useTaskEditorForm } from "@/hooks/task-editor/use-task-editor-form";
 import { cn } from "@/lib/utils/cn";
-import type { Task, TaskPriority, TaskStatus } from "@/schemas/task";
+import type { Task, TaskStatus } from "@/schemas/task";
 
 interface TaskEditorProps {
 	task?: Task;
@@ -17,116 +17,9 @@ export function TaskEditor({
 	isOpen,
 	onClose,
 }: TaskEditorProps) {
-	const isEditing = Boolean(task);
 	const id = useId();
 
-	const [title, setTitle] = useState("");
-	const [status, setStatus] = useState<TaskStatus>(initialStatus);
-	const [priority, setPriority] = useState<TaskPriority>("medium");
-	const [labels, setLabels] = useState("");
-	const [assignee, setAssignee] = useState("");
-	const [due, setDue] = useState("");
-	const [content, setContent] = useState("");
-	const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-
-	const { mutate: createTask, isPending: isCreating } = useCreateTask();
-	const { mutate: updateTask, isPending: isUpdating } = useUpdateTask();
-	const { mutate: deleteTask, isPending: isDeleting } = useDeleteTask();
-
-	const isPending = isCreating || isUpdating || isDeleting;
-
-	useEffect(() => {
-		if (task) {
-			setTitle(task.metadata.title);
-			setStatus(task.metadata.status);
-			setPriority(task.metadata.priority);
-			setLabels(task.metadata.labels.join(", "));
-			setAssignee(task.metadata.assignee || "");
-			setDue(task.metadata.due || "");
-			setContent(task.content);
-		} else {
-			setTitle("");
-			setStatus(initialStatus);
-			setPriority("medium");
-			setLabels("");
-			setAssignee("");
-			setDue("");
-			setContent("");
-		}
-		setShowDeleteConfirm(false);
-	}, [task, initialStatus, isOpen]);
-
-	const handleSave = useCallback(() => {
-		if (!title.trim()) return;
-
-		const labelsArray = labels
-			.split(",")
-			.map((l) => l.trim())
-			.filter(Boolean);
-
-		if (isEditing && task) {
-			updateTask(
-				{
-					id: task.id,
-					title: title.trim(),
-					status,
-					priority,
-					labels: labelsArray,
-					assignee: assignee.trim() || null,
-					due: due || null,
-					content,
-				},
-				{ onSuccess: onClose },
-			);
-		} else {
-			createTask(
-				{
-					title: title.trim(),
-					status,
-					priority,
-					labels: labelsArray,
-					assignee: assignee.trim() || undefined,
-					due: due || undefined,
-					content,
-				},
-				{ onSuccess: onClose },
-			);
-		}
-	}, [
-		title,
-		status,
-		priority,
-		labels,
-		assignee,
-		due,
-		content,
-		isEditing,
-		task,
-		createTask,
-		updateTask,
-		onClose,
-	]);
-
-	const handleDelete = useCallback(() => {
-		if (!task) return;
-		deleteTask(task.id, { onSuccess: onClose });
-	}, [task, deleteTask, onClose]);
-
-	useEffect(() => {
-		const handleKeyDown = (e: KeyboardEvent) => {
-			if (!isOpen) return;
-
-			if (e.key === "Escape") {
-				onClose();
-			} else if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
-				e.preventDefault();
-				handleSave();
-			}
-		};
-
-		document.addEventListener("keydown", handleKeyDown);
-		return () => document.removeEventListener("keydown", handleKeyDown);
-	}, [isOpen, onClose, handleSave]);
+	const form = useTaskEditorForm({ task, initialStatus, isOpen, onClose });
 
 	if (!isOpen) return null;
 
@@ -157,7 +50,7 @@ export function TaskEditor({
 					)}
 				>
 					<h2 className={cn("text-lg font-semibold text-gray-900")}>
-						{isEditing ? "Edit Task" : "New Task"}
+						{form.isEditing ? "Edit Task" : "New Task"}
 					</h2>
 					<button
 						type="button"
@@ -179,8 +72,8 @@ export function TaskEditor({
 						<input
 							id={titleId}
 							type="text"
-							value={title}
-							onChange={(e) => setTitle(e.target.value)}
+							value={form.state.title}
+							onChange={form.setField("title")}
 							placeholder="Enter task title"
 							className={cn(
 								"w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500",
@@ -198,8 +91,8 @@ export function TaskEditor({
 							</label>
 							<select
 								id={statusId}
-								value={status}
-								onChange={(e) => setStatus(e.target.value as TaskStatus)}
+								value={form.state.status}
+								onChange={form.setStatus}
 								className={cn(
 									"w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500",
 								)}
@@ -220,8 +113,8 @@ export function TaskEditor({
 							</label>
 							<select
 								id={priorityId}
-								value={priority}
-								onChange={(e) => setPriority(e.target.value as TaskPriority)}
+								value={form.state.priority}
+								onChange={form.setPriority}
 								className={cn(
 									"w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500",
 								)}
@@ -244,8 +137,8 @@ export function TaskEditor({
 						<input
 							id={labelsId}
 							type="text"
-							value={labels}
-							onChange={(e) => setLabels(e.target.value)}
+							value={form.state.labels}
+							onChange={form.setField("labels")}
 							placeholder="bug, feature, urgent (comma separated)"
 							className={cn(
 								"w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500",
@@ -264,8 +157,8 @@ export function TaskEditor({
 							<input
 								id={assigneeId}
 								type="text"
-								value={assignee}
-								onChange={(e) => setAssignee(e.target.value)}
+								value={form.state.assignee}
+								onChange={form.setField("assignee")}
 								placeholder="Name"
 								className={cn(
 									"w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500",
@@ -283,8 +176,8 @@ export function TaskEditor({
 							<input
 								id={dueId}
 								type="date"
-								value={due}
-								onChange={(e) => setDue(e.target.value)}
+								value={form.state.due}
+								onChange={form.setField("due")}
 								className={cn(
 									"w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500",
 								)}
@@ -301,8 +194,8 @@ export function TaskEditor({
 						</label>
 						<textarea
 							id={contentId}
-							value={content}
-							onChange={(e) => setContent(e.target.value)}
+							value={form.state.content}
+							onChange={form.setField("content")}
 							placeholder="## Description&#10;&#10;Add task details..."
 							rows={6}
 							className={cn(
@@ -317,26 +210,26 @@ export function TaskEditor({
 						"flex items-center justify-between p-4 border-t border-gray-200 bg-gray-50",
 					)}
 				>
-					{isEditing ? (
-						showDeleteConfirm ? (
+					{form.isEditing ? (
+						form.state.showDeleteConfirm ? (
 							<div className={cn("flex items-center gap-2")}>
 								<span className={cn("text-sm text-red-600")}>
 									Delete this task?
 								</span>
 								<button
 									type="button"
-									onClick={handleDelete}
-									disabled={isPending}
+									onClick={form.handleDelete}
+									disabled={form.isPending}
 									className={cn(
 										"px-3 py-1.5 text-sm font-medium text-white bg-red-600 rounded hover:bg-red-700 disabled:opacity-50",
 									)}
 								>
-									{isDeleting ? "Deleting..." : "Yes, Delete"}
+									{form.isDeleting ? "Deleting..." : "Yes, Delete"}
 								</button>
 								<button
 									type="button"
-									onClick={() => setShowDeleteConfirm(false)}
-									disabled={isPending}
+									onClick={() => form.toggleDeleteConfirm(false)}
+									disabled={form.isPending}
 									className={cn(
 										"px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50",
 									)}
@@ -347,8 +240,8 @@ export function TaskEditor({
 						) : (
 							<button
 								type="button"
-								onClick={() => setShowDeleteConfirm(true)}
-								disabled={isPending}
+								onClick={() => form.toggleDeleteConfirm(true)}
+								disabled={form.isPending}
 								className={cn(
 									"text-sm text-red-600 hover:text-red-700 disabled:opacity-50",
 								)}
@@ -364,7 +257,7 @@ export function TaskEditor({
 						<button
 							type="button"
 							onClick={onClose}
-							disabled={isPending}
+							disabled={form.isPending}
 							className={cn(
 								"px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50",
 							)}
@@ -373,17 +266,17 @@ export function TaskEditor({
 						</button>
 						<button
 							type="button"
-							onClick={handleSave}
-							disabled={isPending || !title.trim()}
+							onClick={form.handleSave}
+							disabled={!form.canSave}
 							className={cn(
 								"px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed",
 							)}
 						>
-							{isPending
-								? isEditing
+							{form.isPending
+								? form.isEditing
 									? "Saving..."
 									: "Creating..."
-								: isEditing
+								: form.isEditing
 									? "Save Changes"
 									: "Create Task"}
 						</button>

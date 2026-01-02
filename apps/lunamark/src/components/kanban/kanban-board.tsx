@@ -68,6 +68,7 @@ export function KanbanBoard({ initialBoard }: KanbanBoardProps) {
 			</DragDropProvider>
 
 			<TaskEditor
+				key={taskEditor.task?.id ?? `create-${taskEditor.initialStatus}`}
 				isOpen={taskEditor.isOpen}
 				task={taskEditor.task}
 				initialStatus={taskEditor.initialStatus}
