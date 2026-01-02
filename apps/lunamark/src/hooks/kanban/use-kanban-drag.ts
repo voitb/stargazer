@@ -7,7 +7,7 @@ import type {
 	DragStartEvent,
 } from "@/lib/dnd/types";
 import { findTaskColumn } from "@/lib/dnd/utils";
-import { calculateNewOrder } from "@/lib/kanban/task-ordering";
+import { calculateNewOrder } from "@/lib/tasks/task-ordering";
 import type { MoveTaskInput, Task, TaskStatus } from "@/schemas/task";
 
 interface UseKanbanDragParams {

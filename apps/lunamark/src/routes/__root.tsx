@@ -7,7 +7,7 @@ import {
 	Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-import { useFileWatcher } from "@/hooks/kanban/use-file-watcher";
+import { useFileWatcher } from "@/hooks/use-file-watcher";
 
 import appCss from "@/styles.css?url";
 

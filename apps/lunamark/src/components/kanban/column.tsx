@@ -2,7 +2,7 @@ import { CollisionPriority } from "@dnd-kit/abstract";
 import { useDroppable } from "@dnd-kit/react";
 import { Plus } from "lucide-react";
 import { COLUMN_COLORS } from "@/lib/kanban/constants";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/cn";
 import type { Column as ColumnType, Task } from "@/schemas/task";
 import { TaskCard } from "./task-card";
 

@@ -1,7 +1,7 @@
 import { X } from "lucide-react";
 import { useCallback, useEffect, useId, useState } from "react";
 import { useCreateTask, useDeleteTask, useUpdateTask } from "@/hooks/tasks";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/cn";
 import type { Task, TaskPriority, TaskStatus } from "@/schemas/task";
 
 interface TaskEditorProps {

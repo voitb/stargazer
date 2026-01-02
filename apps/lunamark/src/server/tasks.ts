@@ -9,9 +9,9 @@ import {
 	type Task,
 	UpdateTaskInputSchema,
 } from "@/schemas/task";
-import { findTaskFilePath, loadTaskById } from "../lib/board-loader";
+import { findTaskFilePath, loadTaskById } from "../lib/tasks/board-loader";
 import { getTasksDir, resolveConfigSync } from "../lib/config";
-import { generateFilename, serializeTask } from "../lib/task-parser";
+import { generateFilename, serializeTask } from "../lib/tasks/task-parser";
 
 export const createTask = createServerFn({ method: "POST" })
 	.inputValidator((data: unknown) => CreateTaskInputSchema.parse(data))

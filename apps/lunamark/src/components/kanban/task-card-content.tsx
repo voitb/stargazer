@@ -1,5 +1,5 @@
 import { PRIORITY_COLORS } from "@/lib/kanban/constants";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/cn";
 import type { Task } from "@/schemas/task";
 
 interface TaskCardContentProps {

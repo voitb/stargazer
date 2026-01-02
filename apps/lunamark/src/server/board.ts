@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import type { Board } from "@/schemas/task";
-import { loadBoard } from "../lib/board-loader";
+import { loadBoard } from "../lib/tasks/board-loader";
 import { getColumns, getTasksDir, resolveConfigSync } from "../lib/config";
 
 export const getBoard = createServerFn({ method: "GET" }).handler(

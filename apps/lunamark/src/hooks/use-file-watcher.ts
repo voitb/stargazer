@@ -1,7 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import type { FileChange } from "@/lib/file-watcher";
-import { BOARD_QUERY_KEY } from "./use-board";
+import { BOARD_QUERY_KEY } from "./kanban/use-board";
 
 type WatchMessage = FileChange | { type: "connected" };
 

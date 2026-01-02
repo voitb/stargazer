@@ -7,7 +7,7 @@ import { DragDropProvider, DragOverlay } from "@dnd-kit/react";
 import { TaskEditor } from "@/components/task-editor/task-editor";
 import { useBoardState } from "@/hooks/kanban/use-board-state";
 import { useKanbanDrag } from "@/hooks/kanban/use-kanban-drag";
-import { useTaskEditor } from "@/hooks/kanban/use-task-editor";
+import { useTaskEditor } from "@/hooks/task-editor/use-task-editor";
 import { useMoveTask } from "@/hooks/tasks";
 import { buildColumns } from "@/lib/dnd/utils";
 import type { Board } from "@/schemas/task";

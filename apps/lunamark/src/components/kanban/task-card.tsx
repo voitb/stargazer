@@ -1,5 +1,5 @@
 import { useSortable } from "@dnd-kit/react/sortable";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/cn";
 import type { Task } from "@/schemas/task";
 import { DropIndicator } from "./drop-indicator";
 import { TaskCardContent } from "./task-card-content";
