@@ -489,6 +489,55 @@ export type ErrorCode =
 
 ---
 
+## 12. React Best Practices (2025)
+
+### MUST
+
+- ✅ Use `cn()` function for combining Tailwind classes
+- ✅ Prefer `useTransition` for async state updates
+- ✅ Prefer module functions over static class methods
+- ✅ Use Server Components where applicable (Next.js/RSC/TanStack Start)
+- ✅ Static data as module-level constants, not `useMemo(() => [...], [])`
+
+### NEVER
+
+- ❌ NO manual `useCallback`/`useMemo` (React Compiler handles this)
+- ❌ NO `_` prefix/suffix for private members
+- ❌ NO `I` prefix for interfaces (`IUser` → `User`)
+- ❌ NO generic names (`data`, `item`, `thing`, `info`)
+
+### Naming Conventions (React/TypeScript)
+
+| Element | Convention | Example |
+|---------|------------|---------|
+| Files (all) | kebab-case | `chat-header.tsx`, `use-auth.ts` |
+| Component exports | PascalCase | `export function ChatHeader` |
+| Hook exports | camelCase with use prefix | `export function useChatInput()` |
+| Functions | camelCase | `handleSubmit()` |
+| Async functions | prefix: `get`, `load`, `fetch` | `getUser()`, `loadData()` |
+| Boolean variables | prefix: `is`, `has`, `should` | `isLoading`, `hasError` |
+| Constants | UPPER_SNAKE_CASE | `MAX_FILE_SIZE` |
+
+### className Pattern
+
+Always use `cn()` from `@/lib/utils`:
+
+```typescript
+import { cn } from '@/lib/utils'
+
+// ✅ CORRECT
+className={cn(
+  'base-classes',
+  isActive && 'active-classes',
+  variant === 'primary' ? 'primary-classes' : 'secondary-classes'
+)}
+
+// ❌ WRONG - template literals
+className={`base-classes ${isActive ? 'active' : ''}`}
+```
+
+---
+
 ## Quick Checklist Before Committing
 
 - [ ] All functions that can fail return `Result<T, E>`
@@ -503,3 +552,5 @@ export type ErrorCode =
 - [ ] All async functions use async/await
 - [ ] No JSDoc blocks, minimal comments
 - [ ] Code looks human-written (no AI slop)
+- [ ] React: Files use kebab-case naming
+- [ ] React: Using `cn()` for className composition

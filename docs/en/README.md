@@ -18,7 +18,6 @@ Stargazer is an AI-powered code review bot that automatically learns your projec
 - [Quick Start](./quick-start.md) - Get up and running in 5 minutes
 - [Architecture](./architecture.md) - Technical deep dive
 - [Plugins](./plugins.md) - Create custom plugins
-- [API Reference](./api-reference.md) - Full API documentation
 
 ## Installation
 

@@ -36,7 +36,7 @@
 import { ok, err } from '../shared/result';
 import type { Result, ApiError } from '../shared/result';
 
-// ❌ ŹLLE - rzuca wyjątek
+// ❌ ŹLE - rzuca wyjątek
 async function getData(): Promise<Data> {
   throw new Error('Failed to fetch');
 }
@@ -83,7 +83,7 @@ console.log(result.data);
 ### Przykład Kodu
 
 ```typescript
-// ❌ ŹLLE - oparte na klasie
+// ❌ ŹLE - oparte na klasie
 class GeminiClient {
   private client: GoogleGenAI;
 
@@ -137,7 +137,7 @@ export function createGeminiClient(apiKey: string): GeminiClient {
 ### Przykład Kodu
 
 ```typescript
-// ❌ ŹLLE - barrel imports
+// ❌ ŹLE - barrel imports
 import { ok, err, createGeminiClient, GeminiClient } from '../shared';
 import { IssueSchema, ReviewResultSchema } from '../review';
 
@@ -319,7 +319,7 @@ function processResult(result: Result<Data>): void {
   console.log(result.data);
 }
 
-// ❌ ŹLLE - używanie any
+// ❌ ŹLE - używanie any
 function process(data: any) { ... }
 
 // ✅ DOBRZE - używanie unknown z walidacją
@@ -379,7 +379,7 @@ export function createGeminiClient(apiKey: string): GeminiClient {
 ### Przykład Kodu
 
 ```typescript
-// ❌ ŹLLE - łańcuchy Promise
+// ❌ ŹLE - łańcuchy Promise
 function fetchData(): Promise<Data> {
   return fetch(url)
     .then(res => res.json())
@@ -421,7 +421,7 @@ async function fetchData(): Promise<Result<Data>> {
 ### Przykład Kodu
 
 ```typescript
-// ❌ ŹLLE - default export
+// ❌ ŹLE - default export
 export default function createClient() { ... }
 
 // ✅ DOBRZE - named exports

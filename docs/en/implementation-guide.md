@@ -1,6 +1,6 @@
 # Stargazer - Implementation Guide
 
-> **IMPORTANT**: This document contains implementation details. For architecture decisions, see [state-of-art-architecture.md](./state-of-art-architecture.md).
+> **IMPORTANT**: This document contains implementation details. For architecture decisions, see [state-of-the-art-architecture.md](./state-of-the-art-architecture.md).
 
 ## Key Architecture Decisions
 

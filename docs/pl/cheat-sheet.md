@@ -120,7 +120,7 @@ import type { GeminiClient } from '../gemini/types';
 import { IssueSchema } from '../review/schemas';
 import type { Issue } from '../review/types';
 
-// ❌ ŹLLE - Barrel imports
+// ❌ ŹLE - Barrel imports
 import { ok, err, createGeminiClient } from '../shared';
 ```
 
@@ -310,6 +310,6 @@ const StargazerConfigSchema = z.object({
 ## Linki
 
 - [Zasady Implementacji](./implementation-rules.md) - Pełne zasady kodowania dla agentów AI
-- [Architektura](./state-of-art-architecture.md) - Szczegółowe decyzje architektoniczne
+- [Architektura](./state-of-the-art-architecture.md) - Szczegółowe decyzje architektoniczne
 - [Pluginy](./plugins.md) - Pisanie własnych pluginów
 - [Szybki Start](./quick-start.md) - Przewodnik rozpoczęcia pracy

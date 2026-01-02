@@ -310,6 +310,6 @@ const StargazerConfigSchema = z.object({
 ## Links
 
 - [Implementation Rules](./implementation-rules.md) - Full coding rules for AI agents
-- [Architecture](./state-of-art-architecture.md) - Detailed architecture decisions
+- [Architecture](./state-of-the-art-architecture.md) - Detailed architecture decisions
 - [Plugins](./plugins.md) - Writing custom plugins
 - [Quick Start](./quick-start.md) - Getting started guide

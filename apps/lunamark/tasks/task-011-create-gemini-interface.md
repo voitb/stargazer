@@ -8,7 +8,7 @@ labels:
   - gemini
   - types
 created: '2026-01-01'
-order: 110
+order: 17.5
 ---
 ## Description
 

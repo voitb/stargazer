@@ -7,7 +7,7 @@ labels:
   - core
   - gemini
 created: '2026-01-01'
-order: 120
+order: 35
 ---
 ## Description
 
