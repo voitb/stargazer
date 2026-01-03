@@ -1,8 +1,19 @@
-import { X } from "lucide-react";
-import { useId } from "react";
+"use client";
+
 import { useTaskEditorForm } from "@/hooks/task-editor/use-task-editor-form";
-import { cn } from "@/lib/utils/cn";
-import type { Task, TaskStatus } from "@/schemas/task";
+import type { Task, TaskPriority, TaskStatus } from "@/schemas/task";
+import { Button } from "@/components/ui/button";
+import {
+	Dialog,
+	DialogContent,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectItem } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 interface TaskEditorProps {
 	task?: Task;
@@ -17,272 +28,171 @@ export function TaskEditor({
 	isOpen,
 	onClose,
 }: TaskEditorProps) {
-	const id = useId();
-
 	const form = useTaskEditorForm({ task, initialStatus, isOpen, onClose });
 
-	if (!isOpen) return null;
-
-	const titleId = `${id}-title`;
-	const statusId = `${id}-status`;
-	const priorityId = `${id}-priority`;
-	const labelsId = `${id}-labels`;
-	const assigneeId = `${id}-assignee`;
-	const dueId = `${id}-due`;
-	const contentId = `${id}-content`;
-
 	return (
-		<div className={cn("fixed inset-0 z-50 flex items-center justify-center")}>
-			<div
-				role="presentation"
-				className={cn("absolute inset-0 bg-black/50")}
-				onClick={onClose}
-			/>
-
-			<div
-				className={cn(
-					"relative bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto",
-				)}
-			>
-				<div
-					className={cn(
-						"flex items-center justify-between p-4 border-b border-gray-200",
-					)}
-				>
-					<h2 className={cn("text-lg font-semibold text-gray-900")}>
+		<Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+			<DialogContent className="max-h-[90vh] overflow-y-auto">
+				<DialogHeader>
+					<DialogTitle>
 						{form.isEditing ? "Edit Task" : "New Task"}
-					</h2>
-					<button
-						type="button"
-						onClick={onClose}
-						className={cn("p-1 text-gray-400 hover:text-gray-600 rounded")}
-					>
-						<X className={cn("w-5 h-5")} />
-					</button>
-				</div>
+					</DialogTitle>
+				</DialogHeader>
 
-				<div className={cn("p-4 space-y-4")}>
-					<div>
-						<label
-							htmlFor={titleId}
-							className={cn("block text-sm font-medium text-gray-700 mb-1")}
-						>
-							Title <span className={cn("text-red-500")}>*</span>
-						</label>
-						<input
-							id={titleId}
+				<div className="space-y-4">
+					<div className="space-y-2">
+						<Label htmlFor="title" required>
+							Title
+						</Label>
+						<Input
+							id="title"
 							type="text"
 							value={form.state.title}
 							onChange={form.setField("title")}
 							placeholder="Enter task title"
-							className={cn(
-								"w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500",
-							)}
 						/>
 					</div>
 
-					<div className={cn("grid grid-cols-2 gap-4")}>
-						<div>
-							<label
-								htmlFor={statusId}
-								className={cn("block text-sm font-medium text-gray-700 mb-1")}
-							>
-								Status
-							</label>
-							<select
-								id={statusId}
+					<div className="grid grid-cols-2 gap-4">
+						<div className="space-y-2">
+							<Label htmlFor="status">Status</Label>
+							<Select
+								id="status"
 								value={form.state.status}
-								onChange={form.setStatus}
-								className={cn(
-									"w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500",
-								)}
+								onValueChange={(value) =>
+									form.setStatusValue(value as TaskStatus)
+								}
 							>
-								<option value="todo">To Do</option>
-								<option value="in-progress">In Progress</option>
-								<option value="review">Review</option>
-								<option value="done">Done</option>
-							</select>
+								<SelectItem value="todo">To Do</SelectItem>
+								<SelectItem value="in-progress">In Progress</SelectItem>
+								<SelectItem value="review">Review</SelectItem>
+								<SelectItem value="done">Done</SelectItem>
+							</Select>
 						</div>
 
-						<div>
-							<label
-								htmlFor={priorityId}
-								className={cn("block text-sm font-medium text-gray-700 mb-1")}
-							>
-								Priority
-							</label>
-							<select
-								id={priorityId}
+						<div className="space-y-2">
+							<Label htmlFor="priority">Priority</Label>
+							<Select
+								id="priority"
 								value={form.state.priority}
-								onChange={form.setPriority}
-								className={cn(
-									"w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500",
-								)}
+								onValueChange={(value) =>
+									form.setPriorityValue(value as TaskPriority)
+								}
 							>
-								<option value="low">Low</option>
-								<option value="medium">Medium</option>
-								<option value="high">High</option>
-								<option value="critical">Critical</option>
-							</select>
+								<SelectItem value="low">Low</SelectItem>
+								<SelectItem value="medium">Medium</SelectItem>
+								<SelectItem value="high">High</SelectItem>
+								<SelectItem value="critical">Critical</SelectItem>
+							</Select>
 						</div>
 					</div>
 
-					<div>
-						<label
-							htmlFor={labelsId}
-							className={cn("block text-sm font-medium text-gray-700 mb-1")}
-						>
-							Labels
-						</label>
-						<input
-							id={labelsId}
+					<div className="space-y-2">
+						<Label htmlFor="labels">Labels</Label>
+						<Input
+							id="labels"
 							type="text"
 							value={form.state.labels}
 							onChange={form.setField("labels")}
 							placeholder="bug, feature, urgent (comma separated)"
-							className={cn(
-								"w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500",
-							)}
 						/>
 					</div>
 
-					<div className={cn("grid grid-cols-2 gap-4")}>
-						<div>
-							<label
-								htmlFor={assigneeId}
-								className={cn("block text-sm font-medium text-gray-700 mb-1")}
-							>
-								Assignee
-							</label>
-							<input
-								id={assigneeId}
+					<div className="grid grid-cols-2 gap-4">
+						<div className="space-y-2">
+							<Label htmlFor="assignee">Assignee</Label>
+							<Input
+								id="assignee"
 								type="text"
 								value={form.state.assignee}
 								onChange={form.setField("assignee")}
 								placeholder="Name"
-								className={cn(
-									"w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500",
-								)}
 							/>
 						</div>
 
-						<div>
-							<label
-								htmlFor={dueId}
-								className={cn("block text-sm font-medium text-gray-700 mb-1")}
-							>
-								Due Date
-							</label>
-							<input
-								id={dueId}
+						<div className="space-y-2">
+							<Label htmlFor="due">Due Date</Label>
+							<Input
+								id="due"
 								type="date"
 								value={form.state.due}
 								onChange={form.setField("due")}
-								className={cn(
-									"w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500",
-								)}
 							/>
 						</div>
 					</div>
 
-					<div>
-						<label
-							htmlFor={contentId}
-							className={cn("block text-sm font-medium text-gray-700 mb-1")}
-						>
-							Description (Markdown)
-						</label>
-						<textarea
-							id={contentId}
+					<div className="space-y-2">
+						<Label htmlFor="content">Description (Markdown)</Label>
+						<Textarea
+							id="content"
 							value={form.state.content}
 							onChange={form.setField("content")}
 							placeholder="## Description&#10;&#10;Add task details..."
 							rows={6}
-							className={cn(
-								"w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 font-mono text-sm",
-							)}
+							className="font-mono"
 						/>
 					</div>
 				</div>
 
-				<div
-					className={cn(
-						"flex items-center justify-between p-4 border-t border-gray-200 bg-gray-50",
-					)}
-				>
-					{form.isEditing ? (
-						form.state.showDeleteConfirm ? (
-							<div className={cn("flex items-center gap-2")}>
-								<span className={cn("text-sm text-red-600")}>
-									Delete this task?
-								</span>
-								<button
-									type="button"
-									onClick={form.handleDelete}
-									disabled={form.isPending}
-									className={cn(
-										"px-3 py-1.5 text-sm font-medium text-white bg-red-600 rounded hover:bg-red-700 disabled:opacity-50",
-									)}
-								>
-									{form.isDeleting ? "Deleting..." : "Yes, Delete"}
-								</button>
-								<button
-									type="button"
-									onClick={() => form.toggleDeleteConfirm(false)}
-									disabled={form.isPending}
-									className={cn(
-										"px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50",
-									)}
-								>
-									Cancel
-								</button>
-							</div>
-						) : (
-							<button
-								type="button"
-								onClick={() => form.toggleDeleteConfirm(true)}
-								disabled={form.isPending}
-								className={cn(
-									"text-sm text-red-600 hover:text-red-700 disabled:opacity-50",
+				<DialogFooter className="flex-row justify-between sm:justify-between">
+					<div>
+						{form.isEditing && (
+							<>
+								{form.state.showDeleteConfirm ? (
+									<div className="flex items-center gap-2">
+										<span className="text-sm text-[rgb(var(--ui-danger))]">
+											Delete this task?
+										</span>
+										<Button
+											variant="danger"
+											size="sm"
+											onClick={form.handleDelete}
+											isLoading={form.isDeleting}
+											disabled={form.isPending}
+										>
+											Yes, Delete
+										</Button>
+										<Button
+											variant="outline"
+											size="sm"
+											onClick={() => form.toggleDeleteConfirm(false)}
+											disabled={form.isPending}
+										>
+											Cancel
+										</Button>
+									</div>
+								) : (
+									<Button
+										variant="link"
+										onClick={() => form.toggleDeleteConfirm(true)}
+										disabled={form.isPending}
+										className="text-[rgb(var(--ui-danger))] hover:text-[rgb(var(--ui-danger))]"
+									>
+										Delete task
+									</Button>
 								)}
-							>
-								Delete task
-							</button>
-						)
-					) : (
-						<div />
-					)}
+							</>
+						)}
+					</div>
 
-					<div className={cn("flex items-center gap-2")}>
-						<button
-							type="button"
+					<div className="flex items-center gap-2">
+						<Button
+							variant="outline"
 							onClick={onClose}
 							disabled={form.isPending}
-							className={cn(
-								"px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50",
-							)}
 						>
 							Cancel
-						</button>
-						<button
-							type="button"
+						</Button>
+						<Button
 							onClick={form.handleSave}
 							disabled={!form.canSave}
-							className={cn(
-								"px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed",
-							)}
+							isLoading={form.isPending && !form.isDeleting}
 						>
-							{form.isPending
-								? form.isEditing
-									? "Saving..."
-									: "Creating..."
-								: form.isEditing
-									? "Save Changes"
-									: "Create Task"}
-						</button>
+							{form.isEditing ? "Save Changes" : "Create Task"}
+						</Button>
 					</div>
-				</div>
-			</div>
-		</div>
+				</DialogFooter>
+			</DialogContent>
+		</Dialog>
 	);
 }

@@ -1,4 +1,5 @@
-import { PRIORITY_COLORS } from "@/lib/kanban/constants";
+import { Badge } from "@/components/ui/badge";
+import { PRIORITY_BADGE_VARIANTS } from "@/lib/kanban/constants";
 import { cn } from "@/lib/utils/cn";
 import type { Task } from "@/schemas/task";
 
@@ -37,26 +38,31 @@ export function TaskCardContent({
 		>
 			<div className="flex items-start justify-between mb-3 gap-2">
 				<div className="flex flex-wrap gap-1.5">
-					<span
-						className={cn(
-							"px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide uppercase",
-							PRIORITY_COLORS[task.metadata.priority],
-						)}
+					<Badge
+						variant={PRIORITY_BADGE_VARIANTS[task.metadata.priority]}
+						size="sm"
+						className="uppercase text-[10px] font-bold tracking-wide"
 					>
 						{task.metadata.priority}
-					</span>
+					</Badge>
 					{task.metadata.labels.slice(0, 2).map((label) => (
-						<span
+						<Badge
 							key={label}
-							className="px-2 py-0.5 bg-gray-50 text-gray-500 rounded-full text-[10px] font-medium border border-gray-100"
+							variant="outline"
+							size="sm"
+							className="text-[10px] font-medium text-gray-500"
 						>
 							{label}
-						</span>
+						</Badge>
 					))}
 					{task.metadata.labels.length > 2 && (
-						<span className="px-1.5 py-0.5 bg-gray-50 text-gray-400 rounded-full text-[10px] border border-gray-100">
+						<Badge
+							variant="outline"
+							size="sm"
+							className="text-[10px] text-gray-400"
+						>
 							+{task.metadata.labels.length - 2}
-						</span>
+						</Badge>
 					)}
 				</div>
 			</div>

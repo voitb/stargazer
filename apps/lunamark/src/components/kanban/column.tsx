@@ -1,6 +1,7 @@
 import { CollisionPriority } from "@dnd-kit/abstract";
 import { useDroppable } from "@dnd-kit/react";
 import { Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { COLUMN_COLORS } from "@/lib/kanban/constants";
 import { cn } from "@/lib/utils/cn";
 import type { Column as ColumnType, Task } from "@/schemas/task";
@@ -80,14 +81,14 @@ export function Column({ column, onAddTask, onEditTask }: ColumnProps) {
 
 			{onAddTask && (
 				<div className="p-3 pt-2">
-					<button
-						type="button"
+					<Button
+						variant="ghost"
 						onClick={onAddTask}
-						className="group w-full flex items-center justify-center gap-2 text-sm text-gray-500 hover:text-gray-900 hover:bg-white hover:shadow-sm hover:border-gray-200 border border-transparent rounded-lg py-2 transition-all duration-200"
+						className="w-full justify-center gap-2 text-gray-500 hover:text-gray-900 hover:bg-white hover:shadow-sm border border-transparent hover:border-gray-200"
 					>
 						<Plus className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors" />
 						<span className="font-medium">Add Task</span>
-					</button>
+					</Button>
 				</div>
 			)}
 		</div>

@@ -1,0 +1,40 @@
+:root {
+  /* Backgrounds */
+  --ui-bg: 255 255 255;
+  --ui-bg-secondary: 249 250 251;
+  --ui-bg-tertiary: 243 244 246;
+
+  /* Foregrounds */
+  --ui-fg: 17 24 39;
+  --ui-fg-muted: 107 114 128;
+
+  /* Borders */
+  --ui-border: 229 231 235;
+  --ui-border-focus: 59 130 246;
+
+  /* Brand */
+  --ui-primary: 37 99 235;
+  --ui-primary-fg: 255 255 255;
+
+  /* Semantic */
+  --ui-danger: 220 38 38;
+  --ui-danger-fg: 255 255 255;
+  --ui-success: 22 163 74;
+  --ui-warning: 234 179 8;
+
+  /* Overlay */
+  --ui-overlay: 0 0 0 / 0.5;
+}
+
+[data-theme="dark"] {
+  --ui-bg: 17 24 39;
+  --ui-bg-secondary: 31 41 55;
+  --ui-bg-tertiary: 55 65 81;
+
+  --ui-fg: 249 250 251;
+  --ui-fg-muted: 156 163 175;
+
+  --ui-border: 75 85 99;
+
+  --ui-overlay: 0 0 0 / 0.7;
+}

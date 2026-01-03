@@ -48,8 +48,16 @@ export function useTaskEditorForm({
 		dispatch({ type: "SET_STATUS", value: e.target.value as TaskStatus });
 	}
 
+	function setStatusValue(value: TaskStatus) {
+		dispatch({ type: "SET_STATUS", value });
+	}
+
 	function setPriority(e: React.ChangeEvent<HTMLSelectElement>) {
 		dispatch({ type: "SET_PRIORITY", value: e.target.value as TaskPriority });
+	}
+
+	function setPriorityValue(value: TaskPriority) {
+		dispatch({ type: "SET_PRIORITY", value });
 	}
 
 	function toggleDeleteConfirm(show: boolean) {
@@ -99,7 +107,9 @@ export function useTaskEditorForm({
 		canSave,
 		setField,
 		setStatus,
+		setStatusValue,
 		setPriority,
+		setPriorityValue,
 		toggleDeleteConfirm,
 		handleSave,
 		handleDelete,

@@ -1,3 +1,5 @@
+import type { VariantProps } from "class-variance-authority";
+import type { badgeVariants } from "@/components/ui/badge";
 import type { TaskPriority } from "@/schemas/task";
 
 export const COLUMN_COLORS: Record<string, string> = {
@@ -7,11 +9,14 @@ export const COLUMN_COLORS: Record<string, string> = {
 	green: "bg-green-500",
 };
 
-export const PRIORITY_COLORS: Record<TaskPriority, string> = {
-	low: "bg-gray-100 text-gray-600",
-	medium: "bg-blue-100 text-blue-600",
-	high: "bg-orange-100 text-orange-600",
-	critical: "bg-red-100 text-red-600",
+export const PRIORITY_BADGE_VARIANTS: Record<
+	TaskPriority,
+	VariantProps<typeof badgeVariants>["variant"]
+> = {
+	low: "secondary",
+	medium: "default",
+	high: "warning",
+	critical: "danger",
 };
 
 export const DND_TYPES = {
