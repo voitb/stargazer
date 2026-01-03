@@ -122,6 +122,17 @@ export function TaskEditor({
 					</div>
 
 					<div className="space-y-2">
+						<Label htmlFor="avatarUrl">Avatar URL</Label>
+						<Input
+							id="avatarUrl"
+							type="url"
+							value={form.state.avatarUrl}
+							onChange={form.setField("avatarUrl")}
+							placeholder="https://github.com/username.png"
+						/>
+					</div>
+
+					<div className="space-y-2">
 						<Label htmlFor="content">Description (Markdown)</Label>
 						<Textarea
 							id="content"

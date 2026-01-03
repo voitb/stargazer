@@ -38,7 +38,7 @@ export function useTaskEditorForm({
 	const isPending = isCreating || isUpdating || isDeleting;
 	const canSave = state.title.trim().length > 0 && !isPending;
 
-	function setField(field: "title" | "labels" | "assignee" | "due" | "content") {
+	function setField(field: "title" | "labels" | "assignee" | "avatarUrl" | "due" | "content") {
 		return (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 			dispatch({ type: "SET_FIELD", field, value: e.target.value });
 		};

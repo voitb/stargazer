@@ -29,6 +29,7 @@ export const TaskMetadataSchema = z.object({
 		.nullable()
 		.transform((val) => val ?? []),
 	assignee: z.string().optional().nullable(),
+	avatarUrl: z.string().url().optional().nullable(),
 	created: dateToString
 		.optional()
 		.default(() => new Date().toISOString().split("T")[0]),
@@ -82,6 +83,7 @@ export const CreateTaskInputSchema = z.object({
 	priority: TaskPrioritySchema.default("medium"),
 	labels: z.array(z.string()).default([]),
 	assignee: z.string().optional(),
+	avatarUrl: z.string().url().optional(),
 	due: z.string().optional(),
 	content: z.string().default(""),
 });
@@ -94,6 +96,7 @@ export const UpdateTaskInputSchema = z.object({
 	priority: TaskPrioritySchema.optional(),
 	labels: z.array(z.string()).optional(),
 	assignee: z.string().nullable().optional(),
+	avatarUrl: z.string().url().nullable().optional(),
 	due: z.string().nullable().optional(),
 	order: z.number().optional(),
 	content: z.string().optional(),

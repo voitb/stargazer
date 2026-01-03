@@ -1,3 +1,4 @@
+import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { PRIORITY_BADGE_VARIANTS } from "@/lib/kanban/constants";
@@ -77,23 +78,13 @@ export function TaskCardContent({
 
       {/* Footer */}
       <div className="flex items-center justify-between pt-3 border-t border-[rgb(var(--ui-border))]/20">
-        <div className="flex items-center gap-2">
-          {task.metadata.assignee ? (
-            <div
-              className="flex items-center gap-1.5 group/assignee"
-              title={task.metadata.assignee}
-            >
-              <div className="w-6 h-6 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center text-[10px] font-bold border border-indigo-100">
-                {task.metadata.assignee[0]?.toUpperCase()}
-              </div>
-            </div>
-          ) : (
-            <div className="w-6 h-6 rounded-full border border-dashed border-[rgb(var(--ui-border))] flex items-center justify-center text-[rgb(var(--ui-fg-muted))]">
-              <span className="text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">
-                ?
-              </span>
-            </div>
-          )}
+        <div className="flex items-center gap-2" title={task.metadata.assignee ?? undefined}>
+          <Avatar
+            size="sm"
+            src={task.metadata.avatarUrl}
+            alt={task.metadata.assignee ?? undefined}
+            className={!task.metadata.assignee ? "border border-dashed border-[rgb(var(--ui-border))] bg-transparent" : undefined}
+          />
         </div>
 
         <div className="flex items-center gap-3 text-xs text-[rgb(var(--ui-fg-muted))] font-medium">

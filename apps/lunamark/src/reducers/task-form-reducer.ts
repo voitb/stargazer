@@ -6,6 +6,7 @@ export interface TaskFormState {
 	priority: TaskPriority;
 	labels: string;
 	assignee: string;
+	avatarUrl: string;
 	due: string;
 	content: string;
 	showDeleteConfirm: boolean;
@@ -14,7 +15,7 @@ export interface TaskFormState {
 export type TaskFormAction =
 	| {
 			type: "SET_FIELD";
-			field: "title" | "labels" | "assignee" | "due" | "content";
+			field: "title" | "labels" | "assignee" | "avatarUrl" | "due" | "content";
 			value: string;
 	  }
 	| { type: "SET_STATUS"; value: TaskStatus }
@@ -48,6 +49,7 @@ export function createInitialFormState(
 			priority: task.metadata.priority,
 			labels: task.metadata.labels.join(", "),
 			assignee: task.metadata.assignee ?? "",
+			avatarUrl: task.metadata.avatarUrl ?? "",
 			due: task.metadata.due ?? "",
 			content: task.content,
 			showDeleteConfirm: false,
@@ -60,6 +62,7 @@ export function createInitialFormState(
 		priority: "medium",
 		labels: "",
 		assignee: "",
+		avatarUrl: "",
 		due: "",
 		content: "",
 		showDeleteConfirm: false,

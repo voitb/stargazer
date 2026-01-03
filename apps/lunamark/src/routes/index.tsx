@@ -2,8 +2,32 @@ import { createFileRoute } from "@tanstack/react-router";
 import { KanbanBoard } from "@/components/kanban/kanban-board";
 import { useBoard } from "@/hooks/kanban/use-board";
 import { getBoard } from "@/server/board";
+import type { TaskPriority } from "@/schemas/task";
+
+const VALID_PRIORITIES = ["low", "medium", "high", "critical"] as const;
+
+function isValidPriority(value: unknown): value is TaskPriority {
+	return (
+		typeof value === "string" &&
+		VALID_PRIORITIES.includes(value as TaskPriority)
+	);
+}
 
 export const Route = createFileRoute("/")({
+	validateSearch: (
+		search: Record<string, unknown>,
+	): {
+		assignee?: string;
+		priority?: TaskPriority;
+		labels?: string[];
+	} => ({
+		assignee:
+			typeof search.assignee === "string" ? search.assignee : undefined,
+		priority: isValidPriority(search.priority) ? search.priority : undefined,
+		labels: Array.isArray(search.labels)
+			? search.labels.filter((l): l is string => typeof l === "string")
+			: undefined,
+	}),
 	loader: async () => {
 		return { board: await getBoard() };
 	},

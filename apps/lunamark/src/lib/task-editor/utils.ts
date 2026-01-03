@@ -14,6 +14,7 @@ export function buildCreatePayload(state: TaskFormState) {
 		priority: state.priority,
 		labels: parseLabels(state.labels),
 		assignee: state.assignee.trim() || undefined,
+		avatarUrl: state.avatarUrl.trim() || undefined,
 		due: state.due || undefined,
 		content: state.content,
 	};
@@ -27,6 +28,7 @@ export function buildUpdatePayload(taskId: string, state: TaskFormState) {
 		priority: state.priority,
 		labels: parseLabels(state.labels),
 		assignee: state.assignee.trim() || null,
+		avatarUrl: state.avatarUrl.trim() || null,
 		due: state.due || null,
 		content: state.content,
 	};
