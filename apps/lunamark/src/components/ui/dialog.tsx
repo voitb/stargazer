@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils/cn";
+import { useExitAnimation } from "@/hooks/ui/use-exit-animation";
 import { useFocusTrap } from "@/hooks/ui/use-focus-trap";
 import {
 	createContext,
@@ -50,6 +51,9 @@ function DialogContent({ className, children, ref, ...props }: DialogContentProp
 	const { isOpen, onOpenChange, closeOnBackdropClick } = useDialogContext();
 	const contentRef = useRef<HTMLDivElement>(null);
 
+	// Keep mounted during exit animation (150ms matches CSS transition duration)
+	const shouldRender = useExitAnimation(isOpen, 150);
+
 	useFocusTrap(contentRef, isOpen);
 
 	useEffect(() => {
@@ -97,17 +101,22 @@ function DialogContent({ className, children, ref, ...props }: DialogContentProp
 		}
 	};
 
-	if (!isOpen) return null;
+	const dataState = isOpen ? "open" : "closed";
+
+	// Don't render when fully closed (after exit animation completes)
+	if (!shouldRender) return null;
 
 	return createPortal(
 		<div
 			className="fixed inset-0 z-50 flex items-center justify-center"
+			data-state={dataState}
 			onClick={handleBackdropClick}
 		>
 			{/* Backdrop/Overlay */}
 			<div
 				data-dialog-overlay
-				className="fixed inset-0 bg-black/50 animate-fade-in"
+				data-state={dataState}
+				className="fixed inset-0 bg-black/50"
 				aria-hidden="true"
 			/>
 
@@ -116,12 +125,13 @@ function DialogContent({ className, children, ref, ...props }: DialogContentProp
 				ref={combinedRef}
 				role="dialog"
 				aria-modal="true"
+				aria-hidden={!isOpen}
 				data-dialog-content
+				data-state={dataState}
 				className={cn(
-					"relative z-50 grid w-full max-w-lg gap-4 border p-6 shadow-lg",
+					"relative z-50 w-full max-w-lg gap-4 border p-6 shadow-lg",
 					"bg-[rgb(var(--ui-bg))] text-[rgb(var(--ui-fg))] border-[rgb(var(--ui-border))]",
 					"rounded-lg",
-					"animate-zoom-in",
 					className
 				)}
 				{...props}
@@ -131,6 +141,7 @@ function DialogContent({ className, children, ref, ...props }: DialogContentProp
 				{/* Close button */}
 				<button
 					type="button"
+					tabIndex={isOpen ? 0 : -1}
 					className={cn(
 						"absolute right-4 top-4 rounded-sm opacity-70 transition-opacity",
 						"hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-[rgb(var(--ui-border))]",

@@ -90,22 +90,42 @@
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Dialog Animations with @starting-style
+   Dialog Animations with @starting-style and allow-discrete
    ───────────────────────────────────────────────────────────── */
+
+/* Base state (closed) - these are the "exit-to" values */
 [data-dialog-overlay] {
-  transition: opacity 0.15s ease-out, display 0.15s ease-out allow-discrete;
+  opacity: 0;
+  display: none;
+  transition: opacity 0.15s ease-in, display 0.15s ease-in allow-discrete;
 }
 
 [data-dialog-content] {
-  transition: opacity 0.15s ease-out, transform 0.15s ease-out, display 0.15s ease-out allow-discrete;
+  opacity: 0;
+  transform: scale(0.95);
+  display: none;
+  transition: opacity 0.15s ease-in, transform 0.15s ease-in, display 0.15s ease-in allow-discrete;
 }
 
+/* Open state */
+[data-dialog-overlay][data-state="open"] {
+  opacity: 1;
+  display: block;
+}
+
+[data-dialog-content][data-state="open"] {
+  opacity: 1;
+  transform: scale(1);
+  display: grid;
+}
+
+/* Entry animation starting point */
 @starting-style {
-  [data-dialog-overlay] {
+  [data-dialog-overlay][data-state="open"] {
     opacity: 0;
   }
 
-  [data-dialog-content] {
+  [data-dialog-content][data-state="open"] {
     opacity: 0;
     transform: scale(0.95);
   }
