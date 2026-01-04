@@ -1,5 +1,12 @@
 import { Avatar, AvatarGroup } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import {
+	Dropdown,
+	DropdownTrigger,
+	DropdownContent,
+	DropdownItem,
+	DropdownLabel,
+} from "@/components/ui/dropdown";
 import { FilterBar } from "@/components/ui/filter-bar";
 import { FilterGroup } from "@/components/ui/filter-group";
 import { SelectableButton } from "@/components/ui/selectable-button";
@@ -132,9 +139,47 @@ export function BoardFilters({
 					))}
 				</ToggleGroup>
 				{labels.length > 6 && (
-					<Badge variant="secondary" size="sm" className="text-[10px]">
-						+{labels.length - 6}
-					</Badge>
+					<Dropdown trigger="hover">
+						<DropdownTrigger>
+							<Badge
+								variant="secondary"
+								size="sm"
+								className="text-[10px] cursor-pointer"
+							>
+								+{labels.length - 6}
+							</Badge>
+						</DropdownTrigger>
+						<DropdownContent className="max-w-xs">
+							<DropdownLabel>Additional Labels</DropdownLabel>
+							{labels.slice(6).map((label) => (
+								<DropdownItem
+									key={label}
+									onSelect={() => onLabelToggle(label)}
+									className="flex items-center justify-between gap-2"
+								>
+									<Badge variant="outline" size="sm" className="text-[10px]">
+										{label}
+									</Badge>
+									{filters.labels.includes(label) && (
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											width="14"
+											height="14"
+											viewBox="0 0 24 24"
+											fill="none"
+											stroke="currentColor"
+											strokeWidth="2"
+											strokeLinecap="round"
+											strokeLinejoin="round"
+											className="text-[rgb(var(--ui-primary))] shrink-0"
+										>
+											<polyline points="20 6 9 17 4 12" />
+										</svg>
+									)}
+								</DropdownItem>
+							))}
+						</DropdownContent>
+					</Dropdown>
 				)}
 			</FilterGroup>
 		</FilterBar>
