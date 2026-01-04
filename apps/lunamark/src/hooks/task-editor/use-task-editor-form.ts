@@ -44,6 +44,12 @@ export function useTaskEditorForm({
 		};
 	}
 
+	function setFieldValue(field: "title" | "labels" | "assignee" | "avatarUrl" | "due" | "content") {
+		return (value: string) => {
+			dispatch({ type: "SET_FIELD", field, value });
+		};
+	}
+
 	function setStatus(e: React.ChangeEvent<HTMLSelectElement>) {
 		dispatch({ type: "SET_STATUS", value: e.target.value as TaskStatus });
 	}
@@ -106,6 +112,7 @@ export function useTaskEditorForm({
 		isDeleting,
 		canSave,
 		setField,
+		setFieldValue,
 		setStatus,
 		setStatusValue,
 		setPriority,

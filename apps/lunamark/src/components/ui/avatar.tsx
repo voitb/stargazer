@@ -118,4 +118,51 @@ function AvatarGroup({
 	);
 }
 
-export { Avatar, AvatarGroup, avatarVariants };
+type SelectableAvatarProps = ComponentPropsWithoutRef<"button"> &
+	VariantProps<typeof avatarVariants> & {
+		ref?: Ref<HTMLButtonElement>;
+		src?: string | null;
+		alt?: string;
+		fallback?: string;
+		isSelected?: boolean;
+	};
+
+function SelectableAvatar({
+	size,
+	src,
+	alt,
+	fallback,
+	isSelected = false,
+	className,
+	ref,
+	...props
+}: SelectableAvatarProps) {
+	return (
+		<button
+			ref={ref}
+			type="button"
+			data-slot="avatar"
+			aria-pressed={isSelected}
+			data-state={isSelected ? "on" : "off"}
+			className={cn(
+				"relative cursor-pointer transition-all rounded-full",
+				"focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+				"focus-visible:ring-[rgb(var(--ui-border-focus))]",
+				className,
+			)}
+			{...props}
+		>
+			<Avatar
+				size={size}
+				src={src}
+				alt={alt}
+				fallback={fallback}
+				className={cn(
+					isSelected && "ring-2 ring-[rgb(var(--ui-primary))] ring-offset-1",
+				)}
+			/>
+		</button>
+	);
+}
+
+export { Avatar, AvatarGroup, SelectableAvatar, avatarVariants };

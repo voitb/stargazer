@@ -1,17 +1,11 @@
-import { Avatar, AvatarGroup } from "@/components/ui/avatar";
+import { avatarVariants, SelectableAvatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import {
-	Dropdown,
-	DropdownTrigger,
-	DropdownContent,
-	DropdownItem,
-	DropdownLabel,
-} from "@/components/ui/dropdown";
 import { FilterBar } from "@/components/ui/filter-bar";
 import { FilterGroup } from "@/components/ui/filter-group";
-import { SelectableButton } from "@/components/ui/selectable-button";
+import { MultiSelectChips } from "@/components/ui/multi-select-chips";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { PRIORITY_BADGE_VARIANTS } from "@/lib/kanban/constants";
+import { cn } from "@/lib/utils/cn";
 import type { TaskPriority } from "@/schemas/task";
 
 interface Assignee {
@@ -53,21 +47,13 @@ export function BoardFilters({
 	return (
 		<FilterBar hasActiveFilters={hasActiveFilters} onClear={onClearFilters}>
 			<FilterGroup label="Assignee" visible={assignees.length > 0}>
-				<SelectableButton
-					size="sm"
-					variant="ghost"
-					isSelected={filters.assignee === null}
-					onClick={() => onAssigneeChange(null)}
-					aria-label="Show all assignees"
-				>
-					All
-				</SelectableButton>
-				<AvatarGroup max={5} size="sm">
-					{assignees.map((assignee) => (
-						<SelectableButton
+				<div className="flex -space-x-2">
+					{assignees.slice(0, 5).map((assignee) => (
+						<SelectableAvatar
 							key={assignee.name}
 							size="sm"
-							variant="ghost"
+							src={assignee.avatarUrl}
+							alt={assignee.name}
 							isSelected={filters.assignee === assignee.name}
 							onClick={() =>
 								onAssigneeChange(
@@ -75,19 +61,30 @@ export function BoardFilters({
 								)
 							}
 							aria-label={`Filter by ${assignee.name}`}
-							className="rounded-full p-0"
-						>
-							<Avatar size="sm" src={assignee.avatarUrl} alt={assignee.name} />
-						</SelectableButton>
+							className="ring-2 ring-[rgb(var(--ui-bg))]"
+						/>
 					))}
-				</AvatarGroup>
+					{assignees.length > 5 && (
+						<span
+							data-slot="avatar"
+							className={cn(
+								avatarVariants({ size: "sm" }),
+								"ring-2 ring-[rgb(var(--ui-bg))] bg-[rgb(var(--ui-bg-secondary))]",
+							)}
+						>
+							+{assignees.length - 5}
+						</span>
+					)}
+				</div>
 			</FilterGroup>
 
 			<FilterGroup label="Priority">
 				<ToggleGroup
 					type="single"
 					value={filters.priority}
-					onValueChange={(value) => onPriorityChange(value as TaskPriority | null)}
+					onValueChange={(value) =>
+						onPriorityChange(value as TaskPriority | null)
+					}
 					size="sm"
 				>
 					{PRIORITIES.map((priority) => (
@@ -110,77 +107,13 @@ export function BoardFilters({
 			</FilterGroup>
 
 			<FilterGroup label="Labels" visible={labels.length > 0}>
-				<ToggleGroup
-					type="multiple"
+				<MultiSelectChips
 					values={filters.labels}
-					onValuesChange={(values) => {
-						const added = values.find((v) => !filters.labels.includes(v));
-						const removed = filters.labels.find((l) => !values.includes(l));
-						if (added) onLabelToggle(added);
-						if (removed) onLabelToggle(removed);
-					}}
+					onToggle={onLabelToggle}
+					options={labels.map((label) => ({ value: label, label }))}
+					maxDisplay={6}
 					size="sm"
-				>
-					{labels.slice(0, 6).map((label) => (
-						<ToggleGroupItem
-							key={label}
-							value={label}
-							aria-label={`Toggle ${label} label filter`}
-							className="rounded-full p-0 bg-transparent hover:bg-transparent"
-						>
-							<Badge
-								variant="outline"
-								size="sm"
-								className="text-[10px] font-medium cursor-pointer"
-							>
-								{label}
-							</Badge>
-						</ToggleGroupItem>
-					))}
-				</ToggleGroup>
-				{labels.length > 6 && (
-					<Dropdown trigger="hover">
-						<DropdownTrigger>
-							<Badge
-								variant="secondary"
-								size="sm"
-								className="text-[10px] cursor-pointer"
-							>
-								+{labels.length - 6}
-							</Badge>
-						</DropdownTrigger>
-						<DropdownContent className="max-w-xs">
-							<DropdownLabel>Additional Labels</DropdownLabel>
-							{labels.slice(6).map((label) => (
-								<DropdownItem
-									key={label}
-									onSelect={() => onLabelToggle(label)}
-									className="flex items-center justify-between gap-2"
-								>
-									<Badge variant="outline" size="sm" className="text-[10px]">
-										{label}
-									</Badge>
-									{filters.labels.includes(label) && (
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											width="14"
-											height="14"
-											viewBox="0 0 24 24"
-											fill="none"
-											stroke="currentColor"
-											strokeWidth="2"
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											className="text-[rgb(var(--ui-primary))] shrink-0"
-										>
-											<polyline points="20 6 9 17 4 12" />
-										</svg>
-									)}
-								</DropdownItem>
-							))}
-						</DropdownContent>
-					</Dropdown>
-				)}
+				/>
 			</FilterGroup>
 		</FilterBar>
 	);

@@ -1,6 +1,7 @@
 "use client";
 
 import { useTaskEditorForm } from "@/hooks/task-editor/use-task-editor-form";
+import { getGitHubAvatarUrl } from "@/lib/github/avatar";
 import type { Task, TaskPriority, TaskStatus } from "@/schemas/task";
 import { Button } from "@/components/ui/button";
 import {
@@ -106,7 +107,13 @@ export function TaskEditor({
 								type="text"
 								value={form.state.assignee}
 								onChange={form.setField("assignee")}
-								placeholder="Name"
+								onBlur={(e) => {
+									const value = e.target.value.trim();
+									if (value && !form.state.avatarUrl) {
+										form.setFieldValue("avatarUrl")(getGitHubAvatarUrl(value));
+									}
+								}}
+								placeholder="GitHub username (e.g., voitb)"
 							/>
 						</div>
 
