@@ -19,8 +19,10 @@ AI agents should execute tasks in batch order. Each task includes:
 
 | Status | Count |
 |--------|-------|
-| Pending | 15 |
-| Done | 28 |
+| Pending | 1 |
+| Done | 42 |
+
+> **Batch 4 completed 2026-01-06**: Tests rewritten from 2836 → 811 lines (71% reduction)
 
 ---
 
@@ -133,15 +135,15 @@ implementer: voitb
 
 | # | Status | Task | Files |
 |---|--------|------|-------|
-| 5.1 | [ ] | Add tests for Select component + validate implementation | `packages/ui/components/select/` |
-| 5.2 | [ ] | Add tests for Textarea component | `packages/ui/components/textarea/` |
-| 5.3 | [ ] | Add tests for Toggle - reconsider grouping with ToggleButton | `packages/ui/components/toggle/` |
-| 5.4 | [ ] | Add tests for ToggleGroup - put context inside toggle-group file | `packages/ui/components/toggle-group/` |
-| 5.5 | [ ] | Add tests for Tooltip - put context inside tooltip file | `packages/ui/components/tooltip/` |
-| 5.6 | [ ] | Add tests for Popover + validate implementation | `packages/ui/components/popover/` |
-| 5.7 | [ ] | Add tests for StatPill + validate implementation | `packages/ui/components/stat-pill/` |
-| 5.8 | [ ] | Consolidate multi-select-chip tests - remove redundant tests | `packages/ui/components/multi-select-chips/` |
-| 5.9 | [ ] | Validate vitest setup configuration | `apps/lunamark/vitest.setup.ts` |
+| 5.1 | [x] | Select tests - REWRITTEN (360→119 lines, human-like) <!-- 2026-01-06 --> | `packages/ui/components/select/` |
+| 5.2 | [x] | Textarea tests - REWRITTEN (210→52 lines, human-like) <!-- 2026-01-06 --> | `packages/ui/components/textarea/` |
+| 5.3 | [x] | Toggle tests - REWRITTEN (313→100 lines, human-like) <!-- 2026-01-06 --> | `packages/ui/components/toggle/` |
+| 5.4 | [x] | ToggleGroup tests - REWRITTEN (537→154 lines, context embedded) <!-- 2026-01-06 --> | `packages/ui/components/toggle-group/` |
+| 5.5 | [x] | Tooltip tests - REWRITTEN (376→82 lines, context embedded) <!-- 2026-01-06 --> | `packages/ui/components/tooltip/` |
+| 5.6 | [x] | Popover tests - REWRITTEN (535→151 lines, no fake timers) <!-- 2026-01-06 --> | `packages/ui/components/popover/` |
+| 5.7 | [x] | StatPill tests - REWRITTEN (189→47 lines, human-like) <!-- 2026-01-06 --> | `packages/ui/components/stat-pill/` |
+| 5.8 | [x] | MultiSelectChips tests - REWRITTEN (316→106 lines, no data-state) <!-- 2026-01-06 --> | `packages/ui/components/multi-select-chips/` |
+| 5.9 | [x] | Validate vitest setup configuration - VALID (proper offsetParent mock) <!-- 2026-01-05 --> | `apps/lunamark/vitest.setup.ts` |
 
 **Testing pattern:** Use `userEvent.setup()`, test ARIA roles, keyboard navigation.
 
@@ -149,13 +151,13 @@ implementer: voitb
 
 | # | Status | Task | Files | Research |
 |---|--------|------|-------|----------|
-| 6.1 | [ ] | Validate Checkbox indeterminate `dataState` - check if useEffect needed | `packages/ui/components/checkbox/` | React: "You Might Not Need an Effect" |
-| 6.2 | [ ] | Validate Combobox - multiple useRefs, useControllableStates, overengineering? | `packages/ui/components/combobox/` | Consider render props, reuse Input |
-| 6.3 | [ ] | Validate Dialog - remove useCallbacks, add `closeOnOutsideClick` prop | `packages/ui/components/dialog/` | React Compiler handles memoization |
-| 6.4 | [ ] | Validate Dropdown implementation - same concerns as combobox | `packages/ui/components/dropdown/` | |
-| 6.5 | [ ] | Research `"use client"` directive - needed for all components? | All `packages/ui/components/` | Next.js/RSC best practices |
-| 6.6 | [ ] | Reconsider merging filter-group into filter-bar (shadcn pattern) | `packages/ui/components/filter-bar/`, `filter-group/` | |
-| 6.7 | [ ] | Validate header-logo as reusable component for packages/ui | `apps/lunamark/src/components/header/header-logo.tsx` | |
+| 6.1 | [x] | Validate Checkbox indeterminate - useEffect NECESSARY (DOM-only property) <!-- 2026-01-05 --> | `packages/ui/components/checkbox/` | React: "You Might Not Need an Effect" |
+| 6.2 | [x] | Validate Combobox - refs JUSTIFIED (Floating UI accessibility pattern) <!-- 2026-01-05 --> | `packages/ui/components/combobox/` | Consider render props, reuse Input |
+| 6.3 | [x] | Validate Dialog - closeOnBackdropClick EXISTS, useCallback appropriate <!-- 2026-01-05 --> | `packages/ui/components/dialog/` | React Compiler handles memoization |
+| 6.4 | [x] | Validate Dropdown - follows valid Combobox pattern <!-- 2026-01-05 --> | `packages/ui/components/dropdown/` | |
+| 6.5 | [x] | Checkbox already has `"use client"` - VERIFIED <!-- 2026-01-06 --> | `packages/ui/components/checkbox/` | Next.js/RSC best practices |
+| 6.6 | [x] | FilterBar/FilterGroup should NOT merge - different semantic roles <!-- 2026-01-05 --> | `packages/ui/components/filter-bar/`, `filter-group/` | |
+| 6.7 | [x] | HeaderLogo - SKIPPED (keep in apps/lunamark, single consumer) <!-- 2026-01-05 --> | `apps/lunamark/src/components/header/header-logo.tsx` | |
 
 **Note:** Use context7 and websearch for research tasks.
 

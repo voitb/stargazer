@@ -1,6 +1,8 @@
 import type { VariantProps } from "class-variance-authority";
 import {
+  createContext,
   useCallback,
+  useContext,
   useEffect,
   useRef,
   type ComponentProps,
@@ -9,14 +11,35 @@ import {
 } from "react";
 import { cn } from "../../utils/cn";
 import {
-  ToggleGroupContext,
-  useToggleGroupContext,
-} from "./toggle-group.context";
-import {
   toggleGroupVariants,
   toggleGroupItemVariants,
   toggleGroupItemSelectedVariants,
 } from "./toggle-group.variants";
+
+type ToggleGroupContextValue = {
+  type: "single" | "multiple";
+  value: string | null;
+  values: string[];
+  onItemToggle: (itemValue: string) => void;
+  size: "sm" | "md" | "lg";
+  variant: "ring" | "contained";
+  orientation: "horizontal" | "vertical";
+  registerItem: (value: string, element: HTMLButtonElement) => void;
+  unregisterItem: (value: string) => void;
+  isItemSelected: (value: string) => boolean;
+};
+
+const ToggleGroupContext = createContext<ToggleGroupContextValue | null>(null);
+
+function useToggleGroupContext() {
+  const context = useContext(ToggleGroupContext);
+  if (!context) {
+    throw new Error(
+      "ToggleGroupItem must be used within a ToggleGroup provider"
+    );
+  }
+  return context;
+}
 
 type ToggleGroupSingleProps = {
   type: "single";

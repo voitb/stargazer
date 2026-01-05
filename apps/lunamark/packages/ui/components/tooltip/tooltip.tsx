@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useMemo, type ReactNode } from "react";
+import { createContext, useContext, useId, useMemo, type ReactNode } from "react";
 import {
 	useFloating,
 	autoUpdate,
@@ -18,7 +18,29 @@ import {
 import { cn } from "../../utils/cn";
 import { useControllableState } from "../../hooks/use-controllable-state";
 import { useExitAnimation } from "../../hooks/use-exit-animation";
-import { TooltipContext, useTooltipContext } from "./tooltip.context";
+
+type TooltipContextValue = {
+	isOpen: boolean;
+	getReferenceProps: () => Record<string, unknown>;
+	getFloatingProps: () => Record<string, unknown>;
+	refs: {
+		setReference: (node: HTMLElement | null) => void;
+		setFloating: (node: HTMLElement | null) => void;
+	};
+	floatingStyles: React.CSSProperties;
+	placement: Placement;
+	contentId: string;
+};
+
+const TooltipContext = createContext<TooltipContextValue | null>(null);
+
+function useTooltipContext() {
+	const context = useContext(TooltipContext);
+	if (!context) {
+		throw new Error("Tooltip components must be used within a Tooltip provider");
+	}
+	return context;
+}
 
 type TooltipProps = {
 	children: ReactNode;
