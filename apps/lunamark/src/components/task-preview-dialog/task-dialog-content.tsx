@@ -17,7 +17,7 @@ export function TaskDialogContent({
 }: TaskDialogContentProps) {
   if (mode === "edit") {
     return (
-      <div className="flex-1 overflow-y-auto custom-scrollbar p-6">
+      <div className="flex-1 overflow-y-auto scrollbar-thin p-6">
         <Textarea
           value={content}
           onChange={onChange}
@@ -29,7 +29,7 @@ export function TaskDialogContent({
   }
 
   return (
-    <div className="flex-1 overflow-y-auto custom-scrollbar">
+    <div className="flex-1 overflow-y-auto scrollbar-thin">
       <div className="p-6 prose-container">
         {content.trim() ? (
           <Markdown

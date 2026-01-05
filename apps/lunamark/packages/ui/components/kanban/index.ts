@@ -5,11 +5,11 @@
  *
  * @example
  * ```tsx
- * import { ColumnContainer, DroppableZone, EmptyState, DropIndicator } from "@ui/components/kanban";
+ * import { Column, ColumnHeader, DroppableZone, EmptyState, DropIndicator } from "@ui/components/kanban";
  *
  * <DroppableZone id={column.id} type="column" accept={["item"]}>
  *   {(isDropTarget) => (
- *     <ColumnContainer variant={isDropTarget ? "active" : "default"} header={<ColumnHeader />}>
+ *     <Column variant={isDropTarget ? "active" : "default"} header={<ColumnHeader title="Todo" count={3} />}>
  *       {tasks.length === 0 ? (
  *         <EmptyState variant={isDropTarget ? "active" : "default"} message="No tasks" />
  *       ) : (
@@ -19,31 +19,45 @@
  *           </TaskCard>
  *         ))
  *       )}
- *     </ColumnContainer>
+ *     </Column>
  *   )}
  * </DroppableZone>
  * ```
  */
 
-// Column Container
-export { ColumnContainer } from "./column-container";
-export type { ColumnContainerProps } from "./column-container";
-export { columnContainerVariants } from "./column-container";
+// Column compound component
+export { Column, ColumnHeader } from "./column";
+export type { ColumnProps, ColumnHeaderProps } from "./column";
+export { columnVariants, columnHeaderVariants, countBadgeVariants } from "./column.variants";
 
-// Droppable Zone (DnD wrapper)
+// Backward compatibility - deprecated, use Column instead
+export { Column as ColumnContainer } from "./column";
+export type { ColumnProps as ColumnContainerProps } from "./column";
+export { columnVariants as columnContainerVariants } from "./column.variants";
+
+// TaskCard compound component
+export { TaskCard, TaskCardHeader, TaskCardContent, TaskCardFooter } from "./task-card";
+export type {
+  TaskCardProps,
+  TaskCardHeaderProps,
+  TaskCardContentProps,
+  TaskCardFooterProps,
+} from "./task-card";
+export {
+  taskCardVariants,
+  taskCardHeaderVariants,
+  taskCardContentVariants,
+  taskCardFooterVariants,
+} from "./task-card.variants";
+
+// DnD utilities
 export { DroppableZone } from "./droppable-zone";
 export type { DroppableZoneProps } from "./droppable-zone";
 
-// Drop Indicator
 export { DropIndicator } from "./drop-indicator";
 export type { DropIndicatorProps } from "./drop-indicator";
 
-// Empty State
+// Empty state
 export { EmptyState } from "./empty-state";
 export type { EmptyStateProps } from "./empty-state";
-export { emptyStateVariants } from "./empty-state";
-
-// Column Header
-export { ColumnHeader } from "./column-header";
-export type { ColumnHeaderProps } from "./column-header";
-export { columnHeaderVariants, countBadgeVariants } from "./column-header";
+export { emptyStateVariants } from "./empty-state.variants";

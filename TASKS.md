@@ -19,8 +19,8 @@ AI agents should execute tasks in batch order. Each task includes:
 
 | Status | Count |
 |--------|-------|
-| Pending | 37 |
-| Done | 6 |
+| Pending | 26 |
+| Done | 17 |
 
 ---
 
@@ -59,10 +59,10 @@ export type { ReviewResult, Issue, Severity, Decision } from './review/schemas';
 
 | # | Status | Task | Files |
 |---|--------|------|-------|
-| 2.1 | [ ] | Move kanban components to grouped files (shadcn pattern) | `apps/lunamark/packages/ui/components/kanban/` |
-| 2.2 | [ ] | Review `src/components` for duplicates with `packages/ui` | `apps/lunamark/src/components/` vs `packages/ui/components/` |
-| 2.3 | [ ] | Column-container clearance - group related components | `packages/ui/components/kanban/` |
-| 2.4 | [ ] | Remove comments from `kanban/index.ts` | `packages/ui/components/kanban/index.ts` |
+| 2.1 | [x] | Move kanban components to grouped files (shadcn pattern) <!-- 2026-01-05 --> | `apps/lunamark/packages/ui/components/kanban/` |
+| 2.2 | [x] | Review `src/components` for duplicates with `packages/ui` <!-- 2026-01-05 --> | `apps/lunamark/src/components/` vs `packages/ui/components/` |
+| 2.3 | [x] | Column-container clearance - group related components <!-- 2026-01-05 --> | `packages/ui/components/kanban/` |
+| 2.4 | [x] | Remove comments from `kanban/index.ts` <!-- 2026-01-05 --> | `packages/ui/components/kanban/index.ts` |
 
 **Pattern:** Shadcn = related sub-components in same file with named exports.
 
@@ -70,20 +70,20 @@ export type { ReviewResult, Issue, Severity, Decision } from './review/schemas';
 
 | # | Status | Task | Files |
 |---|--------|------|-------|
-| 3.1 | [ ] | Bring back SelectItem component for custom Select dropdowns | `packages/ui/components/select/` |
-| 3.2 | [ ] | Remove duplicate selectable-button - use ToggleButton directly | `apps/lunamark/src/components/ui/selectable-button.tsx` |
-| 3.3 | [ ] | Split form-field into smaller parts (FormDescription, FormError) | `packages/ui/components/form-field/` |
-| 3.4 | [ ] | Improve button's SVG loader - create reusable Spinner component | `packages/ui/components/button/`, new `spinner/` |
-| 3.5 | [ ] | Consider Avatar using Button from packages/ui internally | `packages/ui/components/avatar/` |
+| 3.1 | [x] | Bring back SelectItem component for custom Select dropdowns <!-- 2026-01-05 --> | `packages/ui/components/select/` |
+| 3.2 | [x] | Remove duplicate selectable-button - use ToggleButton directly <!-- 2026-01-05 --> | `apps/lunamark/src/components/ui/selectable-button.tsx` |
+| 3.3 | [x] | Split form-field into smaller parts (FormDescription, FormError) <!-- 2026-01-05 --> | `packages/ui/components/form-field/` |
+| 3.4 | [x] | Improve button's SVG loader - create reusable Spinner component <!-- 2026-01-05 --> | `packages/ui/components/button/`, new `spinner/` |
+| 3.5 | [x] | Consider Avatar using Button from packages/ui internally <!-- 2026-01-05 --> | `packages/ui/components/avatar/` |
 
 ### Agent: `@tailwind-frontend-expert`
 
 | # | Status | Task | Files |
 |---|--------|------|-------|
-| 7.1 | [ ] | Separate inline styles from `styles.css` - extract select, dropdown, scrollbar | `apps/lunamark/src/styles.css` |
-| 7.2 | [ ] | Review `data-header` attribute usage - document or remove | `apps/lunamark/src/styles.css` |
+| 7.1 | [x] | Separate inline styles from `styles.css` - extract select, dropdown, scrollbar <!-- 2026-01-05 --> | `apps/lunamark/src/styles.css` → `packages/ui/styles/*.css` |
+| 7.2 | [x] | Review `data-header` attribute usage - document or remove <!-- 2026-01-05 --> | `apps/lunamark/src/styles.css` |
 
-**Pattern:** Custom scrollbar → `.custom-scrollbar` utility class.
+**Pattern:** Scrollbar renamed from `.custom-scrollbar` → `.scrollbar-thin` for semantic clarity.
 
 ---
 

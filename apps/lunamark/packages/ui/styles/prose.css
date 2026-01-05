@@ -1,0 +1,20 @@
+.prose-container {
+  line-height: 1.7;
+}
+
+.prose-container > *:first-child {
+  margin-top: 0;
+}
+
+.prose-container > *:last-child {
+  margin-bottom: 0;
+}
+
+.prose-container li:has(input[type="checkbox"]) {
+  list-style: none;
+  margin-left: -1.25rem;
+}
+
+.prose-container li:has(input[type="checkbox"]) input {
+  margin-right: 0.5rem;
+}

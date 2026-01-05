@@ -3,13 +3,14 @@
 import { CollisionPriority } from "@dnd-kit/abstract";
 import { useDroppable } from "@dnd-kit/react";
 import type { ReactNode } from "react";
-import { cn } from "@/lib/utils/cn";
+import { cn } from "../../utils/cn";
 
-interface DroppableZoneProps {
+export interface DroppableZoneProps {
   id: string;
   type?: string;
   accept?: string[];
   data?: Record<string, unknown>;
+  disabled?: boolean;
   className?: string;
   activeClassName?: string;
   children: ReactNode | ((isDropTarget: boolean) => ReactNode);
@@ -20,6 +21,7 @@ export function DroppableZone({
   type = "column",
   accept = ["item"],
   data,
+  disabled,
   className,
   activeClassName,
   children,
@@ -30,6 +32,7 @@ export function DroppableZone({
     collisionPriority: CollisionPriority.Low,
     accept,
     data,
+    disabled,
   });
 
   return (

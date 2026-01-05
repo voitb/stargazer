@@ -2,13 +2,13 @@
 id: task-033
 title: Create ConventionPattern type
 status: todo
-assignee: voitb
 priority: medium
 labels:
   - core
   - conventions
 created: '2026-01-01'
-order: 330
+order: 87.5
+assignee: voitb
 ---
 ## Description
 

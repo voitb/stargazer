@@ -11,6 +11,7 @@ import {
 } from "react";
 import { cn } from "../../utils/cn";
 import { avatarVariants } from "./avatar.variants";
+import { Button } from "../button";
 
 type ImageLoadingStatus = "idle" | "loading" | "loaded" | "error";
 
@@ -144,7 +145,7 @@ function AvatarGroup({
   );
 }
 
-type SelectableAvatarProps = ComponentProps<"button"> &
+type SelectableAvatarProps = Omit<ComponentProps<"button">, "children"> &
   VariantProps<typeof avatarVariants> & {
     src?: string | null;
     alt?: string;
@@ -163,16 +164,15 @@ function SelectableAvatar({
   ...props
 }: SelectableAvatarProps) {
   return (
-    <button
+    <Button
       ref={ref}
-      type="button"
+      variant="ghost"
       data-slot="avatar"
       aria-pressed={isSelected}
       data-state={isSelected ? "on" : "off"}
       className={cn(
-        "relative cursor-pointer transition-all rounded-full",
-        "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-        "focus-visible:ring-[rgb(var(--color-neutral-stroke-focus))]",
+        "relative cursor-pointer transition-all rounded-full p-0 h-auto w-auto",
+        "hover:bg-transparent",
         className
       )}
       {...props}
@@ -187,7 +187,7 @@ function SelectableAvatar({
             "ring-2 ring-[rgb(var(--color-brand-background))] ring-offset-1"
         )}
       />
-    </button>
+    </Button>
   );
 }
 

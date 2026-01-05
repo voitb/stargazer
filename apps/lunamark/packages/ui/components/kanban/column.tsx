@@ -1,10 +1,45 @@
 import type { VariantProps } from "class-variance-authority";
-import type { ComponentProps } from "react";
-import { cn } from "../../../utils/cn";
+import type { ComponentProps, ReactNode, Ref } from "react";
+import { cn } from "../../utils/cn";
 import {
+  columnVariants,
   columnHeaderVariants,
   countBadgeVariants,
-} from "./column-header.variants";
+} from "./column.variants";
+
+type ColumnProps = Omit<ComponentProps<"div">, "children"> &
+  VariantProps<typeof columnVariants> & {
+    ref?: Ref<HTMLDivElement>;
+    header?: ReactNode;
+    footer?: ReactNode;
+    children: ReactNode;
+  };
+
+function Column({
+  className,
+  variant,
+  size,
+  header,
+  footer,
+  children,
+  ref,
+  ...props
+}: ColumnProps) {
+  return (
+    <div
+      ref={ref}
+      role="region"
+      className={cn(columnVariants({ variant, size }), className)}
+      {...props}
+    >
+      {header && <div className="p-4 pb-2">{header}</div>}
+      <div className="flex-1 p-3 space-y-3 overflow-y-auto overflow-x-hidden min-h-[150px] scrollbar-thin">
+        {children}
+      </div>
+      {footer && <div className="p-3 pt-2">{footer}</div>}
+    </div>
+  );
+}
 
 type ColumnHeaderProps = ComponentProps<"div"> &
   VariantProps<typeof columnHeaderVariants> & {
@@ -52,5 +87,5 @@ function ColumnHeader({
   );
 }
 
-export { ColumnHeader };
-export type { ColumnHeaderProps };
+export { Column, ColumnHeader };
+export type { ColumnProps, ColumnHeaderProps };

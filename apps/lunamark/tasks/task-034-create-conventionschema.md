@@ -2,13 +2,13 @@
 id: task-034
 title: Create ConventionSchema
 status: todo
-assignee: voitb
 priority: medium
 labels:
   - core
   - conventions
 created: '2026-01-01'
-order: 340
+order: 175
+assignee: voitb
 ---
 ## Description
 

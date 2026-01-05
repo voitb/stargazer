@@ -12,7 +12,7 @@ interface TaskDialogSidebarProps {
 
 export function TaskDialogSidebar({ form }: TaskDialogSidebarProps) {
 	return (
-		<div className="w-72 flex-shrink-0 border-l border-[rgb(var(--color-neutral-stroke-1))/0.3] bg-[rgb(var(--color-neutral-background-2))/0.3] overflow-y-auto custom-scrollbar">
+		<div className="w-72 flex-shrink-0 border-l border-[rgb(var(--color-neutral-stroke-1))/0.3] bg-[rgb(var(--color-neutral-background-2))/0.3] overflow-y-auto scrollbar-thin">
 			<div className="p-5 space-y-5">
 				<FormField label="Title" required>
 					{(inputProps) => (

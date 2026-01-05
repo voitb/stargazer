@@ -1,14 +1,14 @@
-import { ColumnContainer, ColumnHeader, DroppableZone, EmptyState } from "@ui/components/kanban";
+import { Column, ColumnHeader, DroppableZone, EmptyState } from "@ui/components/kanban";
 import { COLUMN_COLORS } from "@/lib/kanban/constants";
 import type { Column as ColumnType, Task } from "@/schemas/task";
 import { TaskCard } from "./task-card";
 
-interface ColumnProps {
+interface KanbanColumnProps {
   column: ColumnType;
   onEditTask?: (task: Task) => void;
 }
 
-export function Column({ column, onEditTask }: ColumnProps) {
+export function KanbanColumn({ column, onEditTask }: KanbanColumnProps) {
   return (
     <DroppableZone
       id={column.id}
@@ -17,7 +17,7 @@ export function Column({ column, onEditTask }: ColumnProps) {
       data={{ column }}
     >
       {(isDropTarget) => (
-        <ColumnContainer
+        <Column
           variant={isDropTarget ? "active" : "default"}
           header={
             <ColumnHeader
@@ -44,7 +44,7 @@ export function Column({ column, onEditTask }: ColumnProps) {
               />
             ))
           )}
-        </ColumnContainer>
+        </Column>
       )}
     </DroppableZone>
   );

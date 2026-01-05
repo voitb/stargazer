@@ -14,7 +14,7 @@ import { useMoveTask } from "@/hooks/tasks";
 import { buildColumns } from "@/lib/dnd/utils";
 import type { Board, Column as ColumnType, Task } from "@/schemas/task";
 import { BoardFilters } from "./board-filters";
-import { Column } from "./column";
+import { KanbanColumn } from "./column";
 import { TaskCardContent } from "./task-card-content";
 
 const sensors = [
@@ -135,10 +135,10 @@ export function KanbanBoard({ initialBoard, taskEditor }: KanbanBoardProps) {
 				onDragOver={handleDragOver}
 				onDragEnd={handleDragEnd}
 			>
-				<div className="flex-1 min-h-0 overflow-x-auto overflow-y-hidden custom-scrollbar">
+				<div className="flex-1 min-h-0 overflow-x-auto overflow-y-hidden scrollbar-thin">
 					<div className="flex gap-4 p-6 h-full">
 						{columns.map((column) => (
-							<Column
+							<KanbanColumn
 								key={column.id}
 								column={column}
 								onEditTask={taskEditor.openEdit}

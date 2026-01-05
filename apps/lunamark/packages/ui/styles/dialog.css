@@ -1,0 +1,38 @@
+[data-dialog-overlay] {
+  opacity: 0;
+  display: none;
+  transition: opacity 0.15s ease-in, display 0.15s ease-in allow-discrete;
+}
+
+[data-dialog-content] {
+  opacity: 0;
+  transform: scale(0.95);
+  display: none;
+  transition: opacity 0.15s ease-in, transform 0.15s ease-in, display 0.15s ease-in allow-discrete;
+}
+
+[data-dialog-overlay][data-state="open"] {
+  opacity: 1;
+  display: block;
+}
+
+[data-dialog-content][data-state="open"] {
+  opacity: 1;
+  transform: scale(1);
+  display: grid;
+}
+
+@starting-style {
+  [data-dialog-overlay][data-state="open"] {
+    opacity: 0;
+  }
+
+  [data-dialog-content][data-state="open"] {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+[data-dialog-content][data-state="open"].max-w-4xl {
+  display: flex;
+}

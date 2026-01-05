@@ -1,0 +1,38 @@
+@supports (appearance: base-select) {
+  select.native-select {
+    appearance: base-select;
+  }
+
+  select.native-select::picker(select) {
+    background: rgb(var(--color-neutral-background-1));
+    border: 1px solid rgb(var(--color-neutral-stroke-1));
+    border-radius: 0.375rem;
+    padding: 0.25rem;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  }
+
+  select.native-select option {
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.25rem;
+  }
+
+  select.native-select option:hover,
+  select.native-select option:focus {
+    background: rgb(var(--color-neutral-background-3));
+  }
+
+  select.native-select option:checked {
+    font-weight: 500;
+  }
+}
+
+@supports not (appearance: base-select) {
+  select.native-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+    padding-right: 2.5rem;
+  }
+}
