@@ -5,13 +5,6 @@ import {
   type Provider,
 } from "react";
 
-/**
- * Creates a context with a custom hook that throws if used outside provider
- * Follows the pattern from Radix UI primitives
- *
- * @example
- * const [DialogProvider, useDialogContext] = createContext<DialogContextValue>("Dialog");
- */
 export function createContext<T>(
   displayName: string
 ): [Provider<T | null>, () => T, Context<T | null>] {

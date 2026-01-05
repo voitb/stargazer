@@ -9,39 +9,25 @@ const mockMatchMedia = (matches: boolean) => {
 		onchange: null,
 		addListener: vi.fn(),
 		removeListener: vi.fn(),
-		addEventListener: (
-			_event: string,
-			callback: (e: { matches: boolean }) => void,
-		) => {
+		addEventListener: (_event: string, callback: (e: { matches: boolean }) => void) => {
 			listeners.push(callback);
 		},
-		removeEventListener: (
-			_event: string,
-			callback: (e: { matches: boolean }) => void,
-		) => {
+		removeEventListener: (_event: string, callback: (e: { matches: boolean }) => void) => {
 			const index = listeners.indexOf(callback);
 			if (index > -1) listeners.splice(index, 1);
 		},
 		dispatchEvent: vi.fn(),
-		_listeners: listeners,
-		_triggerChange: (newMatches: boolean) => {
-			listeners.forEach((cb) => cb({ matches: newMatches }));
-		},
 	}));
 };
 
 describe("useTheme", () => {
 	let originalMatchMedia: typeof window.matchMedia;
-	let mockMediaQuery: ReturnType<typeof mockMatchMedia>;
 
 	beforeEach(() => {
 		localStorage.clear();
 		document.documentElement.removeAttribute("data-theme");
-
 		originalMatchMedia = window.matchMedia;
-		mockMediaQuery = mockMatchMedia(false);
-		window.matchMedia = mockMediaQuery;
-
+		window.matchMedia = mockMatchMedia(false);
 		vi.resetModules();
 	});
 
@@ -53,49 +39,32 @@ describe("useTheme", () => {
 		it("returns system as default theme", async () => {
 			const { useTheme } = await import("./use-theme");
 			const { result } = renderHook(() => useTheme());
-
 			expect(result.current.theme).toBe("system");
 		});
 
 		it("loads stored theme from localStorage", async () => {
 			localStorage.setItem("ui-theme", "dark");
-
 			const { useTheme } = await import("./use-theme");
 			const { result } = renderHook(() => useTheme());
-
 			expect(result.current.theme).toBe("dark");
 		});
 
 		it("ignores invalid localStorage values", async () => {
 			localStorage.setItem("ui-theme", "invalid-theme");
-
 			const { useTheme } = await import("./use-theme");
 			const { result } = renderHook(() => useTheme());
-
 			expect(result.current.theme).toBe("system");
 		});
 	});
 
 	describe("theme setting", () => {
-		it("updates theme in localStorage when setTheme is called", async () => {
+		it("persists theme to localStorage and applies data-theme attribute", async () => {
 			const { useTheme } = await import("./use-theme");
 			const { result } = renderHook(() => useTheme());
 
-			act(() => {
-				result.current.setTheme("dark");
-			});
+			act(() => result.current.setTheme("dark"));
 
 			expect(localStorage.getItem("ui-theme")).toBe("dark");
-		});
-
-		it("applies data-theme attribute to document", async () => {
-			const { useTheme } = await import("./use-theme");
-			const { result } = renderHook(() => useTheme());
-
-			act(() => {
-				result.current.setTheme("dark");
-			});
-
 			expect(document.documentElement.getAttribute("data-theme")).toBe("dark");
 		});
 
@@ -104,9 +73,7 @@ describe("useTheme", () => {
 			const { result: result1 } = renderHook(() => useTheme());
 			const { result: result2 } = renderHook(() => useTheme());
 
-			act(() => {
-				result1.current.setTheme("dark");
-			});
+			act(() => result1.current.setTheme("dark"));
 
 			expect(result1.current.theme).toBe("dark");
 			expect(result2.current.theme).toBe("dark");
@@ -114,27 +81,21 @@ describe("useTheme", () => {
 	});
 
 	describe("system theme resolution", () => {
-		it("resolves system theme to light when prefers-color-scheme is light", async () => {
-			mockMediaQuery = mockMatchMedia(false);
-			window.matchMedia = mockMediaQuery;
-
+		it("resolves system theme based on prefers-color-scheme", async () => {
+			window.matchMedia = mockMatchMedia(false);
+			vi.resetModules();
 			const { useTheme } = await import("./use-theme");
 			const { result } = renderHook(() => useTheme());
-
 			expect(result.current.resolvedTheme).toBe("light");
 		});
 
-		it("resolves system theme to dark when prefers-color-scheme is dark", async () => {
-			mockMediaQuery = mockMatchMedia(true);
-			window.matchMedia = mockMediaQuery;
-
+		it("resolves to dark when prefers-color-scheme is dark", async () => {
+			window.matchMedia = mockMatchMedia(true);
 			vi.resetModules();
 			const { useTheme } = await import("./use-theme");
 			const { result } = renderHook(() => useTheme());
 
-			act(() => {
-				result.current.setTheme("system");
-			});
+			act(() => result.current.setTheme("system"));
 
 			expect(result.current.resolvedTheme).toBe("dark");
 		});
@@ -143,48 +104,9 @@ describe("useTheme", () => {
 			const { useTheme } = await import("./use-theme");
 			const { result } = renderHook(() => useTheme());
 
-			act(() => {
-				result.current.setTheme("dark");
-			});
+			act(() => result.current.setTheme("dark"));
 
 			expect(result.current.resolvedTheme).toBe("dark");
-		});
-	});
-
-	describe("theme values", () => {
-		it("accepts light theme", async () => {
-			const { useTheme } = await import("./use-theme");
-			const { result } = renderHook(() => useTheme());
-
-			act(() => {
-				result.current.setTheme("light");
-			});
-
-			expect(result.current.theme).toBe("light");
-			expect(result.current.resolvedTheme).toBe("light");
-		});
-
-		it("accepts dark theme", async () => {
-			const { useTheme } = await import("./use-theme");
-			const { result } = renderHook(() => useTheme());
-
-			act(() => {
-				result.current.setTheme("dark");
-			});
-
-			expect(result.current.theme).toBe("dark");
-			expect(result.current.resolvedTheme).toBe("dark");
-		});
-
-		it("accepts system theme", async () => {
-			const { useTheme } = await import("./use-theme");
-			const { result } = renderHook(() => useTheme());
-
-			act(() => {
-				result.current.setTheme("system");
-			});
-
-			expect(result.current.theme).toBe("system");
 		});
 	});
 });

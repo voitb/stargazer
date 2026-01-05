@@ -23,24 +23,20 @@ export function TaskPreviewDialog({
 }: TaskPreviewDialogProps) {
 	const form = useTaskEditorForm({ task, initialStatus, isOpen, onClose });
 
-	// Existing tasks open in preview mode, new tasks in edit mode
 	const [mode, setMode] = useState<"preview" | "edit">(
 		form.isEditing ? "preview" : "edit"
 	);
 
-	// Reset mode when dialog opens/closes or task changes
 	useEffect(() => {
 		if (isOpen) {
 			setMode(form.isEditing ? "preview" : "edit");
 		}
 	}, [isOpen, form.isEditing]);
 
-	// Keyboard shortcut to toggle mode
 	useEffect(() => {
 		function handleKeyDown(e: KeyboardEvent) {
 			if (!isOpen) return;
 
-			// Cmd/Ctrl + E to toggle edit mode
 			if ((e.metaKey || e.ctrlKey) && e.key === "e") {
 				e.preventDefault();
 				setMode((m) => (m === "edit" ? "preview" : "edit"));
@@ -54,7 +50,6 @@ export function TaskPreviewDialog({
 	return (
 		<Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
 			<DialogContent className="max-w-4xl max-h-[85vh] p-0 overflow-hidden flex flex-col">
-				{/* Header with mode toggle */}
 				<TaskDialogHeader
 					taskId={task?.metadata.id}
 					isEditing={form.isEditing}
@@ -62,20 +57,16 @@ export function TaskPreviewDialog({
 					onModeChange={setMode}
 				/>
 
-				{/* Two-panel layout */}
 				<div className="flex flex-1 min-h-0">
-					{/* Main content panel (left) */}
 					<TaskDialogContent
 						mode={mode}
 						content={form.state.content}
 						onChange={form.setField("content")}
 					/>
 
-					{/* Sidebar panel (right) */}
 					<TaskDialogSidebar form={form} />
 				</div>
 
-				{/* Footer */}
 				<div className="flex items-center justify-between px-6 py-4 border-t border-[rgb(var(--color-neutral-stroke-1))/0.3] bg-[rgb(var(--color-neutral-background-2))/0.3]">
 					<div>
 						{form.isEditing && (
