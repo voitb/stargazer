@@ -2,6 +2,7 @@
 id: task-010
 title: Run all Result tests
 status: done
+assignee: voitb
 priority: high
 labels:
   - core

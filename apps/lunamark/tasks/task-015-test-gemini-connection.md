@@ -1,7 +1,8 @@
 ---
 id: task-015
 title: Test Gemini connection (live)
-status: todo
+status: done
+assignee: voitb
 priority: high
 labels:
   - core
@@ -16,9 +17,9 @@ Write a live test to verify the Gemini API connection works with structured outp
 
 ## Acceptance Criteria
 
-- [ ] Add live test to `packages/core/src/gemini/client.test.ts`
-- [ ] Test connects to Gemini and returns structured data
-- [ ] Test passes with valid API key
+- [x] Add live test to `packages/core/src/gemini/client.test.ts`
+- [x] Test connects to Gemini and returns structured data
+- [x] Test passes with valid API key
 
 ## Implementation
 

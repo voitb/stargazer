@@ -1,7 +1,8 @@
 ---
 id: task-027
 title: Setup CLI package with commander
-status: todo
+status: done
+assignee: voitb
 priority: high
 labels:
   - cli
@@ -14,10 +15,10 @@ Set up the CLI package with Commander.js for command parsing.
 
 ## Acceptance Criteria
 
-- [ ] Create `packages/cli/src/index.ts`
-- [ ] Initialize Commander program
-- [ ] Add basic --version and --help
-- [ ] CLI entry point works
+- [x] Create `packages/cli/src/index.ts`
+- [x] Initialize Commander program
+- [x] Add basic --version and --help
+- [x] CLI entry point works
 
 ## Implementation
 

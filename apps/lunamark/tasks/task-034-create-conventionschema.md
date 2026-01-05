@@ -2,6 +2,7 @@
 id: task-034
 title: Create ConventionSchema
 status: todo
+assignee: voitb
 priority: medium
 labels:
   - core

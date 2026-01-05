@@ -1,7 +1,8 @@
 ---
 id: task-023
 title: Test getDiff function
-status: todo
+status: done
+assignee: voitb
 priority: medium
 labels:
   - core
@@ -16,10 +17,10 @@ Create unit tests for the getDiff function to verify it works correctly.
 
 ## Acceptance Criteria
 
-- [ ] Create `packages/core/src/context/git.test.ts`
-- [ ] Test that function returns Result type
-- [ ] Test handles empty diff gracefully
-- [ ] All tests pass
+- [x] Create `packages/core/src/context/git.test.ts`
+- [x] Test that function returns Result type
+- [x] Test handles empty diff gracefully
+- [x] All tests pass
 
 ## Implementation
 

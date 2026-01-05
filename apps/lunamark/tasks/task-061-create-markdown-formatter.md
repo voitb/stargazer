@@ -2,6 +2,7 @@
 id: task-061
 title: Create markdown formatter for PR
 status: todo
+assignee: voitb
 priority: medium
 labels:
   - action

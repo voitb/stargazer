@@ -2,6 +2,7 @@
 id: task-064
 title: Create withRetry function
 status: todo
+assignee: voitb
 priority: medium
 labels:
   - core

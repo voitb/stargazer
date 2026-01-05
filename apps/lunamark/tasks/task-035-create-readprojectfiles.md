@@ -2,6 +2,7 @@
 id: task-035
 title: Create readProjectFiles helper
 status: todo
+assignee: voitb
 priority: medium
 labels:
   - core

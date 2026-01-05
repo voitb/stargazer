@@ -2,6 +2,7 @@
 id: task-042
 title: Update review prompt with conventions
 status: todo
+assignee: voitb
 priority: medium
 labels:
   - core

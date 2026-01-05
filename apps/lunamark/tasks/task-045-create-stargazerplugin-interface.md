@@ -2,6 +2,7 @@
 id: task-045
 title: Create StargazerPlugin interface
 status: todo
+assignee: voitb
 priority: high
 labels:
   - core

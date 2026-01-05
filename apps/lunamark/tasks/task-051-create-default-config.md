@@ -2,6 +2,7 @@
 id: task-051
 title: Create DEFAULT_CONFIG
 status: todo
+assignee: voitb
 priority: medium
 labels:
   - core

@@ -1,7 +1,8 @@
 ---
 id: task-019
 title: Create ReviewDecision enum
-status: todo
+status: done
+assignee: voitb
 priority: high
 labels:
   - core
@@ -16,8 +17,8 @@ Create the review decision enum schema.
 
 ## Acceptance Criteria
 
-- [ ] Add `DECISIONS` and `DecisionSchema` to `schemas.ts`
-- [ ] Export `Decision` type
+- [x] Add `DECISIONS` and `DecisionSchema` to `schemas.ts`
+- [x] Export `Decision` type
 
 ## Implementation
 

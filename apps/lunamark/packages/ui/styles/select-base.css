@@ -1,0 +1,152 @@
+/**
+ * Customizable Native Select Styles
+ * Uses CSS `appearance: base-select` for modern browsers (Chrome 135+)
+ * Falls back gracefully to standard select in older browsers
+ */
+
+/* ═══════════════════════════════════════════════════════════════════
+   PROGRESSIVE ENHANCEMENT: CUSTOMIZABLE SELECT
+   @supports ensures these styles only apply when browser supports
+   the new customizable select API
+   ═══════════════════════════════════════════════════════════════════ */
+
+@supports (appearance: base-select) {
+  /* Opt-in to customizable select rendering */
+  .ui-select,
+  .ui-select::picker(select) {
+    appearance: base-select;
+  }
+
+  /* ─────────────────────────────────────────────────────────────────
+     PICKER DROPDOWN CONTAINER
+     ───────────────────────────────────────────────────────────────── */
+  .ui-select::picker(select) {
+    background: rgb(var(--color-neutral-background-1));
+    border: 1px solid rgb(var(--color-neutral-stroke-1));
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xs);
+    box-shadow:
+      0 4px 6px -1px rgb(var(--color-shadow-ambient) / 0.1),
+      0 2px 4px -2px rgb(var(--color-shadow-key) / 0.1);
+
+    /* Entry animation */
+    opacity: 0;
+    transform: translateY(-4px);
+    transition:
+      opacity var(--duration-fast) var(--easing-ease-out),
+      transform var(--duration-fast) var(--easing-ease-out),
+      display var(--duration-fast) allow-discrete,
+      overlay var(--duration-fast) allow-discrete;
+  }
+
+  .ui-select::picker(select):popover-open {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Starting state for entry animation */
+  @starting-style {
+    .ui-select::picker(select):popover-open {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+  }
+
+  /* ─────────────────────────────────────────────────────────────────
+     PICKER ICON (Dropdown Arrow)
+     ───────────────────────────────────────────────────────────────── */
+  .ui-select::picker-icon {
+    color: rgb(var(--color-neutral-foreground-2));
+    transition: rotate var(--duration-fast) var(--easing-default);
+  }
+
+  .ui-select:open::picker-icon {
+    rotate: 180deg;
+  }
+
+  /* Hover state for icon */
+  .ui-select:hover::picker-icon {
+    color: rgb(var(--color-neutral-foreground-1));
+  }
+
+  /* ─────────────────────────────────────────────────────────────────
+     OPTION STYLING
+     ───────────────────────────────────────────────────────────────── */
+  .ui-select option {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition:
+      background-color var(--duration-faster) var(--easing-default),
+      color var(--duration-faster) var(--easing-default);
+  }
+
+  .ui-select option:hover,
+  .ui-select option:focus {
+    background: rgb(var(--color-neutral-background-2));
+    outline: none;
+  }
+
+  .ui-select option:checked {
+    background: rgb(var(--color-brand-background) / 0.1);
+    color: rgb(var(--color-brand-foreground-1));
+  }
+
+  .ui-select option:checked:hover,
+  .ui-select option:checked:focus {
+    background: rgb(var(--color-brand-background) / 0.15);
+  }
+
+  /* Disabled options */
+  .ui-select option:disabled {
+    color: rgb(var(--color-neutral-foreground-disabled));
+    cursor: not-allowed;
+  }
+
+  .ui-select option:disabled:hover {
+    background: transparent;
+  }
+
+  /* ─────────────────────────────────────────────────────────────────
+     CHECKMARK INDICATOR
+     ───────────────────────────────────────────────────────────────── */
+  .ui-select option::checkmark {
+    color: rgb(var(--color-brand-foreground-1));
+    margin-left: auto;
+  }
+
+  /* ─────────────────────────────────────────────────────────────────
+     OPTGROUP STYLING
+     ───────────────────────────────────────────────────────────────── */
+  .ui-select optgroup {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ui-select optgroup:not(:first-of-type) {
+    margin-top: var(--spacing-xs);
+    padding-top: var(--spacing-xs);
+    border-top: 1px solid rgb(var(--color-neutral-stroke-2));
+  }
+
+  .ui-select optgroup::before {
+    content: attr(label);
+    display: block;
+    padding: var(--spacing-xs) var(--spacing-md);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: rgb(var(--color-neutral-foreground-2));
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* ─────────────────────────────────────────────────────────────────
+     OPEN STATE ON SELECT BUTTON
+     ───────────────────────────────────────────────────────────────── */
+  .ui-select:open {
+    border-color: rgb(var(--color-neutral-stroke-focus));
+  }
+}

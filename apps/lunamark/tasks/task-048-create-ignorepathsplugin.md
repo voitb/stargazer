@@ -2,6 +2,7 @@
 id: task-048
 title: Create ignorePathsPlugin
 status: todo
+assignee: voitb
 priority: medium
 labels:
   - core

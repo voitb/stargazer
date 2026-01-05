@@ -2,6 +2,7 @@
 id: task-044
 title: Add conventionRef to IssueSchema
 status: todo
+assignee: voitb
 priority: low
 labels:
   - core

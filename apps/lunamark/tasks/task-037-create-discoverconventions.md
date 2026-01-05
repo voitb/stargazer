@@ -2,6 +2,7 @@
 id: task-037
 title: Create discoverConventions function
 status: todo
+assignee: voitb
 priority: high
 labels:
   - core

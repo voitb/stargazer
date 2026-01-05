@@ -2,6 +2,7 @@
 id: task-041
 title: Wire discover command
 status: todo
+assignee: voitb
 priority: low
 labels:
   - cli

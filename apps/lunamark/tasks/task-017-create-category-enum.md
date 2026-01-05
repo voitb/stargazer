@@ -1,7 +1,8 @@
 ---
 id: task-017
 title: Create IssueCategory enum
-status: todo
+status: done
+assignee: voitb
 priority: high
 labels:
   - core
@@ -16,8 +17,8 @@ Create the issue category enum schema.
 
 ## Acceptance Criteria
 
-- [ ] Add `CATEGORIES` and `CategorySchema` to `schemas.ts`
-- [ ] Export `Category` type
+- [x] Add `CATEGORIES` and `CategorySchema` to `schemas.ts`
+- [x] Export `Category` type
 
 ## Implementation
 

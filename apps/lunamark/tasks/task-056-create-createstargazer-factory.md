@@ -2,6 +2,7 @@
 id: task-056
 title: Create createStargazer factory
 status: todo
+assignee: voitb
 priority: high
 labels:
   - core

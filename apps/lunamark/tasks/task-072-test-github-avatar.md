@@ -2,6 +2,7 @@
 id: task-072
 title: Test GitHub Avatar Feature
 status: todo
+assignee: voitb
 priority: medium
 labels:
   - test

@@ -1,7 +1,8 @@
 ---
 id: task-024
 title: Create buildReviewPrompt function
-status: todo
+status: done
+assignee: voitb
 priority: high
 labels:
   - core
@@ -15,10 +16,10 @@ Create the prompt builder function that constructs the review prompt for Gemini.
 
 ## Acceptance Criteria
 
-- [ ] Create `packages/core/src/review/prompts.ts`
-- [ ] Implement `buildReviewPrompt()` function
-- [ ] Prompt includes diff content
-- [ ] Clear instructions for AI reviewer
+- [x] Create `packages/core/src/review/prompts.ts`
+- [x] Implement `buildReviewPrompt()` function
+- [x] Prompt includes diff content
+- [x] Clear instructions for AI reviewer
 
 ## Implementation
 

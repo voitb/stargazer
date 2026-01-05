@@ -1,7 +1,8 @@
 ---
 id: task-026
 title: Test full review flow
-status: todo
+status: done
+assignee: voitb
 priority: high
 labels:
   - core
@@ -16,14 +17,14 @@ Create integration test for the full review flow with Gemini API.
 
 ## Acceptance Criteria
 
-- [ ] Create `packages/core/src/review/review.test.ts`
-- [ ] Test reviews staged changes successfully
-- [ ] Test handles empty diff
-- [ ] Test returns typed ReviewResult
+- [x] Create `packages/core/src/review/reviewer.integration.test.ts`
+- [x] Test reviews staged changes successfully
+- [x] Test handles empty diff
+- [x] Test returns typed ReviewResult
 
 ## Implementation
 
-**File**: `packages/core/src/review/review.test.ts`
+**File**: `packages/core/src/review/reviewer.integration.test.ts`
 
 ```typescript
 import { describe, it, expect } from 'vitest';
@@ -72,5 +73,5 @@ index 1234567..abcdefg 100644
 ## Test
 
 ```bash
-GEMINI_API_KEY=xxx pnpm test review.test.ts
+GEMINI_API_KEY=xxx pnpm vitest run --project=integration reviewer.integration.test.ts
 ```

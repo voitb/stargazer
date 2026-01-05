@@ -2,6 +2,7 @@
 id: task-033
 title: Create ConventionPattern type
 status: todo
+assignee: voitb
 priority: medium
 labels:
   - core

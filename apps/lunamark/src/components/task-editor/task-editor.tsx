@@ -3,18 +3,18 @@
 import { useTaskEditorForm } from "@/hooks/task-editor/use-task-editor-form";
 import { getGitHubAvatarUrl } from "@/lib/github/avatar";
 import type { Task, TaskPriority, TaskStatus } from "@/schemas/task";
-import { Button } from "@/components/ui/button";
 import {
+	Button,
 	Dialog,
 	DialogContent,
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectItem } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
+	Input,
+	Label,
+	Select,
+	Textarea,
+} from "@ui/components";
 
 interface TaskEditorProps {
 	task?: Task;
@@ -64,10 +64,10 @@ export function TaskEditor({
 									form.setStatusValue(value as TaskStatus)
 								}
 							>
-								<SelectItem value="todo">To Do</SelectItem>
-								<SelectItem value="in-progress">In Progress</SelectItem>
-								<SelectItem value="review">Review</SelectItem>
-								<SelectItem value="done">Done</SelectItem>
+								<option value="todo">To Do</option>
+								<option value="in-progress">In Progress</option>
+								<option value="review">Review</option>
+								<option value="done">Done</option>
 							</Select>
 						</div>
 
@@ -80,10 +80,10 @@ export function TaskEditor({
 									form.setPriorityValue(value as TaskPriority)
 								}
 							>
-								<SelectItem value="low">Low</SelectItem>
-								<SelectItem value="medium">Medium</SelectItem>
-								<SelectItem value="high">High</SelectItem>
-								<SelectItem value="critical">Critical</SelectItem>
+								<option value="low">Low</option>
+								<option value="medium">Medium</option>
+								<option value="high">High</option>
+								<option value="critical">Critical</option>
 							</Select>
 						</div>
 					</div>
@@ -158,7 +158,7 @@ export function TaskEditor({
 							<>
 								{form.state.showDeleteConfirm ? (
 									<div className="flex items-center gap-2">
-										<span className="text-sm text-[rgb(var(--ui-danger))]">
+										<span className="text-sm text-[rgb(var(--color-status-danger))]">
 											Delete this task?
 										</span>
 										<Button
@@ -184,7 +184,7 @@ export function TaskEditor({
 										variant="link"
 										onClick={() => form.toggleDeleteConfirm(true)}
 										disabled={form.isPending}
-										className="text-[rgb(var(--ui-danger))] hover:text-[rgb(var(--ui-danger))]"
+										className="text-[rgb(var(--color-status-danger))] hover:text-[rgb(var(--color-status-danger))]"
 									>
 										Delete task
 									</Button>

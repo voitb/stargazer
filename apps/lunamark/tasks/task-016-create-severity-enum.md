@@ -1,14 +1,15 @@
 ---
 id: task-016
 title: Create IssueSeverity enum
-status: todo
+status: done
+assignee: voitb
 priority: high
 labels:
   - core
   - review
   - schemas
 created: '2026-01-01'
-order: 160
+order: 85
 ---
 ## Description
 
@@ -16,9 +17,9 @@ Create the issue severity enum schema.
 
 ## Acceptance Criteria
 
-- [ ] Create `packages/core/src/review/schemas.ts`
-- [ ] Define `SEVERITIES` constant and `SeveritySchema`
-- [ ] Export `Severity` type
+- [x] Create `packages/core/src/review/schemas.ts`
+- [x] Define `SEVERITIES` constant and `SeveritySchema`
+- [x] Export `Severity` type
 
 ## Implementation
 

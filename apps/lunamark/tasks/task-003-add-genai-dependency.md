@@ -2,6 +2,7 @@
 id: task-003
 title: Add @google/genai dependency
 status: done
+assignee: voitb
 priority: high
 labels:
   - setup

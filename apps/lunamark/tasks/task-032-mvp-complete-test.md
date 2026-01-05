@@ -1,7 +1,8 @@
 ---
 id: task-032
 title: MVP Complete - Full test
-status: todo
+status: done
+assignee: voitb
 priority: high
 labels:
   - cli
@@ -16,10 +17,10 @@ Verify the MVP is complete by running a full end-to-end test.
 
 ## Acceptance Criteria
 
-- [ ] All core packages build successfully
-- [ ] CLI `stargazer review` works end-to-end
-- [ ] Review returns typed ReviewResult
-- [ ] Terminal output is formatted and colored
+- [x] All core packages build successfully
+- [x] CLI `stargazer review` works end-to-end
+- [x] Review returns typed ReviewResult
+- [x] Terminal output is formatted and colored
 
 ## Implementation
 
@@ -67,11 +68,11 @@ echo $?  # Should be 0 (no issues) or 1 (issues found)
 
 ## Success Criteria
 
-- [ ] `pnpm build` completes without errors
-- [ ] `stargazer review` returns formatted output
-- [ ] `stargazer review --json` returns valid JSON
-- [ ] Exit codes are correct (0/1/2)
-- [ ] Issues are detected in code with security problems
+- [x] `pnpm build` completes without errors
+- [x] `stargazer review` returns formatted output
+- [x] `stargazer review --json` returns valid JSON
+- [x] Exit codes are correct (0/1/2)
+- [x] Issues are detected in code with security problems
 
 ## Test
 

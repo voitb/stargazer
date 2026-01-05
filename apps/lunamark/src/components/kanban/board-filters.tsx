@@ -1,9 +1,13 @@
-import { avatarVariants, SelectableAvatar } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { FilterBar } from "@/components/ui/filter-bar";
-import { FilterGroup } from "@/components/ui/filter-group";
-import { MultiSelectChips } from "@/components/ui/multi-select-chips";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import {
+	avatarVariants,
+	SelectableAvatar,
+	Badge,
+	ToggleGroup,
+	ToggleGroupItem,
+	FilterBar,
+	FilterGroup,
+	MultiSelectChips,
+} from "@ui/components";
 import { PRIORITY_BADGE_VARIANTS } from "@/lib/kanban/constants";
 import { cn } from "@/lib/utils/cn";
 import type { TaskPriority } from "@/schemas/task";
@@ -61,7 +65,7 @@ export function BoardFilters({
 								)
 							}
 							aria-label={`Filter by ${assignee.name}`}
-							className="ring-2 ring-[rgb(var(--ui-bg))]"
+							className="ring-2 ring-[rgb(var(--color-neutral-background-1))]"
 						/>
 					))}
 					{assignees.length > 5 && (
@@ -69,7 +73,7 @@ export function BoardFilters({
 							data-slot="avatar"
 							className={cn(
 								avatarVariants({ size: "sm" }),
-								"ring-2 ring-[rgb(var(--ui-bg))] bg-[rgb(var(--ui-bg-secondary))]",
+								"ring-2 ring-[rgb(var(--color-neutral-background-1))] bg-[rgb(var(--color-neutral-background-2))]",
 							)}
 						>
 							+{assignees.length - 5}

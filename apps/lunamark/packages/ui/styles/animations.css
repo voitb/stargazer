@@ -1,0 +1,254 @@
+/**
+ * Design System Animations
+ * Fluent 2-inspired: functional, natural, consistent, appealing
+ */
+
+/* ═══════════════════════════════════════════════════════════════════
+   KEYFRAME DEFINITIONS
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Fade animations */
+@keyframes ui-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes ui-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Zoom animations */
+@keyframes ui-zoom-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes ui-zoom-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+/* Slide animations */
+@keyframes ui-slide-in-from-top {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ui-slide-in-from-bottom {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ui-slide-in-from-left {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes ui-slide-in-from-right {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Scale with bounce (spring) */
+@keyframes ui-scale-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Pulse animation for loading states */
+@keyframes ui-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Spin animation for loading spinners */
+@keyframes ui-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Shake animation for errors */
+@keyframes ui-shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-4px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(4px);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   ANIMATION UTILITY CLASSES
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Enter animations */
+.animate-fade-in {
+  animation: ui-fade-in var(--duration-fast) var(--easing-ease-out);
+}
+
+.animate-zoom-in {
+  animation: ui-zoom-in var(--duration-fast) var(--easing-ease-out);
+}
+
+.animate-slide-in-from-top {
+  animation: ui-slide-in-from-top var(--duration-normal) var(--easing-ease-out);
+}
+
+.animate-slide-in-from-bottom {
+  animation: ui-slide-in-from-bottom var(--duration-normal) var(--easing-ease-out);
+}
+
+.animate-slide-in-from-left {
+  animation: ui-slide-in-from-left var(--duration-normal) var(--easing-ease-out);
+}
+
+.animate-slide-in-from-right {
+  animation: ui-slide-in-from-right var(--duration-normal) var(--easing-ease-out);
+}
+
+.animate-scale-in {
+  animation: ui-scale-in var(--duration-normal) var(--easing-spring);
+}
+
+/* Exit animations */
+.animate-fade-out {
+  animation: ui-fade-out var(--duration-fast) var(--easing-ease-in);
+}
+
+.animate-zoom-out {
+  animation: ui-zoom-out var(--duration-fast) var(--easing-ease-in);
+}
+
+/* Continuous animations */
+.animate-pulse {
+  animation: ui-pulse 2s var(--easing-ease-in) infinite;
+}
+
+.animate-spin {
+  animation: ui-spin 1s linear infinite;
+}
+
+.animate-shake {
+  animation: ui-shake var(--duration-slow) var(--easing-ease-out);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   TRANSITION UTILITIES
+   ═══════════════════════════════════════════════════════════════════ */
+
+.transition-fast {
+  transition-property: all;
+  transition-duration: var(--duration-fast);
+  transition-timing-function: var(--easing-default);
+}
+
+.transition-normal {
+  transition-property: all;
+  transition-duration: var(--duration-normal);
+  transition-timing-function: var(--easing-default);
+}
+
+.transition-slow {
+  transition-property: all;
+  transition-duration: var(--duration-slow);
+  transition-timing-function: var(--easing-default);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   COMPONENT-SPECIFIC ANIMATIONS
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Dialog overlay animations */
+[data-dialog-overlay][data-state="open"] {
+  animation: ui-fade-in var(--duration-fast) var(--easing-ease-out);
+}
+[data-dialog-overlay][data-state="closed"] {
+  animation: ui-fade-out var(--duration-fast) var(--easing-ease-in);
+}
+
+/* Dialog content animations */
+[data-dialog-content][data-state="open"] {
+  animation: ui-zoom-in var(--duration-fast) var(--easing-ease-out);
+}
+[data-dialog-content][data-state="closed"] {
+  animation: ui-zoom-out var(--duration-fast) var(--easing-ease-in);
+}
+
+/* Floating content animations (dropdown, popover, tooltip) */
+[data-floating-content][data-state="open"] {
+  animation: ui-fade-in var(--duration-fast) var(--easing-ease-out);
+}
+[data-floating-content][data-state="closed"] {
+  animation: ui-fade-out var(--duration-fast) var(--easing-ease-in);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   REDUCED MOTION SUPPORT (Accessibility)
+   ═══════════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

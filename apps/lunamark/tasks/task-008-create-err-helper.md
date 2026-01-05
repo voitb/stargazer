@@ -2,6 +2,7 @@
 id: task-008
 title: Create err() helper
 status: done
+assignee: voitb
 priority: high
 labels:
   - core
@@ -16,8 +17,8 @@ Create the `err()` helper function for creating error results.
 ## Acceptance Criteria
 
 - [x] Add `err()` to `packages/core/src/shared/result.ts`
-- [ ] Add unit test
-- [ ] Test passes
+- [x] Add unit test
+- [x] Test passes
 
 ## Implementation
 

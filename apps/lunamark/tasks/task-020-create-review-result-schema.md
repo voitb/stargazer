@@ -1,7 +1,8 @@
 ---
 id: task-020
 title: Create ReviewResultSchema
-status: todo
+status: done
+assignee: voitb
 priority: high
 labels:
   - core
@@ -16,10 +17,10 @@ Create the complete ReviewResult schema and export JSON schema for Gemini.
 
 ## Acceptance Criteria
 
-- [ ] Add `ReviewResultSchema` to `schemas.ts`
-- [ ] Export `ReviewResult` type
-- [ ] Export `ReviewResultJSONSchema` using OpenAPI 3.0 target
-- [ ] JSON schema is valid OpenAPI 3.0
+- [x] Add `ReviewResultSchema` to `schemas.ts`
+- [x] Export `ReviewResult` type
+- [x] Export `ReviewResultJSONSchema` using OpenAPI 3.0 target
+- [x] JSON schema is valid OpenAPI 3.0
 
 ## Implementation
 

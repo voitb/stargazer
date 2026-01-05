@@ -1,7 +1,8 @@
 ---
 id: task-031
 title: Use terminal formatter in CLI
-status: todo
+status: done
+assignee: voitb
 priority: low
 labels:
   - cli
@@ -14,9 +15,9 @@ Update the review command to use the terminal formatter for output.
 
 ## Acceptance Criteria
 
-- [ ] Update `packages/cli/src/commands/review.ts`
-- [ ] Import formatReview function
-- [ ] Use formatted output instead of JSON
+- [x] Update `packages/cli/src/commands/review.ts`
+- [x] Import formatReview function
+- [x] Use formatted output instead of JSON
 
 ## Implementation
 

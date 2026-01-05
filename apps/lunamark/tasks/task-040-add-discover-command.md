@@ -2,6 +2,7 @@
 id: task-040
 title: Add discover command to CLI
 status: todo
+assignee: voitb
 priority: medium
 labels:
   - cli

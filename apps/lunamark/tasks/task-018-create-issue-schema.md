@@ -1,7 +1,8 @@
 ---
 id: task-018
 title: Create IssueSchema
-status: todo
+status: done
+assignee: voitb
 priority: high
 labels:
   - core
@@ -16,10 +17,10 @@ Create the full Issue schema with all fields.
 
 ## Acceptance Criteria
 
-- [ ] Add `IssueSchema` to `schemas.ts`
-- [ ] All fields have `.describe()` for Gemini
-- [ ] Export `Issue` type
-- [ ] Schema roundtrip works with sample data
+- [x] Add `IssueSchema` to `schemas.ts`
+- [x] All fields have `.describe()` for Gemini
+- [x] Export `Issue` type
+- [x] Schema roundtrip works with sample data
 
 ## Implementation
 

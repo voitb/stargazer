@@ -1,7 +1,8 @@
 ---
 id: task-029
 title: Wire review command to CLI
-status: todo
+status: done
+assignee: voitb
 priority: medium
 labels:
   - cli
@@ -14,9 +15,9 @@ Connect the review command to the main CLI program.
 
 ## Acceptance Criteria
 
-- [ ] Update `packages/cli/src/index.ts`
-- [ ] Import and add reviewCommand
-- [ ] CLI shows review in --help
+- [x] Update `packages/cli/src/index.ts`
+- [x] Import and add reviewCommand
+- [x] CLI shows review in --help
 
 ## Implementation
 

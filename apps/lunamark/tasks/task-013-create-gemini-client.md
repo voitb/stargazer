@@ -1,7 +1,8 @@
 ---
 id: task-013
 title: Create createGeminiClient factory
-status: todo
+status: done
+assignee: voitb
 priority: high
 labels:
   - core
@@ -15,11 +16,11 @@ Create the Gemini client factory function with structured output support.
 
 ## Acceptance Criteria
 
-- [ ] Create `packages/core/src/gemini/client.ts`
-- [ ] Implement `createGeminiClient()` factory
-- [ ] Use `responseJsonSchema` with OpenAPI 3.0 target
-- [ ] Handle API errors: 429, 401, empty response
-- [ ] Return `Result<T>` for all outcomes
+- [x] Create `packages/core/src/gemini/client.ts`
+- [x] Implement `createGeminiClient()` factory
+- [x] Use `responseJsonSchema` with OpenAPI 3.0 target
+- [x] Handle API errors: 429, 401, empty response
+- [x] Return `Result<T>` for all outcomes
 
 ## Implementation
 

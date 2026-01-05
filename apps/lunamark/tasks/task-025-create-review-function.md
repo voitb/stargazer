@@ -1,7 +1,8 @@
 ---
 id: task-025
 title: Create reviewDiff function
-status: todo
+status: done
+assignee: voitb
 priority: high
 labels:
   - core
@@ -15,11 +16,11 @@ Create the main review function that orchestrates getting the diff and calling G
 
 ## Acceptance Criteria
 
-- [ ] Create `packages/core/src/review/review.ts`
-- [ ] Implement `reviewDiff()` function
-- [ ] Integrates getDiff and buildReviewPrompt
-- [ ] Calls GeminiClient with ReviewResultSchema
-- [ ] Returns Result<ReviewResult>
+- [x] Create `packages/core/src/review/reviewer.ts`
+- [x] Implement `reviewDiff()` function
+- [x] Integrates getDiff and buildReviewPrompt
+- [x] Calls GeminiClient with ReviewResultSchema
+- [x] Returns Result<ReviewResult>
 
 ## Implementation
 

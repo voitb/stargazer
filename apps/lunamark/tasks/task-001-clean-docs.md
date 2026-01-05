@@ -2,6 +2,7 @@
 id: task-001
 title: Clean docs - remove StargazerError
 status: done
+assignee: voitb
 priority: high
 labels:
   - docs

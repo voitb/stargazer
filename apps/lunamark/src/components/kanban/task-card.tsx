@@ -35,7 +35,7 @@ export function TaskCard({
 				task={task}
 				onClick={onClick}
 				className={cn(
-					isDragging && "opacity-50 shadow-lg ring-2 ring-blue-400",
+					isDragging && "opacity-50 shadow-lg ring-2 ring-[rgb(var(--color-brand-stroke-1))]",
 				)}
 			/>
 			{isLast && <DropIndicator isVisible={isDropTarget && !isDragging} />}

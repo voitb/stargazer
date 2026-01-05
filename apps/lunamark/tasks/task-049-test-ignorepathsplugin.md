@@ -2,6 +2,7 @@
 id: task-049
 title: Test ignorePathsPlugin
 status: todo
+assignee: voitb
 priority: medium
 labels:
   - core

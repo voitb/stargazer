@@ -2,6 +2,7 @@
 id: task-009
 title: Create isOk() and isErr() guards
 status: done
+assignee: voitb
 priority: high
 labels:
   - core
@@ -17,7 +18,7 @@ Create type guard functions for narrowing Result types.
 
 - [x] Add `isOk()` and `isErr()` to `packages/core/src/shared/result.ts`
 - [x] Type narrowing works correctly after guard
-- [ ] Add unit tests
+- [x] Add unit tests
 
 ## Implementation
 

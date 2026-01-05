@@ -1,7 +1,8 @@
 ---
 id: task-012
 title: Create MODELS constant
-status: todo
+status: done
+assignee: voitb
 priority: medium
 labels:
   - core
@@ -15,9 +16,9 @@ Create the models constant and default model configuration.
 
 ## Acceptance Criteria
 
-- [ ] Create `packages/core/src/gemini/models.ts`
-- [ ] Define `MODELS` constant array
-- [ ] Define `Model` type and `DEFAULT_MODEL`
+- [x] Create `packages/core/src/gemini/models.ts`
+- [x] Define `MODELS` constant array
+- [x] Define `Model` type and `DEFAULT_MODEL`
 
 ## Implementation
 

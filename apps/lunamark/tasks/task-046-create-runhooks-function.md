@@ -2,6 +2,7 @@
 id: task-046
 title: Create runHooks function
 status: todo
+assignee: voitb
 priority: high
 labels:
   - core

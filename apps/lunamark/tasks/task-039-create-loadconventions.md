@@ -2,6 +2,7 @@
 id: task-039
 title: Create loadConventions function
 status: todo
+assignee: voitb
 priority: medium
 labels:
   - core

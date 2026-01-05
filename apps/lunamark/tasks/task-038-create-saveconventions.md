@@ -2,6 +2,7 @@
 id: task-038
 title: Create saveConventions function
 status: todo
+assignee: voitb
 priority: medium
 labels:
   - core

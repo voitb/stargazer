@@ -2,6 +2,7 @@
 id: task-007
 title: Create ok() helper
 status: done
+assignee: voitb
 priority: high
 labels:
   - core
@@ -16,8 +17,8 @@ Create the `ok()` helper function for creating success results.
 ## Acceptance Criteria
 
 - [x] Add `ok()` to `packages/core/src/shared/result.ts`
-- [ ] Add unit test in `packages/core/src/shared/result.test.ts`
-- [ ] Test passes
+- [x] Add unit test in `packages/core/src/shared/result.test.ts`
+- [x] Test passes
 
 ## Implementation
 

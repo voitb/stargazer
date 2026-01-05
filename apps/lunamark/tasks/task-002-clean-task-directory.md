@@ -2,6 +2,7 @@
 id: task-002
 title: Clean task directory
 status: done
+assignee: voitb
 priority: high
 labels:
   - setup

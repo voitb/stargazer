@@ -2,6 +2,7 @@
 id: task-004
 title: Create ErrorCode type
 status: done
+assignee: voitb
 priority: high
 labels:
   - core

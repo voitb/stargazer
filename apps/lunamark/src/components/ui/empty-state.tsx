@@ -8,8 +8,8 @@ const emptyStateVariants = cva(
 		variants: {
 			variant: {
 				default:
-					"border-[rgb(var(--ui-border))]/60 bg-[rgb(var(--ui-bg-secondary))]/30 text-[rgb(var(--ui-fg-muted))]",
-				active: "border-blue-300 bg-blue-50/50 text-blue-500",
+					"border-[rgb(var(--color-neutral-stroke-1))]/60 bg-[rgb(var(--color-neutral-background-2))]/30 text-[rgb(var(--color-neutral-foreground-2))]",
+				active: "border-[rgb(var(--color-brand-stroke-2))] bg-[rgb(var(--color-brand-background-selected)/0.5)] text-[rgb(var(--color-brand-foreground-1))]",
 			},
 			size: {
 				sm: "h-20 m-1",

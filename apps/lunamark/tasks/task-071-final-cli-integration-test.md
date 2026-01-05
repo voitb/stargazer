@@ -2,6 +2,7 @@
 id: task-071
 title: Final CLI integration test
 status: todo
+assignee: voitb
 priority: high
 labels:
   - cli

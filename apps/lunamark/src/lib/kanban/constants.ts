@@ -1,12 +1,12 @@
 import type { VariantProps } from "class-variance-authority";
-import type { badgeVariants } from "@/components/ui/badge";
+import type { badgeVariants } from "@ui/components/badge";
 import type { TaskPriority } from "@/schemas/task";
 
 export const COLUMN_COLORS: Record<string, string> = {
-	gray: "bg-gray-500",
-	blue: "bg-blue-500",
-	yellow: "bg-yellow-500",
-	green: "bg-green-500",
+	gray: "bg-[rgb(var(--color-neutral-foreground-3))]",
+	blue: "bg-[rgb(var(--color-brand-background))]",
+	yellow: "bg-[rgb(var(--color-status-warning))]",
+	green: "bg-[rgb(var(--color-status-success))]",
 };
 
 export const PRIORITY_BADGE_VARIANTS: Record<

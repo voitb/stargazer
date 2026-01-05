@@ -2,6 +2,7 @@
 id: task-052
 title: Create defineConfig helper
 status: todo
+assignee: voitb
 priority: medium
 labels:
   - core

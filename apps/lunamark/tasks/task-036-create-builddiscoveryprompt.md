@@ -2,6 +2,7 @@
 id: task-036
 title: Create buildDiscoveryPrompt
 status: todo
+assignee: voitb
 priority: medium
 labels:
   - core

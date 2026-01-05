@@ -2,6 +2,7 @@
 id: task-043
 title: Update review to use conventions
 status: todo
+assignee: voitb
 priority: medium
 labels:
   - core

@@ -2,6 +2,7 @@
 id: task-069
 title: Add stargazer init command
 status: todo
+assignee: voitb
 priority: medium
 labels:
   - cli

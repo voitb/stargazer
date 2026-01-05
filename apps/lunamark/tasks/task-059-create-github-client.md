@@ -2,6 +2,7 @@
 id: task-059
 title: Create GitHub client
 status: todo
+assignee: voitb
 priority: high
 labels:
   - action

@@ -2,6 +2,7 @@
 id: task-006
 title: Create Result type
 status: done
+assignee: voitb
 priority: high
 labels:
   - core

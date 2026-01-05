@@ -1,7 +1,8 @@
 ---
 id: task-028
 title: Add review command (basic)
-status: todo
+status: done
+assignee: voitb
 priority: high
 labels:
   - cli
@@ -15,10 +16,10 @@ Create the review command that calls the core review function.
 
 ## Acceptance Criteria
 
-- [ ] Create `packages/cli/src/commands/review.ts`
-- [ ] Implement `reviewCommand` with Commander
-- [ ] Check for GEMINI_API_KEY environment variable
-- [ ] Output JSON result initially (formatting comes later)
+- [x] Create `packages/cli/src/commands/review.ts`
+- [x] Implement `reviewCommand` with Commander
+- [x] Check for GEMINI_API_KEY environment variable
+- [x] Output JSON result initially (formatting comes later)
 
 ## Implementation
 

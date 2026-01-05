@@ -1,7 +1,8 @@
 ---
 id: task-030
 title: Add terminal formatting
-status: todo
+status: done
+assignee: voitb
 priority: medium
 labels:
   - cli
@@ -15,10 +16,10 @@ Create beautiful terminal output with colors using chalk.
 
 ## Acceptance Criteria
 
-- [ ] Create `packages/cli/src/output/terminal.ts`
-- [ ] Implement `formatReview()` function
-- [ ] Color-code issues by severity
-- [ ] Show decision with emoji
+- [x] Create `packages/cli/src/output/terminal.ts`
+- [x] Implement `formatReview()` function
+- [x] Color-code issues by severity
+- [x] Show decision with emoji
 
 ## Implementation
 

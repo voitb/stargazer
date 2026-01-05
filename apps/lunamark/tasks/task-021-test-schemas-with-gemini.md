@@ -1,7 +1,8 @@
 ---
 id: task-021
 title: Test schemas with Gemini
-status: todo
+status: done
+assignee: voitb
 priority: high
 labels:
   - core
@@ -16,13 +17,13 @@ Verify schemas work with Gemini structured output.
 
 ## Acceptance Criteria
 
-- [ ] Create `packages/core/src/review/schemas.test.ts`
-- [ ] Test Gemini returns typed ReviewResult
-- [ ] Test passes with valid API key
+- [x] Create `packages/core/src/review/schemas.integration.test.ts`
+- [x] Test Gemini returns typed ReviewResult
+- [x] Test passes with valid API key
 
 ## Implementation
 
-**File**: `packages/core/src/review/schemas.test.ts`
+**File**: `packages/core/src/review/schemas.integration.test.ts`
 
 ```typescript
 import { describe, it, expect } from 'vitest';
@@ -56,5 +57,5 @@ function add(a, b) {
 ## Test
 
 ```bash
-GEMINI_API_KEY=xxx pnpm test schemas.test.ts
+GEMINI_API_KEY=xxx pnpm vitest run --project=integration schemas.integration.test.ts
 ```

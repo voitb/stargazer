@@ -2,6 +2,7 @@
 id: task-067
 title: Add --format flag
 status: todo
+assignee: voitb
 priority: low
 labels:
   - cli

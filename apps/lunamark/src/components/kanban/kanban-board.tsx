@@ -5,11 +5,11 @@ import {
 } from "@dnd-kit/dom";
 import { DragDropProvider, DragOverlay } from "@dnd-kit/react";
 import { useMemo } from "react";
-import { TaskEditor } from "@/components/task-editor/task-editor";
+import { TaskPreviewDialog } from "@/components/task-preview-dialog";
 import { useBoardFilters } from "@/hooks/kanban/use-board-filters";
 import { useBoardState } from "@/hooks/kanban/use-board-state";
 import { useKanbanDrag } from "@/hooks/kanban/use-kanban-drag";
-import { useTaskEditor } from "@/hooks/task-editor/use-task-editor";
+import type { useTaskEditor } from "@/hooks/task-editor/use-task-editor";
 import { useMoveTask } from "@/hooks/tasks";
 import { buildColumns } from "@/lib/dnd/utils";
 import type { Board, Column as ColumnType, Task } from "@/schemas/task";
@@ -28,6 +28,7 @@ const sensors = [
 
 interface KanbanBoardProps {
 	initialBoard: Board;
+	taskEditor: ReturnType<typeof useTaskEditor>;
 }
 
 function filterTasks(tasks: Task[], filters: ReturnType<typeof useBoardFilters>["filters"]): Task[] {
@@ -58,8 +59,7 @@ function applyFiltersToColumns(
 	}));
 }
 
-export function KanbanBoard({ initialBoard }: KanbanBoardProps) {
-	const taskEditor = useTaskEditor();
+export function KanbanBoard({ initialBoard, taskEditor }: KanbanBoardProps) {
 	const {
 		filters,
 		hasActiveFilters,
@@ -114,39 +114,44 @@ export function KanbanBoard({ initialBoard }: KanbanBoardProps) {
 
 	return (
 		<>
-			<BoardFilters
-				assignees={uniqueAssignees}
-				labels={uniqueLabels}
-				filters={filters}
-				hasActiveFilters={hasActiveFilters}
-				onAssigneeChange={setAssignee}
-				onPriorityChange={setPriority}
-				onLabelToggle={toggleLabel}
-				onClearFilters={clearFilters}
-			/>
+			{/* Sticky filter bar - flex-shrink-0 prevents collapse */}
+			<div className="flex-shrink-0">
+				<BoardFilters
+					assignees={uniqueAssignees}
+					labels={uniqueLabels}
+					filters={filters}
+					hasActiveFilters={hasActiveFilters}
+					onAssigneeChange={setAssignee}
+					onPriorityChange={setPriority}
+					onLabelToggle={toggleLabel}
+					onClearFilters={clearFilters}
+				/>
+			</div>
 
+			{/* Scrollable columns area - fills remaining space */}
 			<DragDropProvider
 				sensors={sensors}
 				onDragStart={handleDragStart}
 				onDragOver={handleDragOver}
 				onDragEnd={handleDragEnd}
 			>
-				<div className="flex gap-4 p-6 overflow-x-auto min-h-screen bg-gray-100">
-					{columns.map((column) => (
-						<Column
-							key={column.id}
-							column={column}
-							onAddTask={() => taskEditor.openCreate(column.id)}
-							onEditTask={taskEditor.openEdit}
-						/>
-					))}
+				<div className="flex-1 min-h-0 overflow-x-auto overflow-y-hidden custom-scrollbar">
+					<div className="flex gap-4 p-6 h-full">
+						{columns.map((column) => (
+							<Column
+								key={column.id}
+								column={column}
+								onEditTask={taskEditor.openEdit}
+							/>
+						))}
+					</div>
 				</div>
 				<DragOverlay>
 					{activeTask && <TaskCardContent task={activeTask} isDragOverlay />}
 				</DragOverlay>
 			</DragDropProvider>
 
-			<TaskEditor
+			<TaskPreviewDialog
 				key={taskEditor.task?.id ?? `create-${taskEditor.initialStatus}`}
 				isOpen={taskEditor.isOpen}
 				task={taskEditor.task}

@@ -2,6 +2,7 @@
 id: task-055
 title: Create Stargazer interface
 status: todo
+assignee: voitb
 priority: high
 labels:
   - core

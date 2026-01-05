@@ -2,6 +2,7 @@
 id: task-063
 title: Build action
 status: todo
+assignee: voitb
 priority: medium
 labels:
   - action

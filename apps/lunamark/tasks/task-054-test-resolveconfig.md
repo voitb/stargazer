@@ -2,6 +2,7 @@
 id: task-054
 title: Test resolveConfig
 status: todo
+assignee: voitb
 priority: medium
 labels:
   - core

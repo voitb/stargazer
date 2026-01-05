@@ -1,7 +1,8 @@
 ---
 id: task-014
 title: Create test schema for Gemini
-status: todo
+status: done
+assignee: voitb
 priority: medium
 labels:
   - core
@@ -16,9 +17,9 @@ Create a simple test schema to verify Gemini structured output works.
 
 ## Acceptance Criteria
 
-- [ ] Create `packages/core/src/gemini/client.test.ts`
-- [ ] Define simple `TestSchema`
-- [ ] Schema compiles and JSON schema can be generated
+- [x] Create `packages/core/src/gemini/client.test.ts`
+- [x] Define simple `TestSchema`
+- [x] Schema compiles and JSON schema can be generated
 
 ## Implementation
 

@@ -2,6 +2,7 @@
 id: task-047
 title: Test runHooks function
 status: todo
+assignee: voitb
 priority: medium
 labels:
   - core

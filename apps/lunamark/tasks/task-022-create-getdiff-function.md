@@ -1,7 +1,8 @@
 ---
 id: task-022
 title: Create getDiff function
-status: todo
+status: done
+assignee: voitb
 priority: high
 labels:
   - core
@@ -16,10 +17,10 @@ Create a function to get git diff output. This is essential for reviewing staged
 
 ## Acceptance Criteria
 
-- [ ] Create `packages/core/src/context/git.ts`
-- [ ] Implement `getDiff()` function with Result return type
-- [ ] Support both staged and unstaged diffs
-- [ ] Handle git errors gracefully
+- [x] Create `packages/core/src/context/git.ts`
+- [x] Implement `getDiff()` function with Result return type
+- [x] Support both staged and unstaged diffs
+- [x] Handle git errors gracefully
 
 ## Implementation
 

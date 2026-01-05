@@ -2,6 +2,7 @@
 id: task-005
 title: Create ApiError type
 status: done
+assignee: voitb
 priority: high
 labels:
   - core

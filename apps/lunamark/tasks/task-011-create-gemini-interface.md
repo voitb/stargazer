@@ -1,7 +1,8 @@
 ---
 id: task-011
 title: Create GeminiClient interface
-status: todo
+status: done
+assignee: voitb
 priority: high
 labels:
   - core

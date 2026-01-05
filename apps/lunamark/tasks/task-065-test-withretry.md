@@ -2,6 +2,7 @@
 id: task-065
 title: Test withRetry
 status: todo
+assignee: voitb
 priority: medium
 labels:
   - core

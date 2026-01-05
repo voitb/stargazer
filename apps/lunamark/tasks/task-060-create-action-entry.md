@@ -2,6 +2,7 @@
 id: task-060
 title: Create action entry
 status: todo
+assignee: voitb
 priority: high
 labels:
   - action

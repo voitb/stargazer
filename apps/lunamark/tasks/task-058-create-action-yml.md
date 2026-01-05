@@ -2,6 +2,7 @@
 id: task-058
 title: Create action.yml
 status: todo
+assignee: voitb
 priority: high
 labels:
   - action
