@@ -37,7 +37,6 @@ describe('Convention Cache', () => {
 
       expect(result.ok).toBe(true);
 
-      // Verify file was created
       const content = await readFile(
         join(testDir, '.stargazer/conventions.json'),
         'utf-8'
@@ -53,7 +52,6 @@ describe('Convention Cache', () => {
 
       expect(result.ok).toBe(true);
 
-      // Directory should exist
       const content = await readFile(
         join(testDir, '.stargazer/conventions.json'),
         'utf-8'
@@ -62,10 +60,8 @@ describe('Convention Cache', () => {
     });
 
     it('should overwrite existing conventions', async () => {
-      // Save first version
       await saveConventions(testDir, testConventions);
 
-      // Save updated version
       const updated: ProjectConventions = {
         ...testConventions,
         summary: 'Updated conventions',
@@ -106,7 +102,6 @@ describe('Convention Cache', () => {
     });
 
     it('should return error for invalid JSON', async () => {
-      // Create invalid JSON file
       await mkdir(join(testDir, '.stargazer'), { recursive: true });
       const { writeFile } = await import('node:fs/promises');
       await writeFile(
@@ -120,7 +115,6 @@ describe('Convention Cache', () => {
     });
 
     it('should return error for invalid schema', async () => {
-      // Create file with wrong schema
       await mkdir(join(testDir, '.stargazer'), { recursive: true });
       const { writeFile } = await import('node:fs/promises');
       await writeFile(

@@ -1,19 +1,12 @@
 import type { StargazerPlugin, ReviewContext } from './types';
 import type { Issue } from '../review/types';
 
-/**
- * Payload returned by review operations.
- */
 type ReviewResultPayload = {
   issues: Issue[];
   summary: string;
   decision: string;
 };
 
-/**
- * Runs beforeReview hooks in sequence.
- * Each plugin receives the context from the previous plugin.
- */
 export async function runBeforeReviewHooks(
   plugins: readonly StargazerPlugin[],
   ctx: ReviewContext
@@ -27,10 +20,6 @@ export async function runBeforeReviewHooks(
   return result;
 }
 
-/**
- * Runs afterReview hooks in sequence.
- * Each plugin receives the result from the previous plugin.
- */
 export async function runAfterReviewHooks(
   plugins: readonly StargazerPlugin[],
   payload: ReviewResultPayload,
@@ -45,10 +34,6 @@ export async function runAfterReviewHooks(
   return result;
 }
 
-/**
- * Runs filterIssues hooks synchronously.
- * Each plugin receives the issues from the previous plugin.
- */
 export function runFilterHooks(
   plugins: readonly StargazerPlugin[],
   issues: Issue[]

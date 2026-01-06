@@ -26,7 +26,7 @@ export function SwipeableContainer({
     });
 
   // Get active tab info for screen reader announcement
-  const activeChild = children[activeIndex] as React.ReactElement | null;
+  const activeChild = children[activeIndex] as React.ReactElement<{ 'aria-label'?: string }> | null;
   const activeTabLabel =
     activeChild?.props?.["aria-label"] || "Column " + String(activeIndex + 1);
 
@@ -50,7 +50,7 @@ export function SwipeableContainer({
         {children.map((child, index) => (
           <div
             key={index}
-            className="w-full flex-shrink-0 h-full"
+            className="w-full shrink-0 h-full"
             role="tabpanel"
             id={"column-panel-" + String(index)}
             aria-labelledby={"tab-" + String(index)}

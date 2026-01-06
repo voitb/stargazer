@@ -6,15 +6,26 @@
   "description": "GitHub Action for Stargazer - automated PR reviews",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "echo 'Placeholder - not yet implemented'",
-    "dev": "echo 'Placeholder - not yet implemented'",
-    "lint": "echo 'Placeholder - not yet implemented'",
-    "check": "echo 'Placeholder - not yet implemented'",
-    "test": "echo 'Placeholder - not yet implemented'"
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit"
   },
-  "keywords": ["github-action", "code-review", "ai", "stargazer"],
+  "keywords": [
+    "github-action",
+    "code-review",
+    "ai",
+    "stargazer"
+  ],
   "license": "MIT",
   "dependencies": {
+    "@actions/core": "^2.0.1",
+    "@actions/github": "^6.0.1",
+    "@octokit/rest": "^22.0.1",
     "@stargazer/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsup": "^8.0.0",
+    "typescript": "^5.7.2"
   }
 }

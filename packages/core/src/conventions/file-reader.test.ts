@@ -8,22 +8,19 @@ describe('readProjectFiles', () => {
   let testDir: string;
 
   beforeEach(async () => {
-    // Create temporary test directory
     testDir = join(tmpdir(), `stargazer-test-${Date.now()}`);
     await mkdir(testDir, { recursive: true });
   });
 
   afterEach(async () => {
-    // Clean up test directory
     await rm(testDir, { recursive: true, force: true });
   });
 
   it('should read TypeScript files', async () => {
-    // Create test files
     await mkdir(join(testDir, 'src'), { recursive: true });
     await writeFile(
       join(testDir, 'src/index.ts'),
-      'export function hello() { return "world"; }\n'.repeat(10) // Make it > 100 chars
+      'export function hello() { return "world"; }\n'.repeat(10)
     );
 
     const result = await readProjectFiles(testDir);
@@ -100,10 +97,10 @@ describe('readProjectFiles', () => {
   it('should skip files smaller than 100 characters', async () => {
     await mkdir(join(testDir, 'src'), { recursive: true });
 
-    await writeFile(join(testDir, 'src/tiny.ts'), 'export const x = 1;'); // < 100 chars
+    await writeFile(join(testDir, 'src/tiny.ts'), 'export const x = 1;');
     await writeFile(
       join(testDir, 'src/normal.ts'),
-      'export const normal = true;\n'.repeat(10) // > 100 chars
+      'export const normal = true;\n'.repeat(10)
     );
 
     const result = await readProjectFiles(testDir);
