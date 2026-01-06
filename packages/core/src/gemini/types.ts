@@ -11,6 +11,8 @@ export type GeminiClientOptions = {
   readonly enableRetry?: boolean;
   readonly maxRetries?: number;
   readonly retryDelay?: number;
+  /** Request timeout in milliseconds (default: 60000) */
+  readonly timeout?: number;
 };
 
 export type GeminiClient = {

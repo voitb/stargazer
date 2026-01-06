@@ -2,16 +2,19 @@ import type { Result } from "../shared/result";
 import type { GeminiClient } from "../gemini/types";
 import type { ReviewResult, ReviewOptions } from "./types";
 import { ReviewResultSchema } from "./schemas";
-import { buildReviewPrompt, buildReviewPromptWithConventions } from "./prompts";
+import { buildReviewPrompt } from "./prompts";
 import { getDiff } from "../context/git";
-import { err } from "../shared/result";
+import { err, ok } from "../shared/result";
 import { loadConventions } from "../conventions/cache";
+
+const MAX_DIFF_SIZE = 100_000; // characters
 
 export async function reviewDiff(
   client: GeminiClient,
   options: ReviewOptions = {},
 ): Promise<Result<ReviewResult>> {
   const { staged = true, diff: providedDiff, projectPath } = options;
+  const warnings: string[] = [];
 
   let diff: string;
 
@@ -27,6 +30,14 @@ export async function reviewDiff(
     diff = diffResult.data;
   }
 
+  // Validate diff size
+  if (diff.length > MAX_DIFF_SIZE) {
+    return err({
+      code: 'BAD_REQUEST',
+      message: `Diff too large (${diff.length} chars). Maximum is ${MAX_DIFF_SIZE} chars. Consider reviewing smaller changesets.`,
+    });
+  }
+
   if (!diff.trim()) {
     return err({
       code: "EMPTY_RESPONSE",
@@ -39,12 +50,22 @@ export async function reviewDiff(
     const conventionsResult = await loadConventions(projectPath);
     if (conventionsResult.ok) {
       conventions = conventionsResult.data;
+    } else {
+      warnings.push(`Could not load conventions: ${conventionsResult.error.message}`);
+      console.warn(`[Stargazer] ${warnings[warnings.length - 1]}`);
     }
   }
 
-  const prompt = conventions
-    ? buildReviewPromptWithConventions(diff, conventions)
-    : buildReviewPrompt(diff);
+  const prompt = buildReviewPrompt(diff, conventions);
 
-  return client.generate(prompt, ReviewResultSchema);
+  const result = await client.generate(prompt, ReviewResultSchema);
+
+  if (!result.ok) {
+    return result;
+  }
+
+  return ok({
+    ...result.data,
+    warnings: warnings.length > 0 ? warnings : undefined,
+  });
 }

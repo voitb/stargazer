@@ -1,7 +1,7 @@
 ---
 id: task-070
 title: Add proper exit codes
-status: todo
+status: done
 assignee: voitb
 priority: medium
 labels:

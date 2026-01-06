@@ -1,47 +1,40 @@
 import type { StargazerPlugin, ReviewContext } from './types';
-import type { Issue } from '../review/types';
-
-type ReviewResultPayload = {
-  issues: Issue[];
-  summary: string;
-  decision: string;
-};
+import type { ReviewResult, Issue } from '../review/types';
 
 export async function runBeforeReviewHooks(
   plugins: readonly StargazerPlugin[],
   ctx: ReviewContext
-): Promise<ReviewContext> {
-  let result = ctx;
+): Promise<void> {
   for (const plugin of plugins) {
     if (plugin.beforeReview) {
-      result = await plugin.beforeReview(result);
+      await plugin.beforeReview(ctx);
     }
   }
-  return result;
 }
 
 export async function runAfterReviewHooks(
   plugins: readonly StargazerPlugin[],
-  payload: ReviewResultPayload,
+  result: ReviewResult,
   ctx: ReviewContext
-): Promise<ReviewResultPayload> {
-  let result = payload;
+): Promise<ReviewResult> {
+  let current = result;
   for (const plugin of plugins) {
     if (plugin.afterReview) {
-      result = await plugin.afterReview(result, ctx);
+      current = await plugin.afterReview(current, ctx);
     }
   }
-  return result;
+  return current;
 }
 
 export function runFilterHooks(
   plugins: readonly StargazerPlugin[],
-  issues: Issue[]
-): Issue[] {
+  issues: readonly Issue[],
+  ctx: ReviewContext
+): readonly Issue[] {
   let result = issues;
   for (const plugin of plugins) {
     if (plugin.filterIssues) {
-      result = plugin.filterIssues(result);
+      result = plugin.filterIssues(result, ctx);
     }
   }
   return result;

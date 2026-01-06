@@ -6,13 +6,13 @@ import { TaskCard } from "./task-card";
 interface KanbanColumnProps {
   column: ColumnType;
   onEditTask?: (task: Task) => void;
-  fluid?: boolean; // NEW: Support fluid layout
+  fluid?: boolean;
 }
 
 export function KanbanColumn({
   column,
   onEditTask,
-  fluid = true, // NEW: Default to fluid for responsive design
+  fluid = true,
 }: KanbanColumnProps) {
   return (
     <Column
@@ -20,7 +20,7 @@ export function KanbanColumn({
       type="column"
       accept={["item"]}
       items={column.tasks}
-      fluid={fluid} // Changed from size="md"
+      fluid={fluid}
     >
       <ColumnHeader
         title={column.title}

@@ -1,7 +1,7 @@
 ---
 id: task-073
 title: Write CLI tests
-status: todo
+status: done
 assignee: voitb
 priority: high
 labels:

@@ -1,7 +1,7 @@
 ---
 id: task-058
 title: Create action.yml
-status: todo
+status: done
 priority: high
 labels:
   - action

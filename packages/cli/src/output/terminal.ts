@@ -51,6 +51,10 @@ function formatIssue(issue: Issue, num: number): string {
     output += `\n   ${chalk.dim('💡')} ${chalk.dim(issue.suggestion)}`;
   }
 
+  if (issue.conventionRef) {
+    output += `\n   ${chalk.dim('📋 Convention:')} ${chalk.dim(issue.conventionRef)}`;
+  }
+
   output += '\n';
   return output;
 }

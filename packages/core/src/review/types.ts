@@ -21,6 +21,7 @@ export type ReviewResult = {
   readonly issues: readonly Issue[];
   readonly summary: string;
   readonly decision: Decision;
+  readonly warnings?: readonly string[];
 };
 
 export type ReviewOptions = {

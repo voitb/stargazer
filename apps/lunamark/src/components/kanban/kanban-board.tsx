@@ -63,7 +63,6 @@ function applyFiltersToColumns(
 }
 
 export function KanbanBoard({ initialBoard, taskEditor }: KanbanBoardProps) {
-  // NEW: Detect viewport size for responsive layout
   const viewMode = useKanbanViewMode();
 
   const {

@@ -37,48 +37,44 @@ function buildConventionContext(conventions: ProjectConventions | null): string 
   return sections.join('\n');
 }
 
-export function buildReviewPrompt(diff: string): string {
-  return `You are a senior code reviewer. Review the following git diff and identify issues.
-
-Focus on:
-- Bugs and logic errors
-- Security vulnerabilities
-- Code style and conventions
-- Performance issues
-
-Be specific: include file path, line number, and clear explanation.
-Only report real issues with high confidence.
-
-Git Diff:
-\`\`\`diff
-${diff}
-\`\`\`
-
-Respond with your structured review.`;
-}
-
-export function buildReviewPromptWithConventions(
+/**
+ * Build review prompt with optional conventions context.
+ */
+export function buildReviewPrompt(
   diff: string,
-  conventions: ProjectConventions | null
+  conventions?: ProjectConventions | null
 ): string {
-  const conventionContext = buildConventionContext(conventions);
+  const conventionContext = conventions
+    ? buildConventionContext(conventions)
+    : '';
 
-  return `You are a senior code reviewer. Review the following git diff and identify issues.
+  return `You are an expert code reviewer. Analyze the following git diff and identify issues.
 
 Focus on:
 - Bugs and logic errors
 - Security vulnerabilities
-- Code style and conventions
-- Performance issues
+- Performance problems
+- Code style violations
+${conventionContext ? `\nProject Conventions:\n${conventionContext}` : ''}
 
-Be specific: include file path, line number, and clear explanation.
-Only report real issues with high confidence.
+For each issue found, provide:
+- The file path and line number
+- Severity (critical, high, medium, low)
+- Category (bug, security, convention, performance)
+- Clear description of the issue
+- Specific suggestion for fixing it
+- Confidence score from 0.0 to 1.0 (e.g., 0.9 for highly confident, 0.5 for uncertain)
+${conventionContext ? '- Convention reference if applicable' : ''}
 
-${conventionContext}
-Git Diff:
+Be thorough but avoid false positives. Only report issues you are confident about.
+
+Diff to review:
 \`\`\`diff
 ${diff}
 \`\`\`
 
 Respond with your structured review.`;
 }
+
+/** @deprecated Use buildReviewPrompt(diff, conventions) instead */
+export const buildReviewPromptWithConventions = buildReviewPrompt;

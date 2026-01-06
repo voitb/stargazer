@@ -1,21 +1,26 @@
-import type { Issue } from '../review/types';
+import type { ReviewResult, Issue } from '../review/types';
+import type { ProjectConventions } from '../conventions/types';
 
-export type ReviewContext = {
-  readonly diff: string;
-  readonly files: readonly string[];
-  readonly projectDir: string;
-};
-
-export type StargazerPlugin = {
+export interface StargazerPlugin {
   readonly name: string;
-  readonly beforeReview?: (
-    ctx: ReviewContext
-  ) => ReviewContext | Promise<ReviewContext>;
+
+  readonly beforeReview?: (ctx: ReviewContext) => void | Promise<void>;
+
   readonly afterReview?: (
-    result: { issues: Issue[]; summary: string; decision: string },
+    result: ReviewResult,
     ctx: ReviewContext
-  ) => { issues: Issue[]; summary: string; decision: string } | Promise<{ issues: Issue[]; summary: string; decision: string }>;
-  readonly filterIssues?: (issues: Issue[]) => Issue[];
-};
+  ) => ReviewResult | Promise<ReviewResult>;
+
+  readonly filterIssues?: (
+    issues: readonly Issue[],
+    ctx: ReviewContext
+  ) => readonly Issue[];
+}
+
+export interface ReviewContext {
+  readonly diff: string;
+  readonly projectPath?: string;
+  readonly conventions?: ProjectConventions;
+}
 
 export type PluginFactory<T = void> = (options?: T) => StargazerPlugin;

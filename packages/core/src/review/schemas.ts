@@ -13,7 +13,7 @@ export const IssueSchema = z.object({
   category: CategorySchema,
   message: z.string().describe('Clear description of the issue'),
   suggestion: z.string().optional().describe('Suggested fix'),
-  confidence: z.number().min(0).max(1).describe('Confidence score 0-1'),
+  confidence: z.number().min(0).max(1).describe('Confidence score from 0.0 (uncertain) to 1.0 (certain)'),
   conventionRef: z.string().optional().describe('Convention category this violates (errorHandling, naming, testing, imports)'),
 }).describe('A single code review issue') satisfies z.ZodType<Issue>;
 
@@ -23,6 +23,7 @@ export const ReviewResultSchema = z.object({
   issues: z.array(IssueSchema).describe('List of issues found'),
   summary: z.string().describe('Brief summary of the review'),
   decision: DecisionSchema,
+  warnings: z.array(z.string()).optional().describe('Non-critical warnings from the review process'),
 }).describe('Complete code review result') satisfies z.ZodType<ReviewResult>;
 
 export const ReviewResultJSONSchema = z.toJSONSchema(ReviewResultSchema, {

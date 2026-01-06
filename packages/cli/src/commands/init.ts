@@ -29,7 +29,7 @@ export const initCommand = new Command('init')
         await access(configPath);
         console.error(chalk.yellow('Config file already exists: stargazer.config.ts'));
         console.error(chalk.dim('Use --force to overwrite'));
-        process.exit(EXIT_CODES.ISSUES_FOUND);
+        process.exit(EXIT_CODES.ERROR);
       } catch {
       }
     }

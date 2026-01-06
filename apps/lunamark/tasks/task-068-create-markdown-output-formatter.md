@@ -1,7 +1,7 @@
 ---
 id: task-068
 title: Create markdown output formatter
-status: todo
+status: done
 assignee: voitb
 priority: low
 labels:

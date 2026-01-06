@@ -1,7 +1,7 @@
 ---
 id: task-066
 title: Add retry to Gemini client
-status: todo
+status: done
 assignee: voitb
 priority: medium
 labels:
