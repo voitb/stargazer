@@ -159,4 +159,3 @@ The discovered conventions are then used to provide more relevant reviews specif
 
 - [Architecture](./architecture.md) - Understand how Stargazer works
 - [Plugins](./plugins.md) - Create custom review plugins
-- [API Reference](./api-reference.md) - Full API documentation

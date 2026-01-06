@@ -1,0 +1,47 @@
+import type { VariantProps } from "class-variance-authority";
+import type { ComponentProps, ComponentType } from "react";
+import { cn } from "../../utils/cn";
+import { statPillVariants } from "./stat-pill.variants";
+
+const iconSizeClasses = {
+  sm: "w-3 h-3",
+  md: "w-3.5 h-3.5",
+} as const;
+
+type StatPillProps = Omit<ComponentProps<"div">, "children"> &
+  VariantProps<typeof statPillVariants> & {
+    icon: ComponentType<{ className?: string }>;
+    label: string;
+    value: number | string;
+  };
+
+function StatPill({
+  className,
+  variant,
+  size = "md",
+  icon: Icon,
+  label,
+  value,
+  ref,
+  ...props
+}: StatPillProps) {
+  return (
+    <div
+      ref={ref}
+      className={cn(statPillVariants({ variant, size, className }))}
+      {...props}
+    >
+      <Icon
+        className={cn(iconSizeClasses[size ?? "md"], "transition-colors duration-200")}
+        aria-hidden="true"
+      />
+      <span className="text-[rgb(var(--color-neutral-foreground-1))] font-semibold tabular-nums">
+        {value}
+      </span>
+      <span>{label}</span>
+    </div>
+  );
+}
+
+export { StatPill };
+export type { StatPillProps };

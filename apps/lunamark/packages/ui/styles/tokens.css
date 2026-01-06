@@ -1,0 +1,211 @@
+/**
+ * Design System CSS Tokens
+ * Generated from TypeScript token definitions
+ *
+ * Two-layer architecture:
+ * - Layer 1 (Global): Raw values, not used directly
+ * - Layer 2 (Alias): Semantic tokens used by components
+ */
+
+:root {
+  /* ═══════════════════════════════════════════════════════════════
+     BACKGROUNDS (Progressive Layering)
+     ═══════════════════════════════════════════════════════════════ */
+  --color-neutral-background-1: 255 255 255;
+  --color-neutral-background-1-hover: 250 250 250;
+  --color-neutral-background-1-pressed: 244 244 245;
+  --color-neutral-background-2: 249 250 251;
+  --color-neutral-background-2-hover: 243 244 246;
+  --color-neutral-background-3: 243 244 246;
+  --color-neutral-background-3-hover: 228 228 231;
+  --color-neutral-background-disabled: 244 244 245;
+  --color-neutral-background-inverted: 17 24 39;
+
+  /* ═══════════════════════════════════════════════════════════════
+     FOREGROUNDS (Text Colors)
+     ═══════════════════════════════════════════════════════════════ */
+  --color-neutral-foreground-1: 17 24 39;
+  --color-neutral-foreground-2: 107 114 128;
+  --color-neutral-foreground-3: 161 161 170;
+  --color-neutral-foreground-disabled: 212 212 216;
+  --color-neutral-foreground-inverted: 255 255 255;
+
+  /* ═══════════════════════════════════════════════════════════════
+     BRAND (Primary Actions)
+     ═══════════════════════════════════════════════════════════════ */
+  --color-brand-background: 37 99 235;
+  --color-brand-background-hover: 29 78 216;
+  --color-brand-background-pressed: 30 64 175;
+  --color-brand-background-selected: 219 234 254;
+  --color-brand-foreground-1: 37 99 235;
+  --color-brand-foreground-2: 59 130 246;
+  --color-brand-foreground-on-brand: 255 255 255;
+
+  /* ═══════════════════════════════════════════════════════════════
+     STATUS - SUCCESS
+     ═══════════════════════════════════════════════════════════════ */
+  --color-status-success: 22 163 74;
+  --color-status-success-foreground: 21 128 61;
+  --color-status-success-background: 240 253 244;
+  --color-status-success-background-hover: 220 252 231;
+
+  /* ═══════════════════════════════════════════════════════════════
+     STATUS - WARNING
+     ═══════════════════════════════════════════════════════════════ */
+  --color-status-warning: 234 179 8;
+  --color-status-warning-foreground: 161 98 7;
+  --color-status-warning-background: 254 252 232;
+  --color-status-warning-background-hover: 254 249 195;
+
+  /* ═══════════════════════════════════════════════════════════════
+     STATUS - DANGER
+     ═══════════════════════════════════════════════════════════════ */
+  --color-status-danger: 220 38 38;
+  --color-status-danger-foreground: 185 28 28;
+  --color-status-danger-background: 254 242 242;
+  --color-status-danger-background-hover: 254 226 226;
+
+  /* ═══════════════════════════════════════════════════════════════
+     STROKES (Borders)
+     ═══════════════════════════════════════════════════════════════ */
+  --color-neutral-stroke-1: 229 231 235;
+  --color-neutral-stroke-1-hover: 212 212 216;
+  --color-neutral-stroke-1-pressed: 161 161 170;
+  --color-neutral-stroke-2: 244 244 245;
+  --color-neutral-stroke-disabled: 243 244 246;
+  --color-neutral-stroke-focus: 59 130 246;
+  --color-brand-stroke-1: 37 99 235;
+  --color-brand-stroke-2: 147 197 253;
+
+  /* ═══════════════════════════════════════════════════════════════
+     OVERLAY & SHADOW
+     ═══════════════════════════════════════════════════════════════ */
+  --color-overlay: 0 0 0;
+  --color-shadow-ambient: 0 0 0;
+  --color-shadow-key: 0 0 0;
+
+  /* ═══════════════════════════════════════════════════════════════
+     GLASS EFFECTS (Lunamark Signature)
+     ═══════════════════════════════════════════════════════════════ */
+  --color-glass-background: 255 255 255;
+  --color-glass-background-hover: 255 255 255;
+  --color-glass-border: 212 212 216;
+  --glass-blur: 16px;
+  --glass-saturation: 180%;
+  --glass-bg-opacity: 0.85;
+
+  /* ═══════════════════════════════════════════════════════════════
+     GLOW EFFECTS
+     ═══════════════════════════════════════════════════════════════ */
+  --color-glow-primary: 37 99 235;
+  --color-glow-accent: 139 92 246;
+  --glow-primary-opacity: 0.15;
+  --glow-accent-opacity: 0.12;
+
+  /* ═══════════════════════════════════════════════════════════════
+     SPACING SCALE (4px base unit)
+     ═══════════════════════════════════════════════════════════════ */
+  --spacing-none: 0;
+  --spacing-xxs: 2px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 20px;
+  --spacing-xxl: 24px;
+  --spacing-xxxl: 32px;
+  --spacing-xxxxl: 40px;
+  --spacing-xxxxxl: 48px;
+
+  /* ═══════════════════════════════════════════════════════════════
+     RADIUS SCALE
+     ═══════════════════════════════════════════════════════════════ */
+  --radius-none: 0;
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-xxl: 16px;
+  --radius-xxxl: 24px;
+  --radius-full: 9999px;
+
+  /* ═══════════════════════════════════════════════════════════════
+     MOTION (Durations & Easings)
+     ═══════════════════════════════════════════════════════════════ */
+  --duration-ultra-fast: 50ms;
+  --duration-faster: 100ms;
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+  --duration-slower: 400ms;
+  --duration-ultra-slow: 500ms;
+
+  --easing-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --easing-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --easing-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --easing-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   DARK THEME (Deep Zinc Aesthetic)
+   ═══════════════════════════════════════════════════════════════════ */
+
+[data-theme="dark"] {
+  /* Backgrounds (darker to lighter) */
+  --color-neutral-background-1: 9 9 11;
+  --color-neutral-background-1-hover: 18 18 21;
+  --color-neutral-background-1-pressed: 24 24 27;
+  --color-neutral-background-2: 18 18 21;
+  --color-neutral-background-2-hover: 24 24 27;
+  --color-neutral-background-3: 39 39 42;
+  --color-neutral-background-3-hover: 63 63 70;
+  --color-neutral-background-disabled: 24 24 27;
+  --color-neutral-background-inverted: 250 250 250;
+
+  /* Foregrounds */
+  --color-neutral-foreground-1: 250 250 250;
+  --color-neutral-foreground-2: 161 161 170;
+  --color-neutral-foreground-3: 113 113 122;
+  --color-neutral-foreground-disabled: 82 82 91;
+  --color-neutral-foreground-inverted: 9 9 11;
+
+  /* Brand (brighter for visibility) */
+  --color-brand-background: 59 130 246;
+  --color-brand-background-hover: 96 165 250;
+  --color-brand-background-pressed: 37 99 235;
+  --color-brand-background-selected: 30 64 175;
+  --color-brand-foreground-1: 96 165 250;
+  --color-brand-foreground-2: 147 197 253;
+
+  /* Status - Success */
+  --color-status-success: 34 197 94;
+  --color-status-success-foreground: 34 197 94;
+
+  /* Status - Warning */
+  --color-status-warning-foreground: 234 179 8;
+
+  /* Status - Danger */
+  --color-status-danger: 248 113 113;
+  --color-status-danger-foreground: 248 113 113;
+
+  /* Strokes (visible in dark mode) */
+  --color-neutral-stroke-1: 63 63 70;
+  --color-neutral-stroke-1-hover: 82 82 91;
+  --color-neutral-stroke-1-pressed: 113 113 122;
+  --color-neutral-stroke-2: 39 39 42;
+  --color-neutral-stroke-disabled: 39 39 42;
+  --color-neutral-stroke-focus: 96 165 250;
+  --color-brand-stroke-1: 96 165 250;
+  --color-brand-stroke-2: 59 130 246;
+
+  /* Glass (more translucent for glow effect) */
+  --color-glass-background: 9 9 11;
+  --color-glass-background-hover: 9 9 11;
+  --color-glass-border: 63 63 70;
+  --glass-bg-opacity: 0.75;
+
+  /* Glow (enhanced for dark mode) */
+  --glow-primary-opacity: 0.25;
+  --glow-accent-opacity: 0.15;
+}

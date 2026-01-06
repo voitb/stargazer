@@ -22,10 +22,10 @@ export GEMINI_API_KEY=twoj-klucz-tutaj
 
 ```typescript
 import { ok, err } from './shared/result';
-import type { Result, StargazerError } from './shared/result';
+import type { Result, ApiError } from './shared/result';
 
 // Definicja
-type Result<T, E = StargazerError> =
+type Result<T, E = ApiError> =
   | { readonly ok: true; readonly data: T }
   | { readonly ok: false; readonly error: E };
 
@@ -120,7 +120,7 @@ import type { GeminiClient } from '../gemini/types';
 import { IssueSchema } from '../review/schemas';
 import type { Issue } from '../review/types';
 
-// ❌ ŹLLE - Barrel imports
+// ❌ ŹLE - Barrel imports
 import { ok, err, createGeminiClient } from '../shared';
 ```
 
@@ -229,7 +229,7 @@ packages/core/src/
 ├── index.ts                 # JEDYNY publiczny barrel
 ├── shared/                  # BEZ index.ts!
 │   ├── result.ts           # Result<T,E>, ok(), err()
-│   └── types.ts            # Logger, wspólne typy
+│   └── types.ts            # Wspólne typy
 ├── gemini/                  # BEZ index.ts!
 │   ├── client.ts           # createGeminiClient()
 │   └── types.ts            # Interfejs GeminiClient
@@ -273,7 +273,7 @@ packages/core/src/
 ### Tworzenie Błędu
 
 ```typescript
-const createError = (code: ErrorCode, message: string, cause?: unknown): StargazerError =>
+const createError = (code: ErrorCode, message: string, cause?: unknown): ApiError =>
   ({ code, message, cause });
 ```
 
@@ -310,6 +310,6 @@ const StargazerConfigSchema = z.object({
 ## Linki
 
 - [Zasady Implementacji](./implementation-rules.md) - Pełne zasady kodowania dla agentów AI
-- [Architektura](./state-of-art-architecture.md) - Szczegółowe decyzje architektoniczne
+- [Architektura](./state-of-the-art-architecture.md) - Szczegółowe decyzje architektoniczne
 - [Pluginy](./plugins.md) - Pisanie własnych pluginów
 - [Szybki Start](./quick-start.md) - Przewodnik rozpoczęcia pracy

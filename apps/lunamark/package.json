@@ -22,6 +22,7 @@
     "@dnd-kit/dom": "^0.2.1",
     "@dnd-kit/helpers": "^0.2.1",
     "@dnd-kit/react": "^0.2.1",
+    "@floating-ui/react": "^0.27.16",
     "@tailwindcss/vite": "^4.0.6",
     "@tanstack/react-devtools": "^0.7.0",
     "@tanstack/react-query": "^5.90.16",
@@ -31,6 +32,8 @@
     "@tanstack/react-start": "^1.132.0",
     "@tanstack/router-plugin": "^1.132.0",
     "chokidar": "^5.0.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "commander": "^14.0.2",
     "gray-matter": "^4.0.3",
     "lucide-react": "^0.561.0",
@@ -39,6 +42,9 @@
     "open": "^11.0.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
+    "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.0.6",
     "vite-tsconfig-paths": "^6.0.2",
     "zod": "^4.2.1"
@@ -47,7 +53,9 @@
     "@biomejs/biome": "2.2.4",
     "@tanstack/devtools-vite": "^0.3.11",
     "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.2.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^22.10.2",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
@@ -56,6 +64,7 @@
     "typescript": "^5.7.2",
     "vite": "^7.1.7",
     "vitest": "^3.0.5",
+    "vitest-axe": "1.0.0-pre.5",
     "web-vitals": "^5.1.0"
   }
 }

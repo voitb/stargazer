@@ -1,7 +1,7 @@
 # Architecture
 
 > **TL;DR**: 100% functional (no classes), `Result<T, E>` for errors, Vite-style plugin hooks,
-> Zod 4 with OpenAPI 3.0 target. For details, see [State-of-the-Art Architecture](./state-of-art-architecture.md).
+> Zod 4 with OpenAPI 3.0 target. For details, see [State-of-the-Art Architecture](./state-of-the-art-architecture.md).
 
 Stargazer follows a **100% functional architecture** with modern TypeScript patterns.
 
@@ -35,11 +35,12 @@ We use Tagged Unions for explicit error handling instead of exceptions:
 
 ```typescript
 // types/result.ts
-export type Result<T, E = StargazerError> =
+export type Result<T, E = ApiError> =
   | { readonly ok: true; readonly data: T }
   | { readonly ok: false; readonly error: E };
 
-export type StargazerError = {
+// Simple error type - no branded names
+export type ApiError = {
   readonly code: ErrorCode;
   readonly message: string;
   readonly cause?: unknown;
