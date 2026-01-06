@@ -2,7 +2,7 @@ import { cva } from "class-variance-authority";
 
 export const columnVariants = cva(
   [
-    "flex flex-col rounded-xl h-full",
+    "flex flex-col rounded-xl",
     "transition-all duration-200 ease-out",
     "backdrop-blur-sm",
     "border border-[rgb(var(--color-neutral-stroke-1))/0.3]",
@@ -27,10 +27,15 @@ export const columnVariants = cva(
         md: "w-80 min-w-80",
         lg: "w-96 min-w-96",
       },
+      collapsed: {
+        true: "h-auto",
+        false: "h-full",
+      },
     },
     defaultVariants: {
       variant: "default",
       size: "md",
+      collapsed: false,
     },
   }
 );
@@ -65,6 +70,44 @@ export const countBadgeVariants = cva(
     },
     defaultVariants: {
       size: "md",
+    },
+  }
+);
+
+export const columnContentVariants = cva(
+  [
+    "flex-1 p-3 space-y-3",
+    "overflow-y-auto overflow-x-hidden",
+    "scrollbar-thin",
+    "transition-all duration-200 ease-out",
+  ].join(" "),
+  {
+    variants: {
+      state: {
+        expanded: "min-h-37.5 opacity-100",
+        collapsed: "h-0 min-h-0 opacity-0 overflow-hidden p-0",
+      },
+    },
+    defaultVariants: {
+      state: "expanded",
+    },
+  }
+);
+
+export const columnFooterVariants = cva(
+  [
+    "p-3 pt-2",
+    "transition-all duration-200 ease-out",
+  ].join(" "),
+  {
+    variants: {
+      state: {
+        expanded: "opacity-100",
+        collapsed: "h-0 opacity-0 overflow-hidden p-0",
+      },
+    },
+    defaultVariants: {
+      state: "expanded",
     },
   }
 );

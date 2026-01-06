@@ -1,10 +1,29 @@
-export { Column, ColumnHeader } from "./column";
-export type { ColumnProps, ColumnHeaderProps } from "./column";
-export { columnVariants, columnHeaderVariants, countBadgeVariants } from "./column";
-
-export { Column as ColumnContainer } from "./column";
-export type { ColumnProps as ColumnContainerProps } from "./column";
-export { columnVariants as columnContainerVariants } from "./column";
+// Column (compound component)
+export {
+	Column,
+	ColumnHeader,
+	ColumnContent,
+	ColumnFooter,
+	useColumn,
+	useColumnContext,
+	ColumnContext,
+} from "./column";
+export type {
+	ColumnProps,
+	ColumnHeaderProps,
+	ColumnContentProps,
+	ColumnFooterProps,
+	UseColumnOptions,
+	UseColumnReturn,
+	ColumnContextValue,
+} from "./column";
+export {
+	columnVariants,
+	columnHeaderVariants,
+	columnContentVariants,
+	columnFooterVariants,
+	countBadgeVariants,
+} from "./column";
 
 export { TaskCard, TaskCardHeader, TaskCardContent, TaskCardFooter } from "./task-card";
 export type {

@@ -16,7 +16,7 @@ export * from "./keyboard-hint";
 export * from "./toggle-button";
 export * from "./form-field";
 export * from "./stat-pill";
-export * from "./spinner";
+export * from "./icons";
 
 // Compound Components
 export * from "./card";

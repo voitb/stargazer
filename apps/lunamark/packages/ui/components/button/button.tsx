@@ -2,7 +2,7 @@ import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps, ReactNode } from "react";
 import { cn } from "../../utils/cn";
 import { buttonVariants } from "./button.variants";
-import { Spinner } from "../spinner";
+import { Spinner } from "../icons";
 
 type ButtonRenderProps = {
   className: string;

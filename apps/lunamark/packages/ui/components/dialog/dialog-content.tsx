@@ -10,7 +10,7 @@ import {
 	dialogContentVariants,
 	dialogOverlayVariants,
 } from "./dialog.variants";
-import { useDialogBehavior } from "./use-dialog-behavior";
+import { useDialog } from "./use-dialog";
 
 export type DialogContentProps = ComponentProps<"div"> &
 	VariantProps<typeof dialogContentVariants>;
@@ -25,8 +25,9 @@ export function DialogContent({
 	const { open, onOpenChange, closeOnBackdropClick, titleId, descriptionId } =
 		useDialogContext("DialogContent");
 
+	// Use the unified useDialog hook for behavior
 	const { contentRef, shouldRender, handleBackdropClick, dataState } =
-		useDialogBehavior({
+		useDialog({
 			open,
 			onOpenChange,
 			closeOnBackdropClick,

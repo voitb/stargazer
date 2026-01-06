@@ -1,32 +1,19 @@
 "use client";
 
 import {
-	autoUpdate,
 	FloatingFocusManager,
 	FloatingPortal,
-	flip,
-	offset,
-	shift,
-	useClick,
-	useDismiss,
-	useFloating,
-	useInteractions,
-	useListNavigation,
-	useRole,
 } from "@floating-ui/react";
 import { X } from "lucide-react";
-import { useRef, useState } from "react";
-import { Badge } from "../badge";
-import { useControllableState } from "../../hooks/use-controllable-state";
 import { useExitAnimation } from "../../hooks/use-exit-animation";
 import { cn } from "../../utils/cn";
 import { chipVariants } from "./multi-select-chips.variants";
+import {
+	useMultiSelectChips,
+	type MultiSelectChipsOption,
+} from "./use-multi-select-chips";
 
-// Public types - exported
-export interface MultiSelectChipsOption {
-	value: string;
-	label?: string;
-}
+export type { MultiSelectChipsOption };
 
 export interface MultiSelectChipsProps {
 	values?: string[];
@@ -39,7 +26,6 @@ export interface MultiSelectChipsProps {
 	className?: string;
 }
 
-// Internal types - not exported
 interface SelectedChipProps {
 	label: string;
 	size: "sm" | "md";
@@ -52,7 +38,6 @@ interface UnselectedChipProps {
 	onSelect: () => void;
 }
 
-// Internal helper - entire chip is clickable to deselect
 function SelectedChip({ label, size, onRemove }: SelectedChipProps) {
 	return (
 		<button
@@ -71,7 +56,6 @@ function SelectedChip({ label, size, onRemove }: SelectedChipProps) {
 	);
 }
 
-// Internal helper - toggle button pattern for main row
 function UnselectedChip({ label, size, onSelect }: UnselectedChipProps) {
 	return (
 		<button
@@ -96,64 +80,33 @@ function MultiSelectChips({
 	className,
 	"aria-label": ariaLabel,
 }: MultiSelectChipsProps) {
-	// Controlled/uncontrolled state
-	const [values, setValues] = useControllableState({
-		value: controlledValues,
-		defaultValue: [],
-		onChange: onValuesChange,
-	});
-
-	// Floating UI setup
-	const [isOpen, setIsOpen] = useState(false);
-	const [activeIndex, setActiveIndex] = useState<number | null>(null);
-	const listRef = useRef<(HTMLButtonElement | null)[]>([]);
-
-	const { refs, floatingStyles, context } = useFloating({
-		open: isOpen,
-		onOpenChange: setIsOpen,
-		placement: "bottom-start",
-		middleware: [offset(4), flip(), shift({ padding: 8 })],
-		whileElementsMounted: autoUpdate,
-	});
-
-	// Interaction hooks
-	const click = useClick(context);
-	const dismiss = useDismiss(context);
-	const role = useRole(context, { role: "listbox" });
-	const listNavigation = useListNavigation(context, {
+	const {
+		isOpen,
+		refs,
+		floatingStyles,
+		context,
 		listRef,
 		activeIndex,
-		onNavigate: setActiveIndex,
-		loop: true,
+		values,
+		getReferenceProps,
+		getFloatingProps,
+		getItemProps,
+		handleToggle,
+		handleClearAll,
+		selectedOptions,
+		visibleUnselected,
+		overflowOptions,
+		hasSelection,
+		hasOverflow,
+	} = useMultiSelectChips({
+		values: controlledValues,
+		onValuesChange,
+		onToggle,
+		options,
+		maxDisplay,
 	});
 
-	const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions(
-		[click, dismiss, role, listNavigation],
-	);
-
-	// Exit animation - match Dropdown's 150ms
 	const shouldRender = useExitAnimation(isOpen, 150);
-
-	// Compute visible vs overflow options
-	const selectedOptions = options.filter((o) => values.includes(o.value));
-	const unselectedOptions = options.filter((o) => !values.includes(o.value));
-	const remainingSlots = Math.max(0, maxDisplay - selectedOptions.length);
-	const visibleUnselected = unselectedOptions.slice(0, remainingSlots);
-	const overflowOptions = unselectedOptions.slice(remainingSlots);
-
-	const hasSelection = values.length > 0;
-	const hasOverflow = overflowOptions.length > 0;
-
-	// Handlers
-	const handleToggle = (value: string) => {
-		const newValues = values.includes(value)
-			? values.filter((v) => v !== value)
-			: [...values, value];
-		setValues(newValues);
-		onToggle?.(value);
-	};
-
-	const handleClearAll = () => setValues([]);
 
 	return (
 		<div
@@ -161,7 +114,6 @@ function MultiSelectChips({
 			aria-label={ariaLabel}
 			className={cn("inline-flex flex-wrap items-center gap-1", className)}
 		>
-			{/* Selected chips - entire chip clickable */}
 			{selectedOptions.map((option) => (
 				<SelectedChip
 					key={option.value}
@@ -171,7 +123,6 @@ function MultiSelectChips({
 				/>
 			))}
 
-			{/* Visible unselected chips */}
 			{visibleUnselected.map((option) => (
 				<UnselectedChip
 					key={option.value}
@@ -181,20 +132,24 @@ function MultiSelectChips({
 				/>
 			))}
 
-			{/* Overflow trigger */}
 			{hasOverflow && (
 				<>
-					<Badge
+					<button
 						ref={refs.setReference}
-						variant="secondary"
-						size={size}
-						className="cursor-pointer"
+						type="button"
+						className={cn(
+							"inline-flex items-center justify-center rounded-full font-medium",
+							"bg-[rgb(var(--color-neutral-background-3))] text-[rgb(var(--color-neutral-foreground-2))]",
+							"hover:bg-[rgb(var(--color-neutral-background-3-hover))]",
+							"cursor-pointer transition-colors",
+							size === "sm" ? "px-2 py-0.5 text-[10px]" : "px-2.5 py-1 text-xs",
+						)}
 						aria-haspopup="listbox"
 						aria-expanded={isOpen}
 						{...getReferenceProps()}
 					>
 						+{overflowOptions.length}
-					</Badge>
+					</button>
 
 					{shouldRender && (
 						<FloatingPortal>
@@ -260,7 +215,6 @@ function MultiSelectChips({
 				</>
 			)}
 
-			{/* Clear all button */}
 			{hasSelection && (
 				<button
 					type="button"

@@ -9,7 +9,8 @@ import {
 	DropdownItem,
 	DropdownSeparator,
 	DropdownLabel,
-} from "./dropdown";
+	type DropdownTriggerRenderProps,
+} from "./index";
 
 function setup(jsx: React.ReactElement) {
 	return {
@@ -43,7 +44,7 @@ function TestDropdown({
 	return (
 		<Dropdown trigger={trigger} open={open} onOpenChange={onOpenChange}>
 			<DropdownTrigger>
-				{({ isOpen: _isOpen, ...props }) => (
+				{({ isOpen: _isOpen, ...props }: DropdownTriggerRenderProps) => (
 					<button data-testid="trigger" {...props}>
 						Open Menu
 					</button>
@@ -226,7 +227,7 @@ describe("Dropdown", () => {
 		const { user } = setup(
 			<Dropdown>
 				<DropdownTrigger>
-					{({ isOpen, ...props }) => (
+					{({ isOpen, ...props }: DropdownTriggerRenderProps) => (
 						<button data-testid="trigger" data-open={isOpen} {...props}>
 							{isOpen ? "Close" : "Open"}
 						</button>
@@ -251,13 +252,13 @@ describe("Dropdown", () => {
 		const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
 
 		expect(() => render(<DropdownTrigger>Trigger</DropdownTrigger>)).toThrow(
-			"Dropdown components must be used within a Dropdown provider",
+			"<DropdownTrigger> must be used within a <Dropdown> provider",
 		);
 		expect(() => render(<DropdownContent><DropdownItem>Item</DropdownItem></DropdownContent>)).toThrow(
-			"Dropdown components must be used within a Dropdown provider",
+			"<DropdownContent> must be used within a <Dropdown> provider",
 		);
 		expect(() => render(<DropdownItem>Item</DropdownItem>)).toThrow(
-			"Dropdown components must be used within a Dropdown provider",
+			"<DropdownItem> must be used within a <Dropdown> provider",
 		);
 
 		consoleError.mockRestore();

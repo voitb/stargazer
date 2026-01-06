@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
 import { createRef, useState } from "react";
 import { describe, it, expect, vi } from "vitest";
-import { ToggleGroup, ToggleGroupItem } from "./toggle-group";
+import { ToggleGroup, ToggleGroupItem } from "./index";
 
 function SingleSelectGroup({ initialValue = null }: { initialValue?: string | null }) {
 	const [value, setValue] = useState<string | null>(initialValue);

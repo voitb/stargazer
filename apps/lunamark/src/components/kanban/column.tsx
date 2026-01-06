@@ -1,4 +1,4 @@
-import { Column, ColumnHeader, DroppableZone, EmptyState } from "@ui/components/kanban";
+import { Column, ColumnHeader, ColumnContent, EmptyState } from "@ui/components/kanban";
 import { COLUMN_COLORS } from "@/lib/kanban/constants";
 import type { Column as ColumnType, Task } from "@/schemas/task";
 import { TaskCard } from "./task-card";
@@ -10,43 +10,33 @@ interface KanbanColumnProps {
 
 export function KanbanColumn({ column, onEditTask }: KanbanColumnProps) {
   return (
-    <DroppableZone
+    <Column
       id={column.id}
       type="column"
       accept={["item"]}
-      data={{ column }}
+      items={column.tasks}
+      size="md"
     >
-      {(isDropTarget) => (
-        <Column
-          variant={isDropTarget ? "active" : "default"}
-          header={
-            <ColumnHeader
-              title={column.title}
-              count={column.tasks.length}
-              dotColor={COLUMN_COLORS[column.color || "gray"]}
+      <ColumnHeader
+        title={column.title}
+        dotColor={COLUMN_COLORS[column.color || "gray"]}
+      />
+      <ColumnContent>
+        {column.tasks.length === 0 ? (
+          <EmptyState message="No tasks yet" />
+        ) : (
+          column.tasks.map((task, index) => (
+            <TaskCard
+              key={task.id}
+              task={task}
+              column={column.id}
+              index={index}
+              isLast={index === column.tasks.length - 1}
+              onClick={() => onEditTask?.(task)}
             />
-          }
-        >
-          {column.tasks.length === 0 ? (
-            <EmptyState
-              variant={isDropTarget ? "active" : "default"}
-              message="No tasks yet"
-            />
-          ) : (
-            column.tasks.map((task, index) => (
-              <TaskCard
-                key={task.id}
-                task={task}
-                column={column.id}
-                index={index}
-                isLast={index === column.tasks.length - 1}
-                onClick={() => onEditTask?.(task)}
-              />
-            ))
-          )}
-        </Column>
-      )}
-    </DroppableZone>
+          ))
+        )}
+      </ColumnContent>
+    </Column>
   );
 }
-
