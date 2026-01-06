@@ -3,17 +3,14 @@ import {
   Children,
   cloneElement,
   isValidElement,
-  useLayoutEffect,
-  useState,
   type ComponentProps,
   type ReactElement,
   type ReactNode,
 } from "react";
 import { cn } from "../../utils/cn";
+import { useImageLoadingStatus, type ImageLoadingStatus } from "../../hooks";
 import { avatarVariants } from "./avatar.variants";
 import { Button } from "../button";
-
-type ImageLoadingStatus = "idle" | "loading" | "loaded" | "error";
 
 type AvatarProps = ComponentProps<"span"> &
   VariantProps<typeof avatarVariants> & {
@@ -35,44 +32,14 @@ function Avatar({
   ref,
   ...props
 }: AvatarProps) {
-  const [status, setStatus] = useState<ImageLoadingStatus>(
-    src ? "loading" : "idle"
-  );
-  const [canShowFallback, setCanShowFallback] = useState(delayMs === 0);
-
-  useLayoutEffect(() => {
-    if (!src) {
-      setStatus("idle");
-      onLoadingStatusChange?.("idle");
-      setCanShowFallback(true);
-      return;
-    }
-
-    setStatus("loading");
-    onLoadingStatusChange?.("loading");
-
-    if (delayMs === 0) {
-      setCanShowFallback(true);
-    } else {
-      setCanShowFallback(false);
-      const timer = setTimeout(() => setCanShowFallback(true), delayMs);
-      return () => clearTimeout(timer);
-    }
-  }, [src, delayMs, onLoadingStatusChange]);
-
-  const handleLoad = () => {
-    setStatus("loaded");
-    onLoadingStatusChange?.("loaded");
-  };
-
-  const handleError = () => {
-    setStatus("error");
-    onLoadingStatusChange?.("error");
-  };
+  const { showImage, showFallback, handleLoad, handleError } =
+    useImageLoadingStatus({
+      src,
+      delayMs,
+      onLoadingStatusChange,
+    });
 
   const fallbackContent = fallback ?? alt?.[0]?.toUpperCase() ?? "?";
-  const showImage = src && status !== "error";
-  const showFallback = !showImage && canShowFallback;
 
   return (
     <span
@@ -83,7 +50,7 @@ function Avatar({
     >
       {showImage ? (
         <img
-          src={src}
+          src={src!}
           alt={alt ?? ""}
           className="h-full w-full object-cover"
           onLoad={handleLoad}

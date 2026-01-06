@@ -1,36 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect } from "react";
 import { AppHeader } from "@/components/header/app-header";
 import { KanbanBoard } from "@/components/kanban/kanban-board";
 import { useBoard } from "@/hooks/kanban/use-board";
+import { useBoardKeyboardShortcuts } from "@/hooks/keyboard";
+import { validateRouteSearch } from "@/hooks/routing";
 import { useTaskEditor } from "@/hooks/task-editor/use-task-editor";
 import { getBoard } from "@/server/board";
-import type { TaskPriority } from "@/schemas/task";
-
-const VALID_PRIORITIES = ["low", "medium", "high", "critical"] as const;
-
-function isValidPriority(value: unknown): value is TaskPriority {
-	return (
-		typeof value === "string" &&
-		VALID_PRIORITIES.includes(value as TaskPriority)
-	);
-}
 
 export const Route = createFileRoute("/")({
-	validateSearch: (
-		search: Record<string, unknown>,
-	): {
-		assignee?: string;
-		priority?: TaskPriority;
-		labels?: string[];
-	} => ({
-		assignee:
-			typeof search.assignee === "string" ? search.assignee : undefined,
-		priority: isValidPriority(search.priority) ? search.priority : undefined,
-		labels: Array.isArray(search.labels)
-			? search.labels.filter((l): l is string => typeof l === "string")
-			: undefined,
-	}),
+	validateSearch: validateRouteSearch,
 	loader: async () => {
 		return { board: await getBoard() };
 	},
@@ -44,28 +22,9 @@ function BoardPage() {
 
 	const board = queryBoard ?? loaderBoard;
 
-	// Keyboard shortcut: N to add task to Todo column
-	useEffect(() => {
-		function handleKeyDown(event: KeyboardEvent) {
-			// Ignore if user is typing in an input or textarea
-			const target = event.target as HTMLElement;
-			if (
-				target.tagName === "INPUT" ||
-				target.tagName === "TEXTAREA" ||
-				target.isContentEditable
-			) {
-				return;
-			}
-
-			if (event.key === "n" || event.key === "N") {
-				event.preventDefault();
-				taskEditor.openCreate("todo");
-			}
-		}
-
-		document.addEventListener("keydown", handleKeyDown);
-		return () => document.removeEventListener("keydown", handleKeyDown);
-	}, [taskEditor]);
+	useBoardKeyboardShortcuts({
+		onCreateTask: (status) => taskEditor.openCreate(status),
+	});
 
 	return (
 		<div className="h-screen flex flex-col overflow-hidden bg-[rgb(var(--color-neutral-background-2))]">

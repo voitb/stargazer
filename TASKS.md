@@ -19,10 +19,11 @@ AI agents should execute tasks in batch order. Each task includes:
 
 | Status | Count |
 |--------|-------|
-| Pending | 1 |
-| Done | 42 |
+| Pending | 0 |
+| Done | 43 |
 
 > **Batch 4 completed 2026-01-06**: Tests rewritten from 2836 → 811 lines (71% reduction)
+> **Batch 5 completed 2026-01-06**: Routing hooks extracted (keyboard shortcuts + search validation)
 
 ---
 
@@ -171,7 +172,7 @@ implementer: voitb
 
 | # | Status | Task | Files | Research |
 |---|--------|------|-------|----------|
-| 8.1 | [ ] | Create custom routing hook for `/routes/index.tsx` - extract logic | `apps/lunamark/src/routes/index.tsx`, new `src/hooks/use-routing.ts` | TanStack Router docs |
+| 8.1 | [x] | Create routing hooks - extracted keyboard shortcuts + search validation <!-- 2026-01-06 --> | `apps/lunamark/src/routes/index.tsx`, `src/hooks/keyboard/`, `src/hooks/routing/` | TanStack Router docs |
 
 ---
 
