@@ -28,6 +28,9 @@ export type ColumnProps<TItem = unknown> = Omit<
 		// Items (for itemCount in context)
 		items?: TItem[];
 
+		// NEW: Fluid layout for responsive design
+		fluid?: boolean;
+
 		// Legacy API (backward compatibility)
 		header?: ReactNode;
 		footer?: ReactNode;
@@ -39,7 +42,7 @@ export function Column<TItem = unknown>({
 	id,
 	className,
 	variant: variantProp,
-	size = "md",
+	fluid = true, // Changed from size = "md"
 	collapsed: collapsedProp,
 	type,
 	accept,
@@ -75,7 +78,7 @@ export function Column<TItem = unknown>({
 		itemCount: column.itemCount,
 		isEmpty: column.isEmpty,
 		dataState: column.dataState,
-		size: size ?? "md",
+		size: "md", // Default size for header/badge (they still use size variant)
 		contentId: column.contentId,
 	};
 
@@ -100,7 +103,7 @@ export function Column<TItem = unknown>({
 				data-state={column.dataState}
 				data-drop-target={column.isDropTarget}
 				className={cn(
-					columnVariants({ variant, size, collapsed: column.isCollapsed }),
+					columnVariants({ variant, fluid, collapsed: column.isCollapsed }),
 					className
 				)}
 				{...props}

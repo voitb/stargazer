@@ -48,3 +48,8 @@ export type { DropIndicatorProps } from "./drop-indicator";
 export { EmptyState } from "./empty-state";
 export type { EmptyStateProps } from "./empty-state";
 export { emptyStateVariants } from "./empty-state";
+
+export { ColumnTabs } from "./column-tabs";
+export type { ColumnTab, ColumnTabsProps } from "./column-tabs";
+
+export { SwipeableContainer } from "./swipeable-container";

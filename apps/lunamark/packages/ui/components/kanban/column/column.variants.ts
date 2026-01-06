@@ -1,9 +1,10 @@
 import { cva } from "class-variance-authority";
 
+// Main column variants - size replaced with fluid for responsive design
 export const columnVariants = cva(
   [
     "flex flex-col rounded-xl",
-    "transition-all duration-200 ease-out",
+    "kanban-column-transition", // Use CSS utility with motion tokens
     "backdrop-blur-sm",
     "border border-[rgb(var(--color-neutral-stroke-1))/0.3]",
   ].join(" "),
@@ -18,28 +19,28 @@ export const columnVariants = cva(
         active: [
           "bg-[rgb(var(--color-brand-background))/0.05]",
           "border-[rgb(var(--color-brand-background))/0.3]",
-          "ring-2 ring-[rgb(var(--color-brand-background))/0.15]",
-          "shadow-lg shadow-[rgb(var(--color-brand-background))/0.1]",
+          "ring-2 ring-[rgb(var(--color-brand-background))/var(--glow-primary-opacity)]",
+          "shadow-lg shadow-[rgb(var(--color-shadow-ambient))/0.1]",
         ].join(" "),
       },
-      size: {
-        sm: "w-64 min-w-64",
-        md: "w-80 min-w-80",
-        lg: "w-96 min-w-96",
+      fluid: {
+        true: "flex-1 min-w-[280px] max-w-[380px]",
+        false: "w-full",
       },
       collapsed: {
         true: "h-auto",
-        false: "h-full",
+        false: "h-full min-h-[400px]",
       },
     },
     defaultVariants: {
       variant: "default",
-      size: "md",
+      fluid: true,
       collapsed: false,
     },
   }
 );
 
+// Column header variants - updated for responsive context
 export const columnHeaderVariants = cva("flex items-center gap-2.5", {
   variants: {
     size: {
@@ -53,6 +54,7 @@ export const columnHeaderVariants = cva("flex items-center gap-2.5", {
   },
 });
 
+// Count badge variants - updated for responsive context
 export const countBadgeVariants = cva(
   [
     "font-bold px-2 py-0.5 rounded-full min-w-[20px] text-center",
@@ -79,7 +81,7 @@ export const columnContentVariants = cva(
     "flex-1 p-3 space-y-3",
     "overflow-y-auto overflow-x-hidden",
     "scrollbar-thin",
-    "transition-all duration-200 ease-out",
+    "kanban-column-transition",
   ].join(" "),
   {
     variants: {
@@ -97,7 +99,7 @@ export const columnContentVariants = cva(
 export const columnFooterVariants = cva(
   [
     "p-3 pt-2",
-    "transition-all duration-200 ease-out",
+    "kanban-column-transition",
   ].join(" "),
   {
     variants: {

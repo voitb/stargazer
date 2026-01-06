@@ -5,6 +5,7 @@ export { useFocusTrap } from "./use-focus-trap";
 export { useImageLoadingStatus } from "./use-image-loading-status";
 export { useKeyboardShortcut } from "./use-keyboard-shortcut";
 export { useTheme } from "./use-theme";
+export { useSwipeNavigation } from "./use-swipe-navigation";
 
 export type { ImageLoadingStatus } from "./use-image-loading-status";
 export type { KeyboardShortcutConfig } from "./use-keyboard-shortcut";
