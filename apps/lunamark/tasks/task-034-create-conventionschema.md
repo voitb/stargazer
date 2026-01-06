@@ -1,7 +1,7 @@
 ---
 id: task-034
 title: Create ConventionSchema
-status: todo
+status: done
 priority: medium
 labels:
   - core
@@ -16,10 +16,10 @@ Create Zod schemas for convention patterns for Gemini structured output.
 
 ## Acceptance Criteria
 
-- [ ] Create `packages/core/src/conventions/schemas.ts`
-- [ ] Define ConventionPatternSchema
-- [ ] Define ProjectConventionsSchema
-- [ ] Export types from schemas
+- [x] Create `packages/core/src/conventions/schemas.ts`
+- [x] Define ConventionPatternSchema
+- [x] Define ProjectConventionsSchema
+- [x] Export types from schemas
 
 ## Implementation
 

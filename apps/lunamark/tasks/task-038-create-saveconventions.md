@@ -1,7 +1,7 @@
 ---
 id: task-038
 title: Create saveConventions function
-status: todo
+status: done
 assignee: voitb
 priority: medium
 labels:
@@ -16,11 +16,11 @@ Create function to save discovered conventions to a cache file.
 
 ## Acceptance Criteria
 
-- [ ] Create `packages/core/src/conventions/cache.ts`
-- [ ] Implement `saveConventions()` function
-- [ ] Save to `.stargazer/conventions.json`
-- [ ] Create directory if needed
-- [ ] Return Result type
+- [x] Create `packages/core/src/conventions/cache.ts`
+- [x] Implement `saveConventions()` function
+- [x] Save to `.stargazer/conventions.json`
+- [x] Create directory if needed
+- [x] Return Result type
 
 ## Implementation
 

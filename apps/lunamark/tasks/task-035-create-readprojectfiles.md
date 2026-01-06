@@ -1,7 +1,7 @@
 ---
 id: task-035
 title: Create readProjectFiles helper
-status: todo
+status: done
 assignee: voitb
 priority: medium
 labels:
@@ -16,11 +16,11 @@ Create a helper to read code files from a project directory for analysis.
 
 ## Acceptance Criteria
 
-- [ ] Create `packages/core/src/conventions/files.ts`
-- [ ] Implement `readProjectFiles()` function
-- [ ] Filter to only code files (.ts, .tsx, .js, .jsx)
-- [ ] Limit number of files to avoid token overload
-- [ ] Return Result type
+- [x] Create `packages/core/src/conventions/files.ts`
+- [x] Implement `readProjectFiles()` function
+- [x] Filter to only code files (.ts, .tsx, .js, .jsx)
+- [x] Limit number of files to avoid token overload
+- [x] Return Result type
 
 ## Implementation
 

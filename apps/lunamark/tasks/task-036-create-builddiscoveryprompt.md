@@ -1,7 +1,7 @@
 ---
 id: task-036
 title: Create buildDiscoveryPrompt
-status: todo
+status: done
 assignee: voitb
 priority: medium
 labels:
@@ -16,10 +16,10 @@ Create the prompt builder for convention discovery.
 
 ## Acceptance Criteria
 
-- [ ] Create `packages/core/src/conventions/prompts.ts`
-- [ ] Implement `buildDiscoveryPrompt()` function
-- [ ] Include code samples in prompt
-- [ ] Clear instructions for pattern detection
+- [x] Create `packages/core/src/conventions/prompts.ts`
+- [x] Implement `buildDiscoveryPrompt()` function
+- [x] Include code samples in prompt
+- [x] Clear instructions for pattern detection
 
 ## Implementation
 

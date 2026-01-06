@@ -1,7 +1,7 @@
 ---
 id: task-039
 title: Create loadConventions function
-status: todo
+status: done
 assignee: voitb
 priority: medium
 labels:
@@ -16,10 +16,10 @@ Create function to load cached conventions from file.
 
 ## Acceptance Criteria
 
-- [ ] Extend `packages/core/src/conventions/cache.ts`
-- [ ] Implement `loadConventions()` function
-- [ ] Validate with Zod schema
-- [ ] Return Result type
+- [x] Extend `packages/core/src/conventions/cache.ts`
+- [x] Implement `loadConventions()` function
+- [x] Validate with Zod schema
+- [x] Return Result type
 
 ## Implementation
 
