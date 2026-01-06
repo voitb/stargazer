@@ -1,7 +1,7 @@
 ---
 id: task-046
 title: Create runHooks function
-status: todo
+status: done
 assignee: voitb
 priority: high
 labels:

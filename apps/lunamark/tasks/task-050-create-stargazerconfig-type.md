@@ -1,7 +1,7 @@
 ---
 id: task-050
 title: Create StargazerConfig type
-status: todo
+status: done
 assignee: voitb
 priority: high
 labels:

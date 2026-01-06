@@ -21,3 +21,20 @@ export { readProjectFiles } from './conventions/file-reader';
 export { buildDiscoveryPrompt } from './conventions/prompts';
 export { discoverConventions, type DiscoverOptions } from './conventions/discovery';
 export { saveConventions, loadConventions } from './conventions/cache';
+
+export type {
+  StargazerPlugin,
+  PluginFactory,
+  ReviewContext,
+} from './plugins/types';
+export { runBeforeReviewHooks, runAfterReviewHooks, runFilterHooks } from './plugins/hooks';
+export { ignorePathsPlugin } from './plugins/ignore-paths';
+export type { IgnorePathsOptions } from './plugins/ignore-paths';
+
+export { defineConfig } from './config/define';
+export { resolveConfig, mergeIgnorePatterns } from './config/resolve';
+export { DEFAULT_CONFIG } from './config/defaults';
+export type { StargazerConfig, ResolvedConfig, Model } from './config/types';
+
+export { createStargazer } from './stargazer';
+export type { Stargazer, StargazerOptions, ReviewOptions as StargazerReviewOptions } from './stargazer';

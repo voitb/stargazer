@@ -1,7 +1,7 @@
 ---
 id: task-053
 title: Create resolveConfig function
-status: todo
+status: done
 assignee: voitb
 priority: medium
 labels:

@@ -1,37 +1,9 @@
----
-id: task-047
-title: Test runHooks function
-status: done
-assignee: voitb
-priority: medium
-labels:
-  - core
-  - plugins
-  - testing
-created: '2026-01-01'
-order: 470
----
-## Description
-
-Create unit tests for the runHooks function.
-
-## Acceptance Criteria
-
-- [ ] Create `packages/core/src/plugins/hooks.test.ts`
-- [ ] Test plugins run in sequence
-- [ ] Test result is passed through pipeline
-- [ ] Test handles async hooks
-
-## Implementation
-
-**File**: `packages/core/src/plugins/hooks.test.ts`
-
-```typescript
-import { describe, it, expect, vi } from 'vitest';
-import { runHooks, runFilterHooks } from './hooks';
+import { describe, it, expect } from 'vitest';
+import { runBeforeReviewHooks, runFilterHooks } from './hooks';
 import type { StargazerPlugin, ReviewContext } from './types';
+import type { Issue } from '../review/types';
 
-describe('runHooks', () => {
+describe('runBeforeReviewHooks', () => {
   it('runs plugins in sequence', async () => {
     const order: number[] = [];
 
@@ -58,7 +30,7 @@ describe('runHooks', () => {
       projectDir: '/test',
     };
 
-    const result = await runHooks(plugins, 'beforeReview', initialCtx);
+    const result = await runBeforeReviewHooks(plugins, initialCtx);
 
     expect(order).toEqual([1, 2]);
     expect(result.files).toEqual(['file1.ts', 'file2.ts']);
@@ -81,7 +53,7 @@ describe('runHooks', () => {
       projectDir: '/test',
     };
 
-    const result = await runHooks(plugins, 'beforeReview', initialCtx);
+    const result = await runBeforeReviewHooks(plugins, initialCtx);
     expect(result.diff).toBe('original modified');
   });
 
@@ -100,29 +72,38 @@ describe('runHooks', () => {
       projectDir: '/test',
     };
 
-    const result = await runHooks(plugins, 'beforeReview', initialCtx);
+    const result = await runBeforeReviewHooks(plugins, initialCtx);
     expect(result.diff).toBe('modified');
   });
 });
 
 describe('runFilterHooks', () => {
+  const createIssue = (file: string, severity: 'low' | 'medium' | 'high'): Issue => ({
+    file,
+    line: 1,
+    severity,
+    category: 'bug',
+    message: 'Test issue',
+    confidence: 0.9,
+  });
+
   it('filters issues through plugins', () => {
     const plugins: StargazerPlugin[] = [
       {
         name: 'filter-low',
-        filterIssues: (issues) => issues.filter((i: any) => i.severity !== 'low'),
+        filterIssues: (issues) => issues.filter((i) => i.severity !== 'low'),
       },
       {
         name: 'filter-test-files',
         filterIssues: (issues) =>
-          issues.filter((i: any) => !i.file.includes('.test.')),
+          issues.filter((i) => !i.file.includes('.test.')),
       },
     ];
 
-    const issues = [
-      { file: 'src/app.ts', severity: 'high' },
-      { file: 'src/app.ts', severity: 'low' },
-      { file: 'src/app.test.ts', severity: 'high' },
+    const issues: Issue[] = [
+      createIssue('src/app.ts', 'high'),
+      createIssue('src/app.ts', 'low'),
+      createIssue('src/app.test.ts', 'high'),
     ];
 
     const result = runFilterHooks(plugins, issues);
@@ -132,10 +113,3 @@ describe('runFilterHooks', () => {
     expect(result[0].severity).toBe('high');
   });
 });
-```
-
-## Test
-
-```bash
-cd packages/core && pnpm test hooks.test.ts
-```

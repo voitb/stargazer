@@ -1,32 +1,3 @@
----
-id: task-054
-title: Test resolveConfig
-status: done
-assignee: voitb
-priority: medium
-labels:
-  - core
-  - config
-  - testing
-created: '2026-01-01'
-order: 540
----
-## Description
-
-Create unit tests for the resolveConfig function.
-
-## Acceptance Criteria
-
-- [ ] Create `packages/core/src/config/resolve.test.ts`
-- [ ] Test uses defaults when no config
-- [ ] Test overrides specific values
-- [ ] Test merges plugins correctly
-
-## Implementation
-
-**File**: `packages/core/src/config/resolve.test.ts`
-
-```typescript
 import { describe, it, expect } from 'vitest';
 import { resolveConfig, mergeIgnorePatterns } from './resolve';
 import { DEFAULT_CONFIG } from './defaults';
@@ -113,10 +84,3 @@ describe('mergeIgnorePatterns', () => {
     expect(mergeIgnorePatterns([], [])).toEqual([]);
   });
 });
-```
-
-## Test
-
-```bash
-cd packages/core && pnpm test resolve.test.ts
-```

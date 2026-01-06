@@ -1,35 +1,6 @@
----
-id: task-049
-title: Test ignorePathsPlugin
-status: done
-assignee: voitb
-priority: medium
-labels:
-  - core
-  - plugins
-  - testing
-created: '2026-01-01'
-order: 490
----
-## Description
-
-Create unit tests for the ignorePathsPlugin.
-
-## Acceptance Criteria
-
-- [ ] Create `packages/core/src/plugins/ignore-paths.test.ts`
-- [ ] Test filtering by path patterns
-- [ ] Test with empty paths array
-- [ ] Test multiple path patterns
-
-## Implementation
-
-**File**: `packages/core/src/plugins/ignore-paths.test.ts`
-
-```typescript
 import { describe, it, expect } from 'vitest';
 import { ignorePathsPlugin } from './ignore-paths';
-import type { Issue } from '../review/schemas';
+import type { Issue } from '../review/types';
 
 describe('ignorePathsPlugin', () => {
   const createIssue = (file: string): Issue => ({
@@ -101,10 +72,3 @@ describe('ignorePathsPlugin', () => {
     expect(filtered).toHaveLength(1);
   });
 });
-```
-
-## Test
-
-```bash
-cd packages/core && pnpm test ignore-paths.test.ts
-```
