@@ -2,20 +2,14 @@ import { cva } from "class-variance-authority";
 
 export const taskCardVariants = cva(
   [
-    // Base structure
     "relative p-4 rounded-xl group",
-    // Glass effect
     "bg-[rgb(var(--color-neutral-background-1))/0.95] backdrop-blur-sm",
-    // Premium border
     "border border-[rgb(var(--color-neutral-stroke-1))/0.5]",
-    // Subtle inner highlight
     "shadow-[inset_0_1px_0_rgb(255_255_255/0.04)]",
-    // Hover states
     "hover:bg-[rgb(var(--color-neutral-background-1))]",
     "hover:border-[rgb(var(--color-neutral-stroke-1))/0.8]",
     "hover:shadow-md hover:shadow-[rgb(0_0_0/0.08)]",
     "hover:-translate-y-0.5",
-    // Smooth transitions
     "transition-all duration-200 ease-out",
   ],
   {
@@ -42,11 +36,11 @@ export const taskCardVariants = cva(
 );
 
 export const taskCardHeaderVariants = cva(
-  "flex items-start justify-between mb-3 gap-2"
+  "flex items-start justify-between mb-3 gap-2 p-0"
 );
 
-export const taskCardContentVariants = cva("mb-3");
+export const taskCardContentVariants = cva("mb-3 p-0");
 
 export const taskCardFooterVariants = cva(
-  "flex items-center justify-between pt-3 border-t border-[rgb(var(--color-neutral-stroke-1))]/20"
+  "flex items-center justify-between pt-3 p-0 border-t border-[rgb(var(--color-neutral-stroke-1))]/20"
 );

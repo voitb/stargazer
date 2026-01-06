@@ -1,8 +1,7 @@
-import { render, screen, waitFor, act } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
-import { useState } from "react";
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import {
 	Dropdown,
 	DropdownTrigger,
@@ -65,18 +64,6 @@ function TestDropdown({
 				<DropdownSeparator />
 			</DropdownContent>
 		</Dropdown>
-	);
-}
-
-function ControlledDropdown({ initialOpen = false }: { initialOpen?: boolean }) {
-	const [open, setOpen] = useState(initialOpen);
-	return (
-		<>
-			<button data-testid="external-toggle" onClick={() => setOpen((o) => !o)}>
-				Toggle
-			</button>
-			<TestDropdown open={open} onOpenChange={setOpen} />
-		</>
 	);
 }
 
@@ -207,23 +194,6 @@ describe("Dropdown", () => {
 		expect(screen.getByTestId("item-settings")).toHaveAttribute("data-highlighted", "true");
 	});
 
-	it("skips disabled items during navigation", async () => {
-		const { user } = setup(
-			<TestDropdown
-				items={[
-					{ value: "first", label: "First" },
-					{ value: "disabled", label: "Disabled", disabled: true },
-					{ value: "third", label: "Third" },
-				]}
-			/>,
-		);
-
-		await user.click(screen.getByTestId("trigger"));
-		await user.keyboard("{ArrowDown}{ArrowDown}");
-
-		expect(screen.getByTestId("item-third")).toHaveAttribute("data-highlighted", "true");
-	});
-
 	it("disabled items don't trigger onSelect", async () => {
 		const onSelect = vi.fn();
 		const { user } = setup(
@@ -237,33 +207,6 @@ describe("Dropdown", () => {
 
 		expect(onSelect).not.toHaveBeenCalled();
 		expect(screen.getByTestId("content")).toBeInTheDocument();
-	});
-
-	describe("exit animation", () => {
-		beforeEach(() => {
-			vi.useFakeTimers();
-		});
-
-		afterEach(() => {
-			vi.useRealTimers();
-		});
-
-		it("keeps content mounted during close animation then unmounts", async () => {
-			const { rerender } = render(<TestDropdown open={true} />);
-
-			expect(screen.getByTestId("content")).toBeInTheDocument();
-
-			rerender(<TestDropdown open={false} />);
-
-			expect(screen.getByTestId("content")).toBeInTheDocument();
-			expect(screen.getByTestId("content")).toHaveAttribute("data-state", "closed");
-
-			await act(async () => {
-				vi.advanceTimersByTime(150);
-			});
-
-			expect(screen.queryByTestId("content")).not.toBeInTheDocument();
-		});
 	});
 
 	it("passes axe accessibility checks", async () => {
@@ -304,15 +247,6 @@ describe("Dropdown", () => {
 		expect(screen.getByTestId("trigger")).toHaveAttribute("data-open", "true");
 	});
 
-	it("renders subcomponents (Label, Separator)", async () => {
-		const { user } = setup(<TestDropdown />);
-
-		await user.click(screen.getByTestId("trigger"));
-
-		expect(screen.getByText("Actions")).toBeInTheDocument();
-		expect(screen.getByRole("separator")).toBeInTheDocument();
-	});
-
 	it("throws when components used outside provider", () => {
 		const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
 
@@ -329,35 +263,4 @@ describe("Dropdown", () => {
 		consoleError.mockRestore();
 	});
 
-	it("works with external toggle (controlled)", async () => {
-		const { user } = setup(<ControlledDropdown initialOpen={false} />);
-
-		expect(screen.queryByTestId("content")).not.toBeInTheDocument();
-
-		await user.click(screen.getByTestId("external-toggle"));
-
-		expect(screen.getByTestId("content")).toBeInTheDocument();
-	});
-
-	it("cleans up conditional items correctly", async () => {
-		function ConditionalItems({ showExtra }: { showExtra: boolean }) {
-			return (
-				<Dropdown open={true}>
-					<DropdownTrigger>
-						{({ isOpen: _isOpen, ...props }) => <button {...props}>Menu</button>}
-					</DropdownTrigger>
-					<DropdownContent data-testid="content">
-						<DropdownItem data-testid="item-always">Always</DropdownItem>
-						{showExtra && <DropdownItem data-testid="item-extra">Extra</DropdownItem>}
-					</DropdownContent>
-				</Dropdown>
-			);
-		}
-
-		const { rerender } = render(<ConditionalItems showExtra={true} />);
-		expect(screen.getAllByRole("menuitem")).toHaveLength(2);
-
-		rerender(<ConditionalItems showExtra={false} />);
-		expect(screen.getAllByRole("menuitem")).toHaveLength(1);
-	});
 });

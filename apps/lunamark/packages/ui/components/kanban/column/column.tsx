@@ -1,6 +1,6 @@
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps, ReactNode, Ref } from "react";
-import { cn } from "../../utils/cn";
+import { cn } from "../../../utils/cn";
 import {
   columnVariants,
   columnHeaderVariants,
@@ -33,7 +33,7 @@ function Column({
       {...props}
     >
       {header && <div className="p-4 pb-2">{header}</div>}
-      <div className="flex-1 p-3 space-y-3 overflow-y-auto overflow-x-hidden min-h-[150px] scrollbar-thin">
+      <div className="flex-1 p-3 space-y-3 overflow-y-auto overflow-x-hidden min-h-37.5 scrollbar-thin">
         {children}
       </div>
       {footer && <div className="p-3 pt-2">{footer}</div>}
@@ -68,13 +68,13 @@ function ColumnHeader({
           <div
             className={cn(
               "w-2.5 h-2.5 rounded-full ring-2 ring-[rgb(var(--color-neutral-background-1))] shadow-sm",
-              dotColor
+              dotColor,
             )}
           />
           <div
             className={cn(
               "absolute inset-0 rounded-full blur-sm opacity-50",
-              dotColor
+              dotColor,
             )}
           />
         </div>

@@ -128,6 +128,24 @@ describe("ToggleGroup", () => {
 			await user.keyboard("{End}");
 			expect(document.activeElement).toBe(screen.getByRole("radio", { name: "C" }));
 		});
+
+		it("uses ArrowUp/ArrowDown for vertical orientation", async () => {
+			const user = userEvent.setup();
+			render(
+				<ToggleGroup type="single" value={null} onValueChange={() => {}} orientation="vertical">
+					<ToggleGroupItem value="a">A</ToggleGroupItem>
+					<ToggleGroupItem value="b">B</ToggleGroupItem>
+					<ToggleGroupItem value="c">C</ToggleGroupItem>
+				</ToggleGroup>
+			);
+
+			screen.getByRole("radio", { name: "A" }).focus();
+			await user.keyboard("{ArrowDown}");
+			expect(document.activeElement).toBe(screen.getByRole("radio", { name: "B" }));
+
+			await user.keyboard("{ArrowUp}");
+			expect(document.activeElement).toBe(screen.getByRole("radio", { name: "A" }));
+		});
 	});
 
 	describe("API Contract", () => {
@@ -149,6 +167,21 @@ describe("ToggleGroup", () => {
 			);
 			expect(groupRef.current).toBeInstanceOf(HTMLDivElement);
 			expect(itemRef.current).toBeInstanceOf(HTMLButtonElement);
+		});
+
+		it("disabled item does not toggle on click", async () => {
+			const onValueChange = vi.fn();
+			render(
+				<ToggleGroup type="single" value={null} onValueChange={onValueChange}>
+					<ToggleGroupItem value="a" disabled>A</ToggleGroupItem>
+					<ToggleGroupItem value="b">B</ToggleGroupItem>
+				</ToggleGroup>
+			);
+
+			const disabledItem = screen.getByRole("radio", { name: "A" });
+			expect(disabledItem).toBeDisabled();
+			await userEvent.click(disabledItem);
+			expect(onValueChange).not.toHaveBeenCalled();
 		});
 	});
 });

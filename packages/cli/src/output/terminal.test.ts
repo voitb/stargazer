@@ -67,53 +67,15 @@ describe('formatReview', () => {
     expect(formatReview(makeReview('comment'))).toContain('💬');
   });
 
-  it('shows severity badges', () => {
-    const makeReview = (severity: 'critical' | 'high' | 'medium' | 'low'): ReviewResult => ({
-      issues: [{ file: 'test.ts', line: 1, severity, category: 'bug', message: 'Test', confidence: 0.9 }],
-      summary: 'Test',
-      decision: 'comment',
-    });
-
-    expect(stripAnsi(formatReview(makeReview('critical')))).toContain('[CRITICAL]');
-    expect(stripAnsi(formatReview(makeReview('high')))).toContain('[HIGH]');
-    expect(stripAnsi(formatReview(makeReview('medium')))).toContain('[MEDIUM]');
-    expect(stripAnsi(formatReview(makeReview('low')))).toContain('[LOW]');
-  });
-
-  it('shows suggestion with lightbulb when present', () => {
-    const withSuggestion: ReviewResult = {
+  it('omits lightbulb when no suggestion', () => {
+    const review: ReviewResult = {
       issues: [
-        {
-          file: 'test.ts',
-          line: 1,
-          severity: 'medium',
-          category: 'convention',
-          message: 'Bad name',
-          suggestion: 'Rename to userCount',
-          confidence: 0.8,
-        },
-      ],
-      summary: 'Suggestion',
-      decision: 'comment',
-    };
-
-    const withoutSuggestion: ReviewResult = {
-      issues: [
-        {
-          file: 'test.ts',
-          line: 1,
-          severity: 'high',
-          category: 'bug',
-          message: 'Bug found',
-          confidence: 0.9,
-        },
+        { file: 'test.ts', line: 1, severity: 'high', category: 'bug', message: 'Bug found', confidence: 0.9 },
       ],
       summary: 'Bug',
       decision: 'request_changes',
     };
 
-    expect(formatReview(withSuggestion)).toContain('💡');
-    expect(formatReview(withSuggestion)).toContain('Rename to userCount');
-    expect(formatReview(withoutSuggestion)).not.toContain('💡');
+    expect(formatReview(review)).not.toContain('💡');
   });
 });

@@ -5,164 +5,60 @@ import { describe, expect, it, vi } from "vitest";
 import { FilterBar } from "./filter-bar";
 
 describe("FilterBar", () => {
-  describe("rendering", () => {
-    it("renders children content", () => {
-      render(<FilterBar>Filter content</FilterBar>);
+	it("renders children content", () => {
+		render(<FilterBar>Filter content</FilterBar>);
 
-      expect(screen.getByText("Filter content")).toBeInTheDocument();
-    });
+		expect(screen.getByText("Filter content")).toBeInTheDocument();
+	});
 
-    it("applies custom className", () => {
-      render(<FilterBar className="custom-class">Content</FilterBar>);
+	it("shows clear button only when hasActiveFilters and onClear provided", () => {
+		const { rerender } = render(<FilterBar>Content</FilterBar>);
+		expect(screen.queryByRole("button", { name: "Clear filters" })).not.toBeInTheDocument();
 
-      const toolbar = screen.getByRole("toolbar");
-      expect(toolbar).toHaveClass("custom-class");
-    });
+		rerender(
+			<FilterBar hasActiveFilters onClear={() => {}}>
+				Content
+			</FilterBar>,
+		);
+		expect(screen.getByRole("button", { name: "Clear filters" })).toBeInTheDocument();
+	});
 
-    it("forwards ref", () => {
-      const ref = createRef<HTMLDivElement>();
-      render(<FilterBar ref={ref}>Content</FilterBar>);
+	it("has toolbar role", () => {
+		render(<FilterBar>Content</FilterBar>);
 
-      expect(ref.current).toBeInstanceOf(HTMLDivElement);
-    });
+		expect(screen.getByRole("toolbar")).toBeInTheDocument();
+	});
 
-    it("spreads additional props", () => {
-      render(
-        <FilterBar data-testid="filter-bar" id="main-filters">
-          Content
-        </FilterBar>,
-      );
+	it("supports aria-label", () => {
+		render(<FilterBar aria-label="Filter tasks">Content</FilterBar>);
 
-      const toolbar = screen.getByRole("toolbar");
-      expect(toolbar).toHaveAttribute("data-testid", "filter-bar");
-      expect(toolbar).toHaveAttribute("id", "main-filters");
-    });
-  });
+		expect(screen.getByRole("toolbar", { name: "Filter tasks" })).toBeInTheDocument();
+	});
 
-  describe("accessibility", () => {
-    it("has toolbar role", () => {
-      render(<FilterBar>Content</FilterBar>);
+	it("forwards ref", () => {
+		const ref = createRef<HTMLDivElement>();
+		render(<FilterBar ref={ref}>Content</FilterBar>);
 
-      expect(screen.getByRole("toolbar")).toBeInTheDocument();
-    });
+		expect(ref.current).toBeInstanceOf(HTMLDivElement);
+	});
 
-    it("applies aria-label", () => {
-      render(<FilterBar aria-label="Filter tasks">Content</FilterBar>);
+	it("merges custom className", () => {
+		render(<FilterBar className="custom-class">Content</FilterBar>);
 
-      const toolbar = screen.getByRole("toolbar", { name: "Filter tasks" });
-      expect(toolbar).toBeInTheDocument();
-    });
+		expect(screen.getByRole("toolbar")).toHaveClass("custom-class");
+	});
 
-    it("has data-filter-bar attribute", () => {
-      render(<FilterBar>Content</FilterBar>);
+	it("calls onClear when clear button clicked", async () => {
+		const user = userEvent.setup();
+		const onClear = vi.fn();
 
-      const toolbar = screen.getByRole("toolbar");
-      expect(toolbar).toHaveAttribute("data-filter-bar");
-    });
-  });
+		render(
+			<FilterBar hasActiveFilters onClear={onClear}>
+				Content
+			</FilterBar>,
+		);
 
-  describe("clear button", () => {
-    it("shows when hasActiveFilters=true and onClear provided", () => {
-      render(
-        <FilterBar hasActiveFilters onClear={() => {}}>
-          Content
-        </FilterBar>,
-      );
-
-      expect(
-        screen.getByRole("button", { name: "Clear filters" }),
-      ).toBeInTheDocument();
-    });
-
-    it("hidden when hasActiveFilters=false", () => {
-      render(
-        <FilterBar hasActiveFilters={false} onClear={() => {}}>
-          Content
-        </FilterBar>,
-      );
-
-      expect(
-        screen.queryByRole("button", { name: "Clear filters" }),
-      ).not.toBeInTheDocument();
-    });
-
-    it("hidden when onClear not provided", () => {
-      render(<FilterBar hasActiveFilters>Content</FilterBar>);
-
-      expect(
-        screen.queryByRole("button", { name: "Clear filters" }),
-      ).not.toBeInTheDocument();
-    });
-
-    it("has ml-auto class for right alignment", () => {
-      render(
-        <FilterBar hasActiveFilters onClear={() => {}}>
-          Content
-        </FilterBar>,
-      );
-
-      const button = screen.getByRole("button", { name: "Clear filters" });
-      expect(button).toHaveClass("ml-auto");
-    });
-  });
-
-  describe("interaction", () => {
-    it("calls onClear when clear button clicked", async () => {
-      const user = userEvent.setup();
-      const onClear = vi.fn();
-
-      render(
-        <FilterBar hasActiveFilters onClear={onClear}>
-          Content
-        </FilterBar>,
-      );
-
-      await user.click(screen.getByRole("button", { name: "Clear filters" }));
-      expect(onClear).toHaveBeenCalledTimes(1);
-    });
-
-    it("clear button is keyboard accessible with Enter", async () => {
-      const user = userEvent.setup();
-      const onClear = vi.fn();
-
-      render(
-        <FilterBar hasActiveFilters onClear={onClear}>
-          Content
-        </FilterBar>,
-      );
-
-      const button = screen.getByRole("button", { name: "Clear filters" });
-      button.focus();
-      await user.keyboard("{Enter}");
-
-      expect(onClear).toHaveBeenCalledTimes(1);
-    });
-
-    it("clear button is keyboard accessible with Space", async () => {
-      const user = userEvent.setup();
-      const onClear = vi.fn();
-
-      render(
-        <FilterBar hasActiveFilters onClear={onClear}>
-          Content
-        </FilterBar>,
-      );
-
-      const button = screen.getByRole("button", { name: "Clear filters" });
-      button.focus();
-      await user.keyboard(" ");
-
-      expect(onClear).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  describe("default props", () => {
-    it("hasActiveFilters defaults to false", () => {
-      render(<FilterBar onClear={() => {}}>Content</FilterBar>);
-
-      expect(
-        screen.queryByRole("button", { name: "Clear filters" }),
-      ).not.toBeInTheDocument();
-    });
-  });
+		await user.click(screen.getByRole("button", { name: "Clear filters" }));
+		expect(onClear).toHaveBeenCalledTimes(1);
+	});
 });

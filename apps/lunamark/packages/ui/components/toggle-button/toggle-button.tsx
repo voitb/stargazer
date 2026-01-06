@@ -1,3 +1,5 @@
+"use client";
+
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps, ReactNode } from "react";
 import { useControllableState } from "../../hooks/use-controllable-state";

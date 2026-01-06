@@ -23,8 +23,6 @@ export type ReviewResult = {
 };
 
 export type ReviewOptions = {
-  /** If true (default), review staged changes. If false, review unstaged changes. */
   readonly staged?: boolean;
-  /** Optional: provide a diff string directly instead of getting from git. */
   readonly diff?: string;
 };

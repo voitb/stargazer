@@ -28,7 +28,6 @@ export * from "./dialog";
 export * from "./tooltip";
 export * from "./dropdown";
 export * from "./popover";
-export * from "./combobox";
 
 // Filter Components
 export * from "./filter-bar";

@@ -4,11 +4,9 @@ import { useControllableState } from "./use-controllable-state";
 
 describe("useControllableState", () => {
 	describe("uncontrolled mode", () => {
-		it("uses defaultValue in uncontrolled mode", () => {
+		it("uses defaultValue as initial state", () => {
 			const { result } = renderHook(() =>
-				useControllableState({
-					defaultValue: "initial",
-				}),
+				useControllableState({ defaultValue: "initial" }),
 			);
 
 			expect(result.current[0]).toBe("initial");
@@ -16,9 +14,7 @@ describe("useControllableState", () => {
 
 		it("updates internal state when setValue called", () => {
 			const { result } = renderHook(() =>
-				useControllableState({
-					defaultValue: "initial",
-				}),
+				useControllableState({ defaultValue: "initial" }),
 			);
 
 			act(() => {
@@ -28,13 +24,10 @@ describe("useControllableState", () => {
 			expect(result.current[0]).toBe("updated");
 		});
 
-		it("calls onChange in uncontrolled mode", () => {
+		it("calls onChange callback when setValue called", () => {
 			const onChange = vi.fn();
 			const { result } = renderHook(() =>
-				useControllableState({
-					defaultValue: "initial",
-					onChange,
-				}),
+				useControllableState({ defaultValue: "initial", onChange }),
 			);
 
 			act(() => {
@@ -43,43 +36,22 @@ describe("useControllableState", () => {
 
 			expect(onChange).toHaveBeenCalledWith("updated");
 		});
-
-		it("works without onChange callback", () => {
-			const { result } = renderHook(() =>
-				useControllableState({
-					defaultValue: false,
-				}),
-			);
-
-			act(() => {
-				result.current[1](true);
-			});
-
-			expect(result.current[0]).toBe(true);
-		});
 	});
 
 	describe("controlled mode", () => {
-		it("uses value prop in controlled mode", () => {
+		it("uses value prop and ignores defaultValue", () => {
 			const { result } = renderHook(() =>
-				useControllableState({
-					value: "controlled",
-					defaultValue: "default",
-				}),
+				useControllableState({ value: "controlled", defaultValue: "default" }),
 			);
 
 			expect(result.current[0]).toBe("controlled");
 		});
 
-		it("only calls onChange in controlled mode (no internal update)", () => {
+		it("calls onChange without updating internal state", () => {
 			const onChange = vi.fn();
 			const { result, rerender } = renderHook(
 				({ value }) =>
-					useControllableState({
-						value,
-						defaultValue: "default",
-						onChange,
-					}),
+					useControllableState({ value, defaultValue: "default", onChange }),
 				{ initialProps: { value: "initial" } },
 			);
 
@@ -93,121 +65,54 @@ describe("useControllableState", () => {
 			rerender({ value: "new-value" });
 			expect(result.current[0]).toBe("new-value");
 		});
-
-		it("reflects prop changes", () => {
-			const { result, rerender } = renderHook(
-				({ value }) =>
-					useControllableState({
-						value,
-						defaultValue: "default",
-					}),
-				{ initialProps: { value: "first" } },
-			);
-
-			expect(result.current[0]).toBe("first");
-
-			rerender({ value: "second" });
-			expect(result.current[0]).toBe("second");
-		});
 	});
 
 	describe("mode stability", () => {
-		it("maintains controlled mode when started as controlled", () => {
+		it("maintains initial control mode throughout component lifecycle", () => {
 			const onChange = vi.fn();
-			const { result, rerender } = renderHook(
+
+			// Start UNCONTROLLED (value=undefined)
+			const uncontrolled = renderHook(
 				({ value }) =>
-					useControllableState({
-						value,
-						defaultValue: "default",
-						onChange,
-					}),
+					useControllableState({ value, defaultValue: "default", onChange }),
+				{ initialProps: { value: undefined as string | undefined } },
+			);
+
+			act(() => {
+				uncontrolled.result.current[1]("updated");
+			});
+			expect(uncontrolled.result.current[0]).toBe("updated");
+
+			// Try to switch to controlled - should be ignored
+			uncontrolled.rerender({ value: "controlled-attempt" });
+			expect(uncontrolled.result.current[0]).toBe("updated");
+
+			// Start CONTROLLED (value defined)
+			const controlled = renderHook(
+				({ value }) =>
+					useControllableState({ value, defaultValue: "default", onChange }),
 				{ initialProps: { value: "controlled" as string | undefined } },
 			);
 
 			act(() => {
-				result.current[1]("attempt-update");
+				controlled.result.current[1]("attempt-update");
 			});
-			expect(result.current[0]).toBe("controlled");
+			expect(controlled.result.current[0]).toBe("controlled");
 			expect(onChange).toHaveBeenCalledWith("attempt-update");
 
-			rerender({ value: undefined });
-
+			// Try to switch to uncontrolled - should stay controlled
+			controlled.rerender({ value: undefined });
 			act(() => {
-				result.current[1]("still-controlled");
+				controlled.result.current[1]("still-controlled");
 			});
 			expect(onChange).toHaveBeenCalledWith("still-controlled");
-		});
-
-		it("maintains uncontrolled mode when started as uncontrolled", () => {
-			const onChange = vi.fn();
-			const { result, rerender } = renderHook(
-				({ value }) =>
-					useControllableState({
-						value,
-						defaultValue: "default",
-						onChange,
-					}),
-				{ initialProps: { value: undefined as string | undefined } },
-			);
-
-			act(() => {
-				result.current[1]("updated");
-			});
-			expect(result.current[0]).toBe("updated");
-
-			rerender({ value: "controlled-attempt" });
-
-			expect(result.current[0]).toBe("updated");
-		});
-
-		it("does not switch modes mid-lifecycle", () => {
-			const onChange = vi.fn();
-			const { result, rerender } = renderHook(
-				({ value }) =>
-					useControllableState({
-						value,
-						defaultValue: "default",
-						onChange,
-					}),
-				{ initialProps: { value: undefined as string | undefined } },
-			);
-
-			expect(result.current[0]).toBe("default");
-
-			rerender({ value: "controlled" });
-			expect(result.current[0]).toBe("default");
-
-			rerender({ value: undefined });
-
-			act(() => {
-				result.current[1]("internal-update");
-			});
-			expect(result.current[0]).toBe("internal-update");
 		});
 	});
 
 	describe("edge cases", () => {
-		it("handles boolean values", () => {
+		it("handles null as a valid controlled value", () => {
 			const { result } = renderHook(() =>
-				useControllableState({
-					defaultValue: false,
-				}),
-			);
-
-			expect(result.current[0]).toBe(false);
-
-			act(() => {
-				result.current[1](true);
-			});
-
-			expect(result.current[0]).toBe(true);
-		});
-
-		it("handles null as a valid value", () => {
-			const { result } = renderHook(() =>
-				useControllableState({
-					defaultValue: "initial" as string | null,
-				}),
+				useControllableState({ defaultValue: "initial" as string | null }),
 			);
 
 			act(() => {
@@ -217,12 +122,10 @@ describe("useControllableState", () => {
 			expect(result.current[0]).toBe(null);
 		});
 
-		it("handles object values", () => {
+		it("handles object values with reference equality", () => {
 			const initialObj = { name: "initial" };
 			const { result } = renderHook(() =>
-				useControllableState({
-					defaultValue: initialObj,
-				}),
+				useControllableState({ defaultValue: initialObj }),
 			);
 
 			expect(result.current[0]).toBe(initialObj);

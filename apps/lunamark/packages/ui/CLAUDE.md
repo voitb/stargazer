@@ -108,8 +108,7 @@ packages/ui/
 │   ├── use-exit-animation.ts
 │   └── use-focus-trap.ts
 └── utils/
-    ├── cn.ts                # clsx + tailwind-merge
-    └── create-context.ts
+    └── cn.ts                # clsx + tailwind-merge
 ```
 
 ### Component Categories

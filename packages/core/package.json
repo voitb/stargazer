@@ -34,9 +34,7 @@
     "lint": "echo 'Placeholder - not yet implemented'",
     "check": "echo 'Placeholder - not yet implemented'",
     "test": "vitest run",
-    "test:watch": "vitest",
-    "review": "tsx src/test-review.ts",
-    "review:unstaged": "tsx src/test-review.ts --unstaged"
+    "test:watch": "vitest"
   },
   "keywords": [
     "code-review",

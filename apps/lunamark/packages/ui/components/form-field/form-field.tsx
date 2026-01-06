@@ -1,3 +1,5 @@
+"use client";
+
 import { useId, type ComponentProps, type ReactNode, type Ref } from "react";
 import { cn } from "../../utils/cn";
 import { Label } from "../label";
@@ -8,7 +10,7 @@ type FormFieldRenderProps = {
 	"aria-invalid": boolean | undefined;
 };
 
-type FormFieldProps = ComponentProps<"div"> & {
+type FormFieldProps = Omit<ComponentProps<"div">, "children"> & {
 	ref?: Ref<HTMLDivElement>;
 	label: string;
 	required?: boolean;

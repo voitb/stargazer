@@ -1,5 +1,6 @@
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { axe } from "vitest-axe";
 import { describe, it, expect, vi } from "vitest";
 import { Popover, PopoverTrigger, PopoverContent, PopoverClose } from "./popover";
 
@@ -36,6 +37,24 @@ describe("Popover", () => {
 
 		await user.click(screen.getByRole("button", { name: "Open" }));
 		await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+	});
+
+	it("uses data-state for exit animation", () => {
+		const { rerender } = render(
+			<Popover trigger="click" open onOpenChange={() => {}}>
+				<PopoverTrigger>Open</PopoverTrigger>
+				<PopoverContent>Content</PopoverContent>
+			</Popover>
+		);
+		expect(screen.getByRole("dialog")).toHaveAttribute("data-state", "open");
+
+		rerender(
+			<Popover trigger="click" open={false} onOpenChange={() => {}}>
+				<PopoverTrigger>Open</PopoverTrigger>
+				<PopoverContent>Content</PopoverContent>
+			</Popover>
+		);
+		expect(screen.getByRole("dialog")).toHaveAttribute("data-state", "closed");
 	});
 
 	it("closes on PopoverClose click", async () => {
@@ -75,6 +94,23 @@ describe("Popover", () => {
 
 		await user.keyboard("{Escape}");
 		await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+	});
+
+	it("calls onOpenChange when opening and closing", async () => {
+		const onOpenChange = vi.fn();
+		const user = userEvent.setup();
+		render(
+			<Popover trigger="click" onOpenChange={onOpenChange}>
+				<PopoverTrigger>Open</PopoverTrigger>
+				<PopoverContent>Content</PopoverContent>
+			</Popover>
+		);
+
+		await user.click(screen.getByRole("button", { name: "Open" }));
+		expect(onOpenChange).toHaveBeenCalledWith(true);
+
+		await user.keyboard("{Escape}");
+		await waitFor(() => expect(onOpenChange).toHaveBeenCalledWith(false));
 	});
 
 	it("opens on hover when trigger is hover", async () => {
@@ -139,6 +175,25 @@ describe("Popover", () => {
 		const trigger = screen.getByRole("button", { name: "Open" });
 		expect(trigger).toHaveAttribute("aria-haspopup", "dialog");
 		expect(trigger).toHaveAttribute("aria-expanded", "true");
+	});
+
+	it("passes axe accessibility checks", async () => {
+		render(
+			<main>
+				<Popover trigger="click" open onOpenChange={() => {}}>
+					<PopoverTrigger>Open</PopoverTrigger>
+					<PopoverContent>Content</PopoverContent>
+				</Popover>
+			</main>
+		);
+		const results = await axe(document.body, {
+			rules: {
+				region: { enabled: false },
+				"aria-command-name": { enabled: false }, // Floating UI focus guards
+				"aria-dialog-name": { enabled: false }, // Popovers don't require titles like modals
+			},
+		});
+		expect(results).toHaveNoViolations();
 	});
 
 	it("throws when used outside provider", () => {

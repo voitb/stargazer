@@ -1,6 +1,6 @@
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps, ReactNode, Ref } from "react";
-import { cn } from "../../utils/cn";
+import { cn } from "../../../utils/cn";
 import { emptyStateVariants } from "./empty-state.variants";
 
 export interface EmptyStateProps

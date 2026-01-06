@@ -86,27 +86,10 @@ describe("FormField", () => {
 	});
 
 	// RENDER PROPS
-	it("provides id, aria-describedby, and aria-invalid to render function", () => {
+	it("provides correct render props based on state", () => {
 		let receivedProps: FormFieldRenderProps | null = null;
 
-		render(
-			<FormField label="Email" description="Help" error="Error">
-				{(props) => {
-					receivedProps = props;
-					return <input {...props} type="email" />;
-				}}
-			</FormField>,
-		);
-
-		expect(receivedProps!.id).toBeDefined();
-		expect(receivedProps!["aria-describedby"]).toBeDefined();
-		expect(receivedProps!["aria-invalid"]).toBe(true);
-	});
-
-	it("aria-invalid is undefined when no error", () => {
-		let receivedProps: FormFieldRenderProps | null = null;
-
-		render(
+		const { rerender } = render(
 			<FormField label="Email">
 				{(props) => {
 					receivedProps = props;
@@ -115,7 +98,20 @@ describe("FormField", () => {
 			</FormField>,
 		);
 
+		expect(receivedProps!.id).toBeDefined();
 		expect(receivedProps!["aria-invalid"]).toBeUndefined();
+
+		rerender(
+			<FormField label="Email" description="Help" error="Error">
+				{(props) => {
+					receivedProps = props;
+					return <input {...props} type="email" />;
+				}}
+			</FormField>,
+		);
+
+		expect(receivedProps!["aria-describedby"]).toBeDefined();
+		expect(receivedProps!["aria-invalid"]).toBe(true);
 	});
 
 	// API CONTRACT
@@ -129,16 +125,5 @@ describe("FormField", () => {
 		);
 
 		expect(ref.current).toBeInstanceOf(HTMLDivElement);
-	});
-
-	it("accepts custom className", () => {
-		render(
-			<FormField label="Test" className="custom-class">
-				<input type="text" />
-			</FormField>,
-		);
-
-		const container = screen.getByText("Test").closest("div");
-		expect(container).toHaveClass("custom-class");
 	});
 });

@@ -1,9 +1,6 @@
 import "@testing-library/jest-dom/vitest";
 import "vitest-axe/extend-expect";
-import * as matchers from "vitest-axe/matchers";
-import { expect, afterEach, beforeEach } from "vitest";
-
-expect.extend(matchers);
+import { afterEach, beforeEach } from "vitest";
 
 // Floating UI requires offsetParent for positioning calculations in jsdom.
 // jsdom doesn't implement offsetParent, so we mock it globally for all tests.

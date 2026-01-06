@@ -10,7 +10,7 @@ import {
 	DialogTitle,
 	DialogDescription,
 	DialogFooter,
-} from "./dialog";
+} from "./index";
 
 function ControlledDialog({
 	initialOpen = false,
@@ -195,7 +195,7 @@ describe("Dialog", () => {
 	it("throws error when components used outside Dialog", () => {
 		const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
 		expect(() => render(<DialogContent>Content</DialogContent>)).toThrow(
-			"Dialog components must be used within a Dialog provider",
+			"<DialogContent> must be used within a <Dialog> provider",
 		);
 		consoleError.mockRestore();
 	});

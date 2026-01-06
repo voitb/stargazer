@@ -1,3 +1,4 @@
+export { useBodyScrollLock } from "./use-body-scroll-lock";
 export { useControllableState } from "./use-controllable-state";
 export { useExitAnimation } from "./use-exit-animation";
 export { useFocusTrap } from "./use-focus-trap";
