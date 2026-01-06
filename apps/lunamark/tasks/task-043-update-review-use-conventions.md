@@ -1,7 +1,7 @@
 ---
 id: task-043
 title: Update review to use conventions
-status: todo
+status: done
 assignee: voitb
 priority: medium
 labels:
@@ -16,10 +16,10 @@ Update the review function to load and use cached conventions.
 
 ## Acceptance Criteria
 
-- [ ] Update `packages/core/src/review/review.ts`
-- [ ] Try to load conventions from cache
-- [ ] Pass conventions to prompt builder
-- [ ] Conventions are optional (review works without them)
+- [x] Update `packages/core/src/review/review.ts`
+- [x] Try to load conventions from cache
+- [x] Pass conventions to prompt builder
+- [x] Conventions are optional (review works without them)
 
 ## Implementation
 

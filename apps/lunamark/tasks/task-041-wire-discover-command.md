@@ -1,7 +1,7 @@
 ---
 id: task-041
 title: Wire discover command
-status: todo
+status: done
 assignee: voitb
 priority: low
 labels:
@@ -15,9 +15,9 @@ Connect the discover command to the main CLI program.
 
 ## Acceptance Criteria
 
-- [ ] Update `packages/cli/src/index.ts`
-- [ ] Import and add discoverCommand
-- [ ] CLI shows discover in --help
+- [x] Update `packages/cli/src/index.ts`
+- [x] Import and add discoverCommand
+- [x] CLI shows discover in --help
 
 ## Implementation
 

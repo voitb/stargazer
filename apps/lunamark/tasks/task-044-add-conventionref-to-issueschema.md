@@ -1,7 +1,7 @@
 ---
 id: task-044
 title: Add conventionRef to IssueSchema
-status: todo
+status: done
 assignee: voitb
 priority: low
 labels:
@@ -16,9 +16,9 @@ Add the conventionRef field to IssueSchema so issues can reference violated conv
 
 ## Acceptance Criteria
 
-- [ ] Update `packages/core/src/review/schemas.ts`
-- [ ] Add optional conventionRef field to IssueSchema
-- [ ] Field references convention name when violation detected
+- [x] Update `packages/core/src/review/schemas.ts`
+- [x] Add optional conventionRef field to IssueSchema
+- [x] Field references convention name when violation detected
 
 ## Implementation
 

@@ -1,7 +1,7 @@
 ---
 id: task-042
 title: Update review prompt with conventions
-status: todo
+status: done
 assignee: voitb
 priority: medium
 labels:
@@ -16,10 +16,10 @@ Enhance the review prompt to include project conventions when available.
 
 ## Acceptance Criteria
 
-- [ ] Update `packages/core/src/review/prompts.ts`
-- [ ] Accept optional conventions parameter
-- [ ] Include conventions in prompt when provided
-- [ ] Instruct AI to reference conventions by name
+- [x] Update `packages/core/src/review/prompts.ts`
+- [x] Accept optional conventions parameter
+- [x] Include conventions in prompt when provided
+- [x] Instruct AI to reference conventions by name
 
 ## Implementation
 

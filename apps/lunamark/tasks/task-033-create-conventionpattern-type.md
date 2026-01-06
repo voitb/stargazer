@@ -1,7 +1,7 @@
 ---
 id: task-033
 title: Create ConventionPattern type
-status: todo
+status: done
 priority: medium
 labels:
   - core
@@ -16,9 +16,9 @@ Create the type definitions for convention patterns that will be discovered.
 
 ## Acceptance Criteria
 
-- [ ] Create `packages/core/src/conventions/types.ts`
-- [ ] Define ConventionPattern type
-- [ ] Define ProjectConventions type
+- [x] Create `packages/core/src/conventions/types.ts`
+- [x] Define ConventionPattern type
+- [x] Define ProjectConventions type
 
 ## Implementation
 

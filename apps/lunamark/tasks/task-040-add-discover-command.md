@@ -1,7 +1,7 @@
 ---
 id: task-040
 title: Add discover command to CLI
-status: todo
+status: done
 assignee: voitb
 priority: medium
 labels:
@@ -16,10 +16,10 @@ Add the `discover` command to analyze and save project conventions.
 
 ## Acceptance Criteria
 
-- [ ] Create `packages/cli/src/commands/discover.ts`
-- [ ] Implement `discoverCommand` with Commander
-- [ ] Show progress during discovery
-- [ ] Save conventions to cache file
+- [x] Create `packages/cli/src/commands/discover.ts`
+- [x] Implement `discoverCommand` with Commander
+- [x] Show progress during discovery
+- [x] Save conventions to cache file
 
 ## Implementation
 

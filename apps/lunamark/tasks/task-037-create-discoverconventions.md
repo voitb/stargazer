@@ -1,7 +1,7 @@
 ---
 id: task-037
 title: Create discoverConventions function
-status: todo
+status: done
 assignee: voitb
 priority: high
 labels:
@@ -16,10 +16,10 @@ Create the main convention discovery function.
 
 ## Acceptance Criteria
 
-- [ ] Create `packages/core/src/conventions/discovery.ts`
-- [ ] Implement `discoverConventions()` function
-- [ ] Read project files and call Gemini
-- [ ] Return Result<ProjectConventions>
+- [x] Create `packages/core/src/conventions/discovery.ts`
+- [x] Implement `discoverConventions()` function
+- [x] Read project files and call Gemini
+- [x] Return Result<ProjectConventions>
 
 ## Implementation
 
