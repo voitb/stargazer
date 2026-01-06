@@ -1,14 +1,14 @@
 ---
 id: task-045
 title: Create StargazerPlugin interface
-status: todo
-assignee: voitb
+status: in-progress
 priority: high
 labels:
   - core
   - plugins
 created: '2026-01-01'
-order: 450
+order: 10000
+assignee: voitb
 ---
 ## Description
 

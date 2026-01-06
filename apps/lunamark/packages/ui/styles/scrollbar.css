@@ -30,3 +30,24 @@
 [data-theme="dark"] .scrollbar-thin::-webkit-scrollbar-thumb:hover {
   background: rgb(var(--color-neutral-stroke-1) / 0.5);
 }
+
+/* Kanban responsive transitions - uses existing motion tokens */
+@media (prefers-reduced-motion: no-preference) {
+  .kanban-column-transition {
+    transition:
+      flex-basis var(--duration-slower) var(--easing-default),
+      max-width var(--duration-slower) var(--easing-default),
+      min-width var(--duration-slower) var(--easing-default),
+      opacity var(--duration-slow) var(--easing-ease-out);
+  }
+}
+
+/* Hide scrollbar for tab navigation */
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}

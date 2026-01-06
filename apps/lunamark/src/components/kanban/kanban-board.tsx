@@ -3,19 +3,19 @@ import {
   PointerActivationConstraints,
   PointerSensor,
 } from "@dnd-kit/dom";
-import { DragDropProvider, DragOverlay } from "@dnd-kit/react";
 import { useMemo } from "react";
 import { TaskPreviewDialog } from "@/components/task-preview-dialog";
 import { useBoardFilters } from "@/hooks/kanban/use-board-filters";
 import { useBoardState } from "@/hooks/kanban/use-board-state";
 import { useKanbanDrag } from "@/hooks/kanban/use-kanban-drag";
+import { useKanbanViewMode } from "@/hooks/kanban/use-kanban-view-mode";
 import type { useTaskEditor } from "@/hooks/task-editor/use-task-editor";
 import { useMoveTask } from "@/hooks/tasks";
 import { buildColumns } from "@/lib/dnd/utils";
 import type { Board, Column as ColumnType, Task } from "@/schemas/task";
 import { BoardFilters } from "./board-filters";
-import { KanbanColumn } from "./column";
-import { TaskCardContent } from "./task-card-content";
+import { DesktopKanbanView } from "./desktop-kanban-view";
+import { MobileKanbanView } from "./mobile-kanban-view";
 
 const sensors = [
   PointerSensor.configure({
@@ -33,7 +33,7 @@ interface KanbanBoardProps {
 
 function filterTasks(
   tasks: Task[],
-  filters: ReturnType<typeof useBoardFilters>["filters"],
+  filters: ReturnType<typeof useBoardFilters>["filters"]
 ): Task[] {
   return tasks.filter((task) => {
     if (filters.assignee && task.metadata.assignee !== filters.assignee) {
@@ -54,7 +54,7 @@ function filterTasks(
 
 function applyFiltersToColumns(
   columns: ColumnType[],
-  filters: ReturnType<typeof useBoardFilters>["filters"],
+  filters: ReturnType<typeof useBoardFilters>["filters"]
 ): ColumnType[] {
   return columns.map((column) => ({
     ...column,
@@ -63,6 +63,9 @@ function applyFiltersToColumns(
 }
 
 export function KanbanBoard({ initialBoard, taskEditor }: KanbanBoardProps) {
+  // NEW: Detect viewport size for responsive layout
+  const viewMode = useKanbanViewMode();
+
   const {
     filters,
     hasActiveFilters,
@@ -72,8 +75,7 @@ export function KanbanBoard({ initialBoard, taskEditor }: KanbanBoardProps) {
     clearFilters,
   } = useBoardFilters();
 
-  const { items, setItems, tasksMap, setTasksMap } =
-    useBoardState(initialBoard);
+  const { items, setItems, tasksMap, setTasksMap } = useBoardState(initialBoard);
   const { mutate: moveTask } = useMoveTask();
   const { handleDragStart, handleDragOver, handleDragEnd, activeTask } =
     useKanbanDrag({
@@ -86,7 +88,7 @@ export function KanbanBoard({ initialBoard, taskEditor }: KanbanBoardProps) {
 
   const allTasks = useMemo(
     () => initialBoard.columns.flatMap((c) => c.tasks),
-    [initialBoard],
+    [initialBoard]
   );
 
   const uniqueAssignees = useMemo(() => {
@@ -115,9 +117,19 @@ export function KanbanBoard({ initialBoard, taskEditor }: KanbanBoardProps) {
   const unfilteredColumns = buildColumns(initialBoard.columns, items, tasksMap);
   const columns = applyFiltersToColumns(unfilteredColumns, filters);
 
+  // Shared drag props passed to both views
+  const sharedDragProps = {
+    sensors,
+    onDragStart: handleDragStart,
+    onDragOver: handleDragOver,
+    onDragEnd: handleDragEnd,
+    activeTask,
+  };
+
   return (
     <>
-      <div className="shrink-0">
+      {/* Filters - hidden on mobile, shown on tablet+ */}
+      <div className="shrink-0 hidden sm:block">
         <BoardFilters
           assignees={uniqueAssignees}
           labels={uniqueLabels}
@@ -130,28 +142,20 @@ export function KanbanBoard({ initialBoard, taskEditor }: KanbanBoardProps) {
         />
       </div>
 
-      {/* Scrollable columns area - fills remaining space */}
-      <DragDropProvider
-        sensors={sensors}
-        onDragStart={handleDragStart}
-        onDragOver={handleDragOver}
-        onDragEnd={handleDragEnd}
-      >
-        <div className="flex-1 min-h-0 overflow-x-auto overflow-y-hidden scrollbar-thin">
-          <div className="flex gap-4 p-6 h-full">
-            {columns.map((column) => (
-              <KanbanColumn
-                key={column.id}
-                column={column}
-                onEditTask={taskEditor.openEdit}
-              />
-            ))}
-          </div>
-        </div>
-        <DragOverlay>
-          {activeTask && <TaskCardContent task={activeTask} isDragOverlay />}
-        </DragOverlay>
-      </DragDropProvider>
+      {/* Responsive Kanban Views */}
+      {viewMode === "mobile" ? (
+        <MobileKanbanView
+          columns={columns}
+          taskEditor={taskEditor}
+          {...sharedDragProps}
+        />
+      ) : (
+        <DesktopKanbanView
+          columns={columns}
+          taskEditor={taskEditor}
+          {...sharedDragProps}
+        />
+      )}
 
       <TaskPreviewDialog
         key={taskEditor.task?.id ?? `create-${taskEditor.initialStatus}`}
