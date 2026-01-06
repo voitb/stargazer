@@ -1,7 +1,7 @@
 ---
 id: task-057
 title: Update public API barrel
-status: todo
+status: done
 assignee: voitb
 priority: medium
 labels:

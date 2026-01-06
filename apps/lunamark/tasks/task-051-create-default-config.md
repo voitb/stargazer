@@ -1,7 +1,7 @@
 ---
 id: task-051
 title: Create DEFAULT_CONFIG
-status: todo
+status: done
 assignee: voitb
 priority: medium
 labels:

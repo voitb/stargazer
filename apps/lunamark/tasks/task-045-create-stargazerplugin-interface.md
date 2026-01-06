@@ -1,7 +1,7 @@
 ---
 id: task-045
 title: Create StargazerPlugin interface
-status: in-progress
+status: done
 priority: high
 labels:
   - core
