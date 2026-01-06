@@ -1,0 +1,26 @@
+[data-filter-bar] {
+  position: relative;
+  background: rgb(var(--color-neutral-background-1) / 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+[data-filter-bar]::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 1.5rem;
+  right: 1.5rem;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgb(var(--color-neutral-stroke-1) / 0.4) 10%,
+    rgb(var(--color-neutral-stroke-1) / 0.4) 90%,
+    transparent 100%
+  );
+}
+
+[data-theme="dark"] [data-filter-bar] {
+  background: rgb(var(--color-neutral-background-1) / 0.7);
+}

@@ -1,4 +1,52 @@
+@import "../packages/ui/styles/tokens.css";
+@import "../packages/ui/styles/animations.css";
+@import "../packages/ui/styles/select.css";
+@import "../packages/ui/styles/floating.css";
+@import "../packages/ui/styles/dialog.css";
+@import "../packages/ui/styles/header.css";
+@import "../packages/ui/styles/filter-bar.css";
+@import "../packages/ui/styles/scrollbar.css";
+@import "../packages/ui/styles/prose.css";
 @import "tailwindcss";
+
+@theme {
+  --animate-fade-in: fade-in 0.15s ease-out;
+  --animate-zoom-in: zoom-in 0.15s ease-out;
+  --animate-slide-in-from-top: slide-in-from-top 0.2s ease-out;
+  --animate-slide-in-from-bottom: slide-in-from-bottom 0.2s ease-out;
+  --animate-fade-out: fade-out 0.15s ease-in;
+  --animate-zoom-out: zoom-out 0.15s ease-in;
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+
+  @keyframes zoom-in {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes zoom-out {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0; transform: scale(0.95); }
+  }
+
+  @keyframes slide-in-from-top {
+    from { opacity: 0; transform: translateY(-0.5rem); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slide-in-from-bottom {
+    from { opacity: 0; transform: translateY(0.5rem); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
 
 body {
   @apply m-0;

@@ -22,10 +22,10 @@ export GEMINI_API_KEY=your-key-here
 
 ```typescript
 import { ok, err } from './shared/result';
-import type { Result, StargazerError } from './shared/result';
+import type { Result, ApiError } from './shared/result';
 
 // Definition
-type Result<T, E = StargazerError> =
+type Result<T, E = ApiError> =
   | { readonly ok: true; readonly data: T }
   | { readonly ok: false; readonly error: E };
 
@@ -229,7 +229,7 @@ packages/core/src/
 ├── index.ts                 # ONLY public barrel
 ├── shared/                  # NO index.ts!
 │   ├── result.ts           # Result<T,E>, ok(), err()
-│   └── types.ts            # Logger, common types
+│   └── types.ts            # Common types
 ├── gemini/                  # NO index.ts!
 │   ├── client.ts           # createGeminiClient()
 │   └── types.ts            # GeminiClient interface
@@ -273,7 +273,7 @@ packages/core/src/
 ### Create Error
 
 ```typescript
-const createError = (code: ErrorCode, message: string, cause?: unknown): StargazerError =>
+const createError = (code: ErrorCode, message: string, cause?: unknown): ApiError =>
   ({ code, message, cause });
 ```
 
@@ -310,6 +310,6 @@ const StargazerConfigSchema = z.object({
 ## Links
 
 - [Implementation Rules](./implementation-rules.md) - Full coding rules for AI agents
-- [Architecture](./state-of-art-architecture.md) - Detailed architecture decisions
+- [Architecture](./state-of-the-art-architecture.md) - Detailed architecture decisions
 - [Plugins](./plugins.md) - Writing custom plugins
 - [Quick Start](./quick-start.md) - Getting started guide

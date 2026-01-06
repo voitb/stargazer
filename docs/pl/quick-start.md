@@ -159,4 +159,3 @@ Odkryte konwencje są następnie używane do bardziej trafnych review specyficzn
 
 - [Architektura](./architecture.md) - Zrozum jak działa Stargazer
 - [Pluginy](./plugins.md) - Twórz własne pluginy
-- [API Reference](./api-reference.md) - Pełna dokumentacja API

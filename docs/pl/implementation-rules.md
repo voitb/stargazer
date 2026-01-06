@@ -12,6 +12,7 @@
 | Zod | `import * as z from 'zod/v4'` | `import { z } from 'zod'` |
 | Gemini | `responseJsonSchema` | `responseSchema` |
 | Typy | właściwości `readonly` | mutowalne interfejsy |
+| Komentarze | Minimalne inline `//` | Bloki JSDoc, nadmierna dokumentacja |
 
 ---
 
@@ -33,9 +34,9 @@
 
 ```typescript
 import { ok, err } from '../shared/result';
-import type { Result, StargazerError } from '../shared/result';
+import type { Result, ApiError } from '../shared/result';
 
-// ❌ ŹLLE - rzuca wyjątek
+// ❌ ŹLE - rzuca wyjątek
 async function getData(): Promise<Data> {
   throw new Error('Failed to fetch');
 }
@@ -82,7 +83,7 @@ console.log(result.data);
 ### Przykład Kodu
 
 ```typescript
-// ❌ ŹLLE - oparte na klasie
+// ❌ ŹLE - oparte na klasie
 class GeminiClient {
   private client: GoogleGenAI;
 
@@ -136,7 +137,7 @@ export function createGeminiClient(apiKey: string): GeminiClient {
 ### Przykład Kodu
 
 ```typescript
-// ❌ ŹLLE - barrel imports
+// ❌ ŹLE - barrel imports
 import { ok, err, createGeminiClient, GeminiClient } from '../shared';
 import { IssueSchema, ReviewResultSchema } from '../review';
 
@@ -318,7 +319,7 @@ function processResult(result: Result<Data>): void {
   console.log(result.data);
 }
 
-// ❌ ŹLLE - używanie any
+// ❌ ŹLE - używanie any
 function process(data: any) { ... }
 
 // ✅ DOBRZE - używanie unknown z walidacją
@@ -378,7 +379,7 @@ export function createGeminiClient(apiKey: string): GeminiClient {
 ### Przykład Kodu
 
 ```typescript
-// ❌ ŹLLE - łańcuchy Promise
+// ❌ ŹLE - łańcuchy Promise
 function fetchData(): Promise<Data> {
   return fetch(url)
     .then(res => res.json())
@@ -420,7 +421,7 @@ async function fetchData(): Promise<Result<Data>> {
 ### Przykład Kodu
 
 ```typescript
-// ❌ ŹLLE - default export
+// ❌ ŹLE - default export
 export default function createClient() { ... }
 
 // ✅ DOBRZE - named exports
@@ -451,6 +452,28 @@ export type ErrorCode =
 
 ---
 
+## 11. Jakość Kodu (Bez AI Slop)
+
+### MUSI
+
+- ✅ Pisz kod, który napisałby człowiek
+- ✅ Podążaj za istniejącymi wzorcami w pliku
+- ✅ Komentarze minimalne i znaczące
+- ✅ Używaj prostych, bezpośrednich rozwiązań
+- ✅ Łatwy do przeczytania i zrozumienia
+- ✅ Bezpieczeństwo utrzymane odpowiednio
+
+### NIGDY
+
+- ❌ NIE dodawaj komentarzy, których człowiek by nie dodał
+- ❌ NIE używaj defensywnych try/catch w zaufanych/zwalidowanych ścieżkach kodu
+- ❌ NIE używaj `as any` do obejścia problemów z typami
+- ❌ NIE pisz niespójnego stylu z resztą pliku
+- ❌ NIE twórz nadmiernie skomplikowanych rozwiązań
+- ❌ NIE używaj bloków JSDoc (używaj inline comments oszczędnie)
+
+---
+
 ## Checklista NIGDY NIE RÓB
 
 1. ❌ NIGDY nie używaj `console.log` w kodzie biblioteki (tylko w CLI)
@@ -478,3 +501,5 @@ export type ErrorCode =
 - [ ] Tylko named exports (brak default exports)
 - [ ] Spójne konwencje nazewnictwa
 - [ ] Wszystkie funkcje async używają async/await
+- [ ] Brak bloków JSDoc, minimalne komentarze
+- [ ] Kod wygląda jak napisany przez człowieka (bez AI slop)

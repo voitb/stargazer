@@ -1,0 +1,59 @@
+[data-header] {
+  position: relative;
+  background: linear-gradient(
+    180deg,
+    rgb(var(--color-neutral-background-1) / var(--glass-bg-opacity)) 0%,
+    rgb(var(--color-neutral-background-2) / calc(var(--glass-bg-opacity) - 0.05)) 100%
+  );
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+  box-shadow:
+    0 1px 0 rgb(var(--color-neutral-stroke-1) / 0.5),
+    0 1px 3px rgb(0 0 0 / 0.02),
+    0 4px 12px rgb(0 0 0 / 0.04),
+    inset 0 1px 0 rgb(255 255 255 / 0.03);
+}
+
+[data-header]::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgb(var(--color-neutral-stroke-1) / 0.5) 20%,
+    rgb(var(--color-neutral-stroke-1) / 0.5) 80%,
+    transparent 100%
+  );
+}
+
+[data-theme="dark"] [data-header] {
+  background: linear-gradient(
+    180deg,
+    rgb(var(--color-neutral-background-1) / 0.8) 0%,
+    rgb(var(--color-neutral-background-1) / 0.7) 100%
+  );
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.03),
+    0 4px 20px rgb(0 0 0 / 0.3),
+    inset 0 1px 0 rgb(255 255 255 / 0.03),
+    0 0 60px rgb(var(--color-brand-background) / 0.03);
+}
+
+[data-theme="dark"] [data-header]::after {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgb(var(--color-neutral-stroke-1) / 0.3) 20%,
+    rgb(var(--color-brand-background) / 0.2) 50%,
+    rgb(var(--color-neutral-stroke-1) / 0.3) 80%,
+    transparent 100%
+  );
+}
+
+[data-logo]:hover [data-logo-icon] svg path {
+  filter: drop-shadow(0 0 8px rgb(var(--color-brand-background) / 0.4));
+}
