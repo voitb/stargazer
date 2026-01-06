@@ -1,17 +1,24 @@
-import type { StargazerConfig, ResolvedConfig } from './types';
+import type { ResolvedConfig } from './types';
 import { DEFAULT_CONFIG } from './defaults';
+import { StargazerConfigSchema } from './schemas';
 
-export function resolveConfig(config?: StargazerConfig): ResolvedConfig {
+export function resolveConfig(config?: unknown): ResolvedConfig {
   if (!config) {
     return DEFAULT_CONFIG;
   }
 
+  const parsed = StargazerConfigSchema.safeParse(config);
+
+  if (!parsed.success) {
+    throw new Error(`Invalid config: ${parsed.error.message}`);
+  }
+
   return {
-    model: config.model ?? DEFAULT_CONFIG.model,
-    minSeverity: config.minSeverity ?? DEFAULT_CONFIG.minSeverity,
-    maxIssues: config.maxIssues ?? DEFAULT_CONFIG.maxIssues,
-    ignore: config.ignore ?? DEFAULT_CONFIG.ignore,
-    plugins: config.plugins ?? DEFAULT_CONFIG.plugins,
+    model: parsed.data.model ?? DEFAULT_CONFIG.model,
+    minSeverity: parsed.data.minSeverity ?? DEFAULT_CONFIG.minSeverity,
+    maxIssues: parsed.data.maxIssues ?? DEFAULT_CONFIG.maxIssues,
+    ignore: parsed.data.ignore ?? DEFAULT_CONFIG.ignore,
+    plugins: parsed.data.plugins ?? DEFAULT_CONFIG.plugins,
   };
 }
 

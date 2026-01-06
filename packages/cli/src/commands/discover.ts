@@ -1,75 +1,106 @@
 import { Command } from 'commander';
+import { stat } from 'node:fs/promises';
+import { resolve } from 'node:path';
 import { createGeminiClient } from '@stargazer/core/gemini/client';
 import { discoverConventions } from '@stargazer/core/conventions/discovery';
 import { saveConventions } from '@stargazer/core/conventions/cache';
 import chalk from 'chalk';
+import { exitWithError } from '../exit-codes';
+import { logger } from '../logger';
+import ora from 'ora';
 
 export function createDiscoverCommand(): Command {
   const command = new Command('discover')
     .description('Discover coding conventions from current project')
+    .option('-p, --path <directory>', 'Project directory to analyze', process.cwd())
     .option('--json', 'Output conventions as JSON')
     .option('--max-files <number>', 'Maximum files to analyze', '50')
     .action(async (options) => {
       const apiKey = process.env['GEMINI_API_KEY'];
       if (!apiKey) {
-        console.error(chalk.red('Error: GEMINI_API_KEY environment variable is required'));
-        process.exit(2);
+        exitWithError('GEMINI_API_KEY environment variable is required\nSet it with: export GEMINI_API_KEY=your-key');
       }
 
-      const projectPath = process.cwd();
+      // Validate and resolve project path
+      const projectPath = resolve(options.path);
+      try {
+        const stats = await stat(projectPath);
+        if (!stats.isDirectory()) {
+          exitWithError(`Path is not a directory: ${projectPath}`);
+        }
+      } catch {
+        exitWithError(`Path does not exist: ${projectPath}`);
+      }
+
       const maxFiles = parseInt(options.maxFiles, 10);
 
-      console.log(chalk.blue('🔍 Discovering conventions...'));
-      console.log(chalk.gray(`   Analyzing up to ${maxFiles} files in ${projectPath}`));
-
-      const client = createGeminiClient(apiKey);
-
-      const result = await discoverConventions(client, {
-        projectPath,
-        maxFiles,
-      });
-
-      if (!result.ok) {
-        console.error(chalk.red(`Error: ${result.error.message}`));
-        process.exit(2);
+      if (isNaN(maxFiles) || maxFiles <= 0) {
+        exitWithError('--max-files must be a positive integer (e.g., --max-files 10)');
       }
 
-      const conventions = result.data;
-
-      const saveResult = await saveConventions(projectPath, conventions);
-      if (!saveResult.ok) {
-        console.error(chalk.yellow(`Warning: Could not save conventions: ${saveResult.error.message}`));
+      if (maxFiles > 100) {
+        exitWithError('--max-files cannot exceed 100 to prevent excessive API usage');
       }
 
-      if (options.json) {
-        console.log(JSON.stringify(conventions, null, 2));
-      } else {
-        console.log(chalk.green('\n✅ Conventions discovered!\n'));
-        console.log(chalk.bold('Summary:'), conventions.summary);
-        console.log(chalk.bold('Language:'), conventions.language);
-        console.log(chalk.bold('Discovered at:'), conventions.discoveredAt);
+      const spinner = ora('Discovering project conventions...').start();
 
-        console.log(chalk.bold('\nPatterns:'));
-        const patterns = conventions.patterns;
+      try {
+        const client = createGeminiClient(apiKey);
 
-        if (patterns.errorHandling) {
-          console.log(chalk.cyan('\n  Error Handling:'), patterns.errorHandling.name);
-          console.log(chalk.gray(`    ${patterns.errorHandling.description}`));
-        }
-        if (patterns.naming) {
-          console.log(chalk.cyan('\n  Naming:'), patterns.naming.name);
-          console.log(chalk.gray(`    ${patterns.naming.description}`));
-        }
-        if (patterns.testing) {
-          console.log(chalk.cyan('\n  Testing:'), patterns.testing.name);
-          console.log(chalk.gray(`    ${patterns.testing.description}`));
-        }
-        if (patterns.imports) {
-          console.log(chalk.cyan('\n  Imports:'), patterns.imports.name);
-          console.log(chalk.gray(`    ${patterns.imports.description}`));
+        const result = await discoverConventions(client, {
+          projectPath,
+          maxFiles,
+        });
+
+        if (!result.ok) {
+          spinner.fail('Discovery failed');
+          exitWithError(result.error.message);
         }
 
-        console.log(chalk.gray('\nConventions saved to .stargazer/conventions.json'));
+        spinner.succeed('Conventions discovered');
+
+        const conventions = result.data;
+
+        const saveResult = await saveConventions(projectPath, conventions);
+        if (!saveResult.ok) {
+          logger.warn(`Could not save conventions: ${saveResult.error.message}`);
+        }
+
+        if (options.json) {
+          logger.info(JSON.stringify(conventions, null, 2));
+        } else {
+          logger.info(chalk.green('\n✅ Conventions discovered!\n'));
+          logger.info(chalk.bold('Summary:') + ' ' + conventions.summary);
+          logger.info(chalk.bold('Language:') + ' ' + conventions.language);
+          logger.info(chalk.bold('Discovered at:') + ' ' + conventions.discoveredAt);
+
+          logger.info(chalk.bold('\nPatterns:'));
+          const patterns = conventions.patterns;
+
+          if (patterns.errorHandling) {
+            logger.info(chalk.cyan('\n  Error Handling:') + ' ' + patterns.errorHandling.name);
+            logger.info(chalk.gray(`    ${patterns.errorHandling.description}`));
+          }
+          if (patterns.naming) {
+            logger.info(chalk.cyan('\n  Naming:') + ' ' + patterns.naming.name);
+            logger.info(chalk.gray(`    ${patterns.naming.description}`));
+          }
+          if (patterns.testing) {
+            logger.info(chalk.cyan('\n  Testing:') + ' ' + patterns.testing.name);
+            logger.info(chalk.gray(`    ${patterns.testing.description}`));
+          }
+          if (patterns.imports) {
+            logger.info(chalk.cyan('\n  Imports:') + ' ' + patterns.imports.name);
+            logger.info(chalk.gray(`    ${patterns.imports.description}`));
+          }
+
+          logger.info(chalk.gray('\nConventions saved to .stargazer/conventions.json'));
+        }
+
+        process.exit(0);
+      } catch (error) {
+        spinner.fail('Discovery failed');
+        exitWithError(`Discovery failed: ${error instanceof Error ? error.message : String(error)}`);
       }
     });
 

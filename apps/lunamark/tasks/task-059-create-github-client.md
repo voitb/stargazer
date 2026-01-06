@@ -1,7 +1,7 @@
 ---
 id: task-059
 title: Create GitHub client
-status: todo
+status: done
 assignee: voitb
 priority: high
 labels:

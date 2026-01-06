@@ -1,7 +1,7 @@
 ---
 id: task-060
 title: Create action entry
-status: todo
+status: done
 assignee: voitb
 priority: high
 labels:

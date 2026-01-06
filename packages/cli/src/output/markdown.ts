@@ -77,7 +77,7 @@ function formatIssue(issue: Issue): string {
   return lines.join('\n');
 }
 
-function groupBySeverity(issues: Issue[]): Record<Severity, Issue[]> {
+function groupBySeverity(issues: readonly Issue[]): Record<Severity, Issue[]> {
   const grouped: Record<Severity, Issue[]> = {
     critical: [],
     high: [],

@@ -1,7 +1,7 @@
 ---
 id: task-065
 title: Test withRetry
-status: todo
+status: done
 assignee: voitb
 priority: medium
 labels:

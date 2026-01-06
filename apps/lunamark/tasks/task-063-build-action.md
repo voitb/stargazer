@@ -1,7 +1,7 @@
 ---
 id: task-063
 title: Build action
-status: todo
+status: done
 assignee: voitb
 priority: medium
 labels:

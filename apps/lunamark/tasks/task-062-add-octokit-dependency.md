@@ -1,7 +1,7 @@
 ---
 id: task-062
 title: Add Octokit dependency
-status: todo
+status: done
 assignee: voitb
 priority: medium
 labels:
