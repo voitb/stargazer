@@ -21,7 +21,8 @@ describe('reviewCommand', () => {
   beforeEach(() => {
     vi.resetModules();
     vi.clearAllMocks();
-    process.env = { ...originalEnv, GEMINI_API_KEY: 'test-key' };
+    process.env = { ...originalEnv };
+    process.env['GEMINI_API_KEY'] = 'test-key';
   });
 
   afterEach(() => {
@@ -29,7 +30,7 @@ describe('reviewCommand', () => {
   });
 
   it('exits with code 2 when GEMINI_API_KEY is missing', async () => {
-    delete process.env.GEMINI_API_KEY;
+    delete process.env['GEMINI_API_KEY'];
     const { reviewCommand } = await import('./review');
     await reviewCommand.parseAsync(['review'], { from: 'user' });
 
@@ -66,11 +67,54 @@ describe('reviewCommand', () => {
   });
 
   it('outputs JSON when --json flag is used', async () => {
-    const data = { issues: [], summary: 'Clean', decision: 'approve' };
+    const data = { issues: [], summary: 'Clean', decision: 'approve' as const };
     mockReviewDiff.mockResolvedValue({ ok: true, data });
     const { reviewCommand } = await import('./review');
     await reviewCommand.parseAsync(['review', '--json'], { from: 'user' });
 
     expect(mockConsoleLog).toHaveBeenCalledWith(JSON.stringify(data, null, 2));
+  });
+
+  it('passes projectPath to reviewDiff', async () => {
+    mockReviewDiff.mockResolvedValue({ ok: true, data: { issues: [], summary: '', decision: 'approve' as const } });
+    const { reviewCommand } = await import('./review');
+    await reviewCommand.parseAsync(['review'], { from: 'user' });
+
+    expect(mockReviewDiff).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        projectPath: expect.any(String),
+      })
+    );
+  });
+
+  it('uses current working directory as projectPath', async () => {
+    mockReviewDiff.mockResolvedValue({ ok: true, data: { issues: [], summary: '', decision: 'approve' as const } });
+    const { reviewCommand } = await import('./review');
+    await reviewCommand.parseAsync(['review'], { from: 'user' });
+
+    const callArgs = mockReviewDiff.mock.calls[0]?.[1];
+    expect(callArgs).toBeDefined();
+    expect(callArgs!.projectPath).toBe(process.cwd());
+  });
+
+  it('passes staged: true by default', async () => {
+    mockReviewDiff.mockResolvedValue({ ok: true, data: { issues: [], summary: '', decision: 'approve' as const } });
+    const { reviewCommand } = await import('./review');
+    await reviewCommand.parseAsync(['review'], { from: 'user' });
+
+    const callArgs = mockReviewDiff.mock.calls[0]?.[1];
+    expect(callArgs).toBeDefined();
+    expect(callArgs!.staged).toBe(true);
+  });
+
+  it('passes staged: false when --unstaged is provided', async () => {
+    mockReviewDiff.mockResolvedValue({ ok: true, data: { issues: [], summary: '', decision: 'approve' as const } });
+    const { reviewCommand } = await import('./review');
+    await reviewCommand.parseAsync(['review', '--unstaged'], { from: 'user' });
+
+    const callArgs = mockReviewDiff.mock.calls[0]?.[1];
+    expect(callArgs).toBeDefined();
+    expect(callArgs!.staged).toBe(false);
   });
 });

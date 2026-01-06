@@ -2,15 +2,16 @@ import type { Result } from "../shared/result";
 import type { GeminiClient } from "../gemini/types";
 import type { ReviewResult, ReviewOptions } from "./types";
 import { ReviewResultSchema } from "./schemas";
-import { buildReviewPrompt } from "./prompts";
+import { buildReviewPrompt, buildReviewPromptWithConventions } from "./prompts";
 import { getDiff } from "../context/git";
 import { err } from "../shared/result";
+import { loadConventions } from "../conventions/cache";
 
 export async function reviewDiff(
   client: GeminiClient,
   options: ReviewOptions = {},
 ): Promise<Result<ReviewResult>> {
-  const { staged = true, diff: providedDiff } = options;
+  const { staged = true, diff: providedDiff, projectPath } = options;
 
   let diff: string;
 
@@ -33,7 +34,17 @@ export async function reviewDiff(
     });
   }
 
-  const prompt = buildReviewPrompt(diff);
+  let conventions = null;
+  if (projectPath) {
+    const conventionsResult = await loadConventions(projectPath);
+    if (conventionsResult.ok) {
+      conventions = conventionsResult.data;
+    }
+  }
+
+  const prompt = conventions
+    ? buildReviewPromptWithConventions(diff, conventions)
+    : buildReviewPrompt(diff);
 
   return client.generate(prompt, ReviewResultSchema);
 }

@@ -26,6 +26,30 @@
     "./review/schemas": {
       "import": "./dist/review/schemas.js",
       "types": "./dist/review/schemas.d.ts"
+    },
+    "./conventions/types": {
+      "import": "./dist/conventions/types.js",
+      "types": "./dist/conventions/types.d.ts"
+    },
+    "./conventions/schemas": {
+      "import": "./dist/conventions/schemas.js",
+      "types": "./dist/conventions/schemas.d.ts"
+    },
+    "./conventions/file-reader": {
+      "import": "./dist/conventions/file-reader.js",
+      "types": "./dist/conventions/file-reader.d.ts"
+    },
+    "./conventions/prompts": {
+      "import": "./dist/conventions/prompts.js",
+      "types": "./dist/conventions/prompts.d.ts"
+    },
+    "./conventions/discovery": {
+      "import": "./dist/conventions/discovery.js",
+      "types": "./dist/conventions/discovery.d.ts"
+    },
+    "./conventions/cache": {
+      "import": "./dist/conventions/cache.js",
+      "types": "./dist/conventions/cache.d.ts"
     }
   },
   "scripts": {

@@ -14,6 +14,7 @@ export const IssueSchema = z.object({
   message: z.string().describe('Clear description of the issue'),
   suggestion: z.string().optional().describe('Suggested fix'),
   confidence: z.number().min(0).max(1).describe('Confidence score 0-1'),
+  conventionRef: z.string().optional().describe('Convention category this violates (errorHandling, naming, testing, imports)'),
 }).describe('A single code review issue') satisfies z.ZodType<Issue>;
 
 export const DecisionSchema = z.enum(DECISIONS).describe('Review decision');

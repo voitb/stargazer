@@ -7,22 +7,24 @@ export type Category = (typeof CATEGORIES)[number];
 export type Decision = (typeof DECISIONS)[number];
 
 export type Issue = {
-  file: string;
-  line: number;
-  severity: Severity;
-  category: Category;
-  message: string;
-  suggestion?: string;
-  confidence: number;
+  readonly file: string;
+  readonly line: number;
+  readonly severity: Severity;
+  readonly category: Category;
+  readonly message: string;
+  readonly suggestion?: string;
+  readonly confidence: number;
+  readonly conventionRef?: string;
 };
 
 export type ReviewResult = {
-  issues: Issue[];
-  summary: string;
-  decision: Decision;
+  readonly issues: readonly Issue[];
+  readonly summary: string;
+  readonly decision: Decision;
 };
 
 export type ReviewOptions = {
   readonly staged?: boolean;
   readonly diff?: string;
+  readonly projectPath?: string;
 };

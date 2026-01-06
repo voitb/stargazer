@@ -14,3 +14,10 @@ export type { Severity, Category, Decision, Issue, ReviewResult, ReviewOptions }
 export { SEVERITIES, CATEGORIES, DECISIONS } from './review/types';
 
 export { SeveritySchema, CategorySchema, DecisionSchema, IssueSchema, ReviewResultSchema, ReviewResultJSONSchema } from './review/schemas';
+
+export type { ConventionPattern, ConventionCategory, ProjectConventions, FileContext } from './conventions/types';
+export { ConventionPatternSchema, ProjectConventionsSchema } from './conventions/schemas';
+export { readProjectFiles } from './conventions/file-reader';
+export { buildDiscoveryPrompt } from './conventions/prompts';
+export { discoverConventions, type DiscoverOptions } from './conventions/discovery';
+export { saveConventions, loadConventions } from './conventions/cache';

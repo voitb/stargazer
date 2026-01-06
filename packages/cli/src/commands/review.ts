@@ -8,7 +8,7 @@ export const reviewCommand = new Command('review')
   .option('--unstaged', 'Review unstaged changes instead of staged')
   .option('--json', 'Output raw JSON instead of formatted text')
   .action(async (options) => {
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey = process.env['GEMINI_API_KEY'];
 
     if (!apiKey) {
       console.error('Error: GEMINI_API_KEY environment variable is required');
@@ -21,6 +21,7 @@ export const reviewCommand = new Command('review')
 
       const result = await reviewDiff(client, {
         staged: !options.unstaged,
+        projectPath: process.cwd(),
       });
 
       if (!result.ok) {
