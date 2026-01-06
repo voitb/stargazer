@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { createDiscoverCommand } from './discover';
 import type { GeminiClient } from '@stargazer/core/gemini/types';
 
-// Mock external dependencies
 vi.mock('@stargazer/core/gemini/client', () => ({
   createGeminiClient: vi.fn(),
 }));
@@ -100,7 +99,6 @@ describe('createDiscoverCommand', () => {
     try {
       await command.parseAsync(['discover'], { from: 'user' });
     } catch {
-      // Ignore exit errors
     }
 
     expect(discoverConventions).toHaveBeenCalledWith(
@@ -117,7 +115,6 @@ describe('createDiscoverCommand', () => {
     try {
       await command.parseAsync(['discover'], { from: 'user' });
     } catch {
-      // Ignore exit errors
     }
 
     expect(saveConventions).toHaveBeenCalled();

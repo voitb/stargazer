@@ -21,7 +21,6 @@ describe('Convention Schemas', () => {
     it('should reject missing required fields', () => {
       const invalid = {
         name: 'Error Handling',
-        // missing description and examples
       };
 
       const result = ConventionPatternSchema.safeParse(invalid);
@@ -32,7 +31,7 @@ describe('Convention Schemas', () => {
       const invalid = {
         name: 'Error Handling',
         description: 'Use Result types',
-        examples: [123, 456], // should be strings
+        examples: [123, 456],
       };
 
       const result = ConventionPatternSchema.safeParse(invalid);
@@ -75,7 +74,7 @@ describe('Convention Schemas', () => {
 
     it('should reject invalid version', () => {
       const invalid = {
-        version: '2.0', // must be '1.0'
+        version: '2.0',
         discoveredAt: '2025-01-06T12:00:00Z',
         language: 'typescript',
         patterns: {},

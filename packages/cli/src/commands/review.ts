@@ -1,23 +1,47 @@
 import { Command } from 'commander';
 import { createGeminiClient } from '@stargazer/core/gemini/client';
 import { reviewDiff } from '@stargazer/core/review/reviewer';
-import { formatReview } from '../output/terminal';
+import { formatReview as formatTerminal } from '../output/terminal';
+import { formatReview as formatMarkdown } from '../output/markdown';
+import { exitWithError, exitWithResult } from '../exit-codes';
+import type { ReviewResult } from '@stargazer/core';
+
+type OutputFormat = 'terminal' | 'json' | 'markdown';
+
+const formatters: Record<OutputFormat, (review: ReviewResult) => string> = {
+  terminal: formatTerminal,
+  json: (review) => JSON.stringify(review, null, 2),
+  markdown: formatMarkdown,
+};
 
 export const reviewCommand = new Command('review')
   .description('Review staged changes using AI')
   .option('--unstaged', 'Review unstaged changes instead of staged')
-  .option('--json', 'Output raw JSON instead of formatted text')
+  .option(
+    '-f, --format <format>',
+    'Output format: terminal, json, markdown',
+    'terminal'
+  )
+  .option(
+    '-m, --model <model>',
+    'Gemini model to use (e.g., gemini-2.5-flash, gemini-3-flash-preview)'
+  )
   .action(async (options) => {
     const apiKey = process.env['GEMINI_API_KEY'];
 
     if (!apiKey) {
-      console.error('Error: GEMINI_API_KEY environment variable is required');
-      console.error('Set it with: export GEMINI_API_KEY=your-key');
-      process.exit(2);
+      exitWithError(
+        'GEMINI_API_KEY environment variable is required\nSet it with: export GEMINI_API_KEY=your-key'
+      );
+    }
+
+    const format = options.format as OutputFormat;
+    if (!formatters[format]) {
+      exitWithError(`Invalid format "${format}". Use: terminal, json, markdown`);
     }
 
     try {
-      const client = createGeminiClient(apiKey);
+      const client = createGeminiClient(apiKey, options.model);
 
       const result = await reviewDiff(client, {
         staged: !options.unstaged,
@@ -25,19 +49,14 @@ export const reviewCommand = new Command('review')
       });
 
       if (!result.ok) {
-        console.error(`Error: ${result.error.message}`);
-        process.exit(2);
+        exitWithError(result.error.message);
       }
 
-      if (options.json) {
-        console.log(JSON.stringify(result.data, null, 2));
-      } else {
-        console.log(formatReview(result.data));
-      }
+      const formatter = formatters[format];
+      console.log(formatter(result.data));
 
-      process.exit(result.data.issues.length > 0 ? 1 : 0);
+      exitWithResult(result.data.issues.length);
     } catch (error) {
-      console.error('Unexpected error:', error);
-      process.exit(2);
+      exitWithError(`Unexpected error: ${error}`);
     }
   });

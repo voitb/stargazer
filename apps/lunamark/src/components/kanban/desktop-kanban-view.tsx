@@ -33,7 +33,7 @@ export function DesktopKanbanView({
     >
       {/* Fluid container: columns stretch equally */}
       <div className="flex-1 min-h-0 overflow-x-auto overflow-y-hidden scrollbar-thin">
-        <div className="flex gap-6 p-6 h-full mx-auto max-w-[2560px]">
+        <div className="flex gap-6 p-6 h-full mx-auto max-w-640">
           {columns.map((column) => (
             <KanbanColumn
               key={column.id}

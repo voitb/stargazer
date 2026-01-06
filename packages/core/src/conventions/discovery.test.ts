@@ -3,7 +3,6 @@ import { discoverConventions } from './discovery';
 import type { GeminiClient } from '../gemini/types';
 import type { ProjectConventions } from './types';
 
-// Mock file-reader module
 vi.mock('./file-reader', () => ({
   readProjectFiles: vi.fn(),
 }));
@@ -95,7 +94,7 @@ describe('discoverConventions', () => {
       data: [{ path: 'test.ts', content: 'const x = 1;' }],
     });
 
-    mockClient.generate = vi.fn().mockResolvedValue({
+    vi.spyOn(mockClient, 'generate').mockResolvedValue({
       ok: false,
       error: { code: 'API_ERROR', message: 'Rate limited' },
     });

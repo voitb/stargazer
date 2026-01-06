@@ -34,7 +34,7 @@ describe('reviewCommand', () => {
     const { reviewCommand } = await import('./review');
     await reviewCommand.parseAsync(['review'], { from: 'user' });
 
-    expect(mockConsoleError).toHaveBeenCalledWith('Error: GEMINI_API_KEY environment variable is required');
+    expect(mockConsoleError).toHaveBeenCalledWith('Error: GEMINI_API_KEY environment variable is required\nSet it with: export GEMINI_API_KEY=your-key');
     expect(mockExit).toHaveBeenCalledWith(2);
   });
 
@@ -70,7 +70,7 @@ describe('reviewCommand', () => {
     const data = { issues: [], summary: 'Clean', decision: 'approve' as const };
     mockReviewDiff.mockResolvedValue({ ok: true, data });
     const { reviewCommand } = await import('./review');
-    await reviewCommand.parseAsync(['review', '--json'], { from: 'user' });
+    await reviewCommand.parseAsync(['review', '--format', 'json'], { from: 'user' });
 
     expect(mockConsoleLog).toHaveBeenCalledWith(JSON.stringify(data, null, 2));
   });
