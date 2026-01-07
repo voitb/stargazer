@@ -1,7 +1,7 @@
 ---
 id: task-112
 title: Create HistoryScreen
-status: pending
+status: completed
 priority: medium
 labels:
   - cli

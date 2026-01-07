@@ -1,7 +1,7 @@
 ---
 id: task-118
 title: Create TUI entry point
-status: pending
+status: completed
 priority: high
 labels:
   - cli

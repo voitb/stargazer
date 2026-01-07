@@ -8,14 +8,15 @@ import { withRetry } from '../shared/retry';
 
 export function createGeminiClient(
   apiKey: string,
-  defaultModel = DEFAULT_MODEL,
+  defaultModel: string | undefined = DEFAULT_MODEL,
   options: GeminiClientOptions = {}
 ): GeminiClient {
   const {
     enableRetry = true,
     maxRetries = 3,
     retryDelay = 1000,
-    timeout = 60000,
+    // timeout is no longer used - we let Gemini take as long as needed
+    // Connection failures are handled by the underlying HTTP client
   } = options;
 
   const client = new GoogleGenAI({ apiKey });
@@ -27,32 +28,18 @@ export function createGeminiClient(
       generateOptions?: GenerateOptions
     ): Promise<Result<z.infer<T>>> => {
       const doGenerate = async (): Promise<Result<z.infer<T>>> => {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), timeout);
-
         try {
-          // Create a promise that rejects on timeout
-          const timeoutPromise = new Promise<never>((_, reject) => {
-            controller.signal.addEventListener('abort', () => {
-              reject(new Error('Request timeout'));
-            });
+          // No artificial timeout - let Gemini respond at its own pace
+          // Connection failures are handled by the underlying HTTP client's default timeout
+          const response = await client.models.generateContent({
+            model: generateOptions?.model ?? defaultModel,
+            contents: prompt,
+            config: {
+              responseMimeType: 'application/json',
+              responseJsonSchema: z.toJSONSchema(schema, { target: 'openapi-3.0' }),
+              temperature: generateOptions?.temperature ?? 0.2,
+            },
           });
-
-          // Race the API call with the timeout
-          const response = await Promise.race([
-            client.models.generateContent({
-              model: generateOptions?.model ?? defaultModel,
-              contents: prompt,
-              config: {
-                responseMimeType: 'application/json',
-                responseJsonSchema: z.toJSONSchema(schema, { target: 'openapi-3.0' }),
-                temperature: generateOptions?.temperature ?? 0.2,
-              },
-            }),
-            timeoutPromise,
-          ]) as Awaited<ReturnType<typeof client.models.generateContent>>;
-
-          clearTimeout(timeoutId);
 
           const text = response.text;
           if (!text) {
@@ -78,22 +65,6 @@ export function createGeminiClient(
 
           return ok(parsed.data);
         } catch (e) {
-          clearTimeout(timeoutId);
-
-          if (e instanceof Error && e.name === 'AbortError') {
-            return err({
-              code: 'TIMEOUT',
-              message: `Request timed out after ${timeout}ms`,
-            });
-          }
-
-          if (e instanceof Error && e.message === 'Request timeout') {
-            return err({
-              code: 'TIMEOUT',
-              message: `Request timed out after ${timeout}ms`,
-            });
-          }
-
           if (e instanceof Error && 'status' in e) {
             const status = (e as { status: number }).status;
             if (status === 429) {
@@ -106,6 +77,16 @@ export function createGeminiClient(
               return err({ code: 'BAD_REQUEST', message: e.message, cause: e });
             }
           }
+
+          // Handle network/connection errors
+          if (e instanceof Error && (e.message.includes('ECONNREFUSED') || e.message.includes('ETIMEDOUT') || e.message.includes('fetch failed'))) {
+            return err({
+              code: 'CONNECTION_ERROR',
+              message: 'Failed to connect to Gemini API. Please check your internet connection.',
+              cause: e,
+            });
+          }
+
           return err({ code: 'API_ERROR', message: String(e), cause: e });
         }
       };

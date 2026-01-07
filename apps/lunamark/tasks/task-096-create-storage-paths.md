@@ -1,7 +1,7 @@
 ---
 id: task-096
 title: Create storage paths utility
-status: pending
+status: completed
 priority: high
 labels:
   - cli

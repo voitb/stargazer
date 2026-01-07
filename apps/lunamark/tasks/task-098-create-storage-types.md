@@ -1,7 +1,7 @@
 ---
 id: task-098
 title: Create storage types re-exports
-status: pending
+status: completed
 priority: medium
 labels:
   - cli

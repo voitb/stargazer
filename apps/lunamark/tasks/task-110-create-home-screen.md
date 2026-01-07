@@ -1,7 +1,7 @@
 ---
 id: task-110
 title: Create HomeScreen
-status: pending
+status: completed
 priority: high
 labels:
   - cli

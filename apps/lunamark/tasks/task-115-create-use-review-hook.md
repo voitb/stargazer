@@ -1,7 +1,7 @@
 ---
 id: task-115
 title: Create useReview hook
-status: pending
+status: completed
 priority: high
 labels:
   - cli

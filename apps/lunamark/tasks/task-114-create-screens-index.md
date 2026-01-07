@@ -1,7 +1,7 @@
 ---
 id: task-114
 title: Create screens barrel export
-status: pending
+status: completed
 priority: low
 labels:
   - cli

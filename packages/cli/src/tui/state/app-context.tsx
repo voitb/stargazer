@@ -1,35 +1,4 @@
----
-id: task-101
-title: Create React context for app state
-status: completed
-priority: high
-labels:
-  - cli
-  - tui
-  - state
-created: '2025-01-06'
-order: 101
-assignee: glm
----
-
-## Description
-
-Create the React context provider for managing global TUI application state including navigation, sessions, and messages.
-
-## Acceptance Criteria
-
-- [ ] Create `packages/cli/src/tui/state/app-context.tsx`
-- [ ] Define `Screen` type for navigation states
-- [ ] Create `AppProvider` component with state management
-- [ ] Implement `useApp()` hook for consuming context
-- [ ] Implement navigation, session management, and message functions
-
-## Implementation
-
-**File**: `packages/cli/src/tui/state/app-context.tsx`
-
-```typescript
-import React, { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
 import type { SessionData, SessionIndexEntry, ChatMessage } from '../storage/types.js';
 import {
   createSession,
@@ -38,36 +7,22 @@ import {
   listAllSessions,
 } from '../storage/session-store.js';
 
-/**
- * Available screens in the TUI
- */
-export type Screen = 'home' | 'chat' | 'history' | 'settings' | 'help';
+export type Screen = 'home' | 'chat' | 'history' | 'settings' | 'help' | 'review' | 'loading' | 'error' | 'providerSelect' | 'apiKeySetup' | 'modelSelect';
 
-/**
- * App context value interface
- */
-interface AppContextValue {
-  // Navigation
+export interface AppContextValue {
   screen: Screen;
   navigate: (screen: Screen) => void;
-
-  // Session
   activeSession: SessionData | null;
   sessions: readonly SessionIndexEntry[];
   startNewSession: () => Promise<void>;
   resumeSession: (sessionId: string) => Promise<void>;
   closeSession: () => void;
   refreshSessions: () => Promise<void>;
-
-  // Messages
   addMessage: (message: Omit<ChatMessage, 'id' | 'timestamp'>) => Promise<void>;
-
-  // Project
   projectPath: string;
-
-  // Loading states
   isLoading: boolean;
   error: string | null;
+  setError: (error: string | null) => void;
 }
 
 const AppContext = createContext<AppContextValue | null>(null);
@@ -92,6 +47,8 @@ export function AppProvider({ children, projectPath }: AppProviderProps) {
     const result = await listAllSessions();
     if (result.ok) {
       setSessions(result.data);
+    } else {
+      setError(`Failed to load sessions: ${result.error.message}`);
     }
   }, []);
 
@@ -135,12 +92,16 @@ export function AppProvider({ children, projectPath }: AppProviderProps) {
     if (!activeSession) return;
 
     const result = await addMessageToSession(activeSession.metadata.id, message);
-    if (result.ok) {
-      // Reload session to get updated messages
-      const sessionResult = await loadSession(activeSession.metadata.id);
-      if (sessionResult.ok) {
-        setActiveSession(sessionResult.data);
-      }
+    if (!result.ok) {
+      setError(`Failed to save message: ${result.error.message}`);
+      return;
+    }
+
+    const sessionResult = await loadSession(activeSession.metadata.id);
+    if (sessionResult.ok) {
+      setActiveSession(sessionResult.data);
+    } else {
+      setError(`Failed to reload session: ${sessionResult.error.message}`);
     }
   }, [activeSession]);
 
@@ -157,23 +118,16 @@ export function AppProvider({ children, projectPath }: AppProviderProps) {
     projectPath,
     isLoading,
     error,
+    setError,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }
 
-export function useApp(): AppContextValue {
+export function useAppContext(): AppContextValue {
   const context = useContext(AppContext);
   if (!context) {
-    throw new Error('useApp must be used within an AppProvider');
+    throw new Error('useAppContext must be used within an AppProvider');
   }
   return context;
 }
-```
-
-## Test
-
-```bash
-cd /Users/voitz/Projects/gemini-hackathon/packages/cli
-pnpm exec tsc --noEmit
-```

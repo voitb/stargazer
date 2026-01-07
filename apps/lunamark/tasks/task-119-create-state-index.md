@@ -1,7 +1,7 @@
 ---
 id: task-119
 title: Create state barrel export
-status: pending
+status: completed
 priority: low
 labels:
   - cli

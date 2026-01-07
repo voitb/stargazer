@@ -1,42 +1,6 @@
----
-id: task-099
-title: Create session store with CRUD operations
-status: completed
-priority: high
-labels:
-  - cli
-  - tui
-  - storage
-created: '2025-01-06'
-order: 99
-assignee: glm
----
-
-## Description
-
-Create the session store module that handles all session CRUD operations with Zod validation on load.
-
-## Acceptance Criteria
-
-- [ ] Create `packages/cli/src/tui/storage/session-store.ts`
-- [ ] Implement `loadSessionIndex()` with Zod validation
-- [ ] Implement `saveSessionIndex()`
-- [ ] Implement `createSession()` that creates new session
-- [ ] Implement `loadSession()` with Zod validation
-- [ ] Implement `addMessageToSession()`
-- [ ] Implement `deleteSession()`
-- [ ] Implement `listSessionsForProject()`
-- [ ] Implement `listAllSessions()`
-- [ ] All functions return `Result<T>` type
-
-## Implementation
-
-**File**: `packages/cli/src/tui/storage/session-store.ts`
-
-```typescript
 import { readFile, writeFile } from 'node:fs/promises';
 import { basename } from 'node:path';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'node:crypto';
 import { ok, err, type Result } from '@stargazer/core';
 import {
   getSessionDir,
@@ -55,9 +19,6 @@ import {
   type ChatMessage,
 } from './types.js';
 
-/**
- * Load the sessions index with Zod validation
- */
 export async function loadSessionIndex(): Promise<Result<SessionIndex>> {
   try {
     await ensureStorageStructure();
@@ -66,20 +27,23 @@ export async function loadSessionIndex(): Promise<Result<SessionIndex>> {
     try {
       const content = await readFile(indexPath, 'utf-8');
       const rawData = JSON.parse(content);
-
-      // Validate with Zod schema
       const parseResult = SessionIndexSchema.safeParse(rawData);
+
       if (!parseResult.success) {
         return err({
           code: 'SCHEMA_VALIDATION',
           message: `Invalid session index format: ${parseResult.error.message}`,
         });
       }
-
       return ok(parseResult.data);
-    } catch {
-      // File doesn't exist, return empty index
-      return ok({ sessions: [] });
+    } catch (e) {
+      if (e instanceof Error && 'code' in e && (e as NodeJS.ErrnoException).code === 'ENOENT') {
+        return ok({ sessions: [] });
+      }
+      return err({
+        code: 'FILE_NOT_FOUND',
+        message: `Failed to read session index: ${e instanceof Error ? e.message : String(e)}`,
+      });
     }
   } catch (error) {
     return err({
@@ -89,9 +53,6 @@ export async function loadSessionIndex(): Promise<Result<SessionIndex>> {
   }
 }
 
-/**
- * Save the sessions index
- */
 export async function saveSessionIndex(index: SessionIndex): Promise<Result<void>> {
   try {
     await ensureStorageStructure();
@@ -106,12 +67,9 @@ export async function saveSessionIndex(index: SessionIndex): Promise<Result<void
   }
 }
 
-/**
- * Create a new session
- */
 export async function createSession(projectPath: string): Promise<Result<SessionData>> {
   try {
-    const id = uuidv4();
+    const id = randomUUID();
     const now = new Date().toISOString();
     const projectName = basename(projectPath);
 
@@ -128,25 +86,13 @@ export async function createSession(projectPath: string): Promise<Result<Session
       messages: [],
     };
 
-    // Create session directory and save metadata
     const sessionDir = getSessionDir(id);
     await ensureDir(sessionDir);
-    await writeFile(
-      `${sessionDir}/metadata.json`,
-      JSON.stringify(metadata, null, 2),
-      'utf-8'
-    );
-    await writeFile(
-      `${sessionDir}/messages.json`,
-      JSON.stringify([], null, 2),
-      'utf-8'
-    );
+    await writeFile(`${sessionDir}/metadata.json`, JSON.stringify(metadata, null, 2), 'utf-8');
+    await writeFile(`${sessionDir}/messages.json`, JSON.stringify([], null, 2), 'utf-8');
 
-    // Update index
     const indexResult = await loadSessionIndex();
-    if (!indexResult.ok) {
-      return indexResult;
-    }
+    if (!indexResult.ok) return indexResult;
 
     const indexEntry: SessionIndexEntry = {
       id,
@@ -162,9 +108,7 @@ export async function createSession(projectPath: string): Promise<Result<Session
     };
 
     const saveResult = await saveSessionIndex(newIndex);
-    if (!saveResult.ok) {
-      return saveResult;
-    }
+    if (!saveResult.ok) return saveResult;
 
     return ok(sessionData);
   } catch (error) {
@@ -175,17 +119,12 @@ export async function createSession(projectPath: string): Promise<Result<Session
   }
 }
 
-/**
- * Load a session by ID with Zod validation
- */
 export async function loadSession(sessionId: string): Promise<Result<SessionData>> {
   try {
     const sessionDir = getSessionDir(sessionId);
-
     const metadataContent = await readFile(`${sessionDir}/metadata.json`, 'utf-8');
     const rawMetadata = JSON.parse(metadataContent);
 
-    // Validate metadata with Zod
     const metadataResult = SessionMetadataSchema.safeParse(rawMetadata);
     if (!metadataResult.success) {
       return err({
@@ -197,7 +136,6 @@ export async function loadSession(sessionId: string): Promise<Result<SessionData
     const messagesContent = await readFile(`${sessionDir}/messages.json`, 'utf-8');
     const rawMessages = JSON.parse(messagesContent);
 
-    // Validate messages with Zod
     const messagesResult = MessagesArraySchema.safeParse(rawMessages);
     if (!messagesResult.success) {
       return err({
@@ -218,36 +156,31 @@ export async function loadSession(sessionId: string): Promise<Result<SessionData
   }
 }
 
-/**
- * Add a message to a session
- */
 export async function addMessageToSession(
   sessionId: string,
   message: Omit<ChatMessage, 'id' | 'timestamp'>
 ): Promise<Result<ChatMessage>> {
   try {
     const sessionDir = getSessionDir(sessionId);
-
-    // Load existing messages
     const messagesContent = await readFile(`${sessionDir}/messages.json`, 'utf-8');
-    const messages = JSON.parse(messagesContent) as ChatMessage[];
+    const parseResult = MessagesArraySchema.safeParse(JSON.parse(messagesContent));
+    if (!parseResult.success) {
+      return err({
+        code: 'SCHEMA_VALIDATION',
+        message: `Invalid messages format: ${parseResult.error.message}`,
+      });
+    }
+    const messages = parseResult.data;
 
-    // Create new message
     const newMessage: ChatMessage = {
       ...message,
-      id: uuidv4(),
+      id: randomUUID(),
       timestamp: new Date().toISOString(),
     };
 
-    // Save updated messages
     const updatedMessages = [...messages, newMessage];
-    await writeFile(
-      `${sessionDir}/messages.json`,
-      JSON.stringify(updatedMessages, null, 2),
-      'utf-8'
-    );
+    await writeFile(`${sessionDir}/messages.json`, JSON.stringify(updatedMessages, null, 2), 'utf-8');
 
-    // Update session index
     const indexResult = await loadSessionIndex();
     if (indexResult.ok) {
       const updatedSessions = indexResult.data.sessions.map((s) =>
@@ -267,18 +200,12 @@ export async function addMessageToSession(
   }
 }
 
-/**
- * Delete a session
- */
 export async function deleteSession(sessionId: string): Promise<Result<void>> {
   try {
     const { rm } = await import('node:fs/promises');
     const sessionDir = getSessionDir(sessionId);
-
-    // Remove session directory
     await rm(sessionDir, { recursive: true, force: true });
 
-    // Update index
     const indexResult = await loadSessionIndex();
     if (indexResult.ok) {
       const updatedSessions = indexResult.data.sessions.filter((s) => s.id !== sessionId);
@@ -294,38 +221,8 @@ export async function deleteSession(sessionId: string): Promise<Result<void>> {
   }
 }
 
-/**
- * List all sessions for a project
- */
-export async function listSessionsForProject(
-  projectPath: string
-): Promise<Result<readonly SessionIndexEntry[]>> {
-  const indexResult = await loadSessionIndex();
-  if (!indexResult.ok) {
-    return indexResult;
-  }
-
-  const filtered = indexResult.data.sessions.filter(
-    (s) => s.projectPath === projectPath
-  );
-  return ok(filtered);
-}
-
-/**
- * List all sessions
- */
 export async function listAllSessions(): Promise<Result<readonly SessionIndexEntry[]>> {
   const indexResult = await loadSessionIndex();
-  if (!indexResult.ok) {
-    return indexResult;
-  }
+  if (!indexResult.ok) return indexResult;
   return ok(indexResult.data.sessions);
 }
-```
-
-## Test
-
-```bash
-cd /Users/voitz/Projects/gemini-hackathon/packages/cli
-pnpm exec tsc --noEmit
-```

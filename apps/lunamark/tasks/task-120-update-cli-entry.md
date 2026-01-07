@@ -1,7 +1,7 @@
 ---
 id: task-120
 title: Update CLI entry point for TUI mode
-status: pending
+status: completed
 priority: high
 labels:
   - cli

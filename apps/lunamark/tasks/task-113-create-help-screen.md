@@ -1,7 +1,7 @@
 ---
 id: task-113
 title: Create HelpScreen
-status: pending
+status: completed
 priority: medium
 labels:
   - cli

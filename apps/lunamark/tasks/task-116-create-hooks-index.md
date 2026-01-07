@@ -1,7 +1,7 @@
 ---
 id: task-116
 title: Create hooks barrel export
-status: pending
+status: completed
 priority: low
 labels:
   - cli
