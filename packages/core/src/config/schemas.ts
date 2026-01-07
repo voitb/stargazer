@@ -1,7 +1,7 @@
 import * as z from 'zod';
+import { MODELS } from '../gemini/models';
 
 export const SEVERITIES = ['critical', 'high', 'medium', 'low'] as const;
-export const MODELS = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-2.5-pro'] as const;
 
 export const StargazerConfigSchema = z.object({
   /** Minimum severity to report */
