@@ -1,4 +1,3 @@
-// Core components
 export { Dropdown } from "./dropdown";
 export { DropdownTrigger } from "./dropdown-trigger";
 export { DropdownContent } from "./dropdown-content";
@@ -8,13 +7,10 @@ export { DropdownLabel } from "./dropdown-label";
 export { DropdownSeparator } from "./dropdown-separator";
 export { DropdownShortcut } from "./dropdown-shortcut";
 
-// Submenu components
 export { DropdownSub, DropdownSubTrigger, DropdownSubContent } from "./dropdown-sub";
 
-// Headless hook
 export { useDropdown } from "./use-dropdown";
 
-// Context (for advanced customization)
 export {
 	useDropdownContext,
 	useDropdownRadioGroupContext,
@@ -24,7 +20,6 @@ export {
 	DropdownSubContext,
 } from "./dropdown.context";
 
-// Types
 export type { DropdownProps } from "./dropdown";
 export type {
 	DropdownTriggerProps,
@@ -52,7 +47,6 @@ export type {
 } from "./dropdown.context";
 export type { UseDropdownOptions, UseDropdownReturn } from "./use-dropdown";
 
-// Variants (for styling customization)
 export {
 	dropdownContentVariants,
 	dropdownItemVariants,

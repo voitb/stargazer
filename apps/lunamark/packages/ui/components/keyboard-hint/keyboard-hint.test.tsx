@@ -5,7 +5,6 @@ import { axe } from "vitest-axe";
 import { KeyboardHint } from "./keyboard-hint";
 
 describe("KeyboardHint", () => {
-	// BEHAVIOR
 	it("renders a single key", () => {
 		render(<KeyboardHint keys={["K"]} />);
 
@@ -21,7 +20,6 @@ describe("KeyboardHint", () => {
 		expect(screen.getAllByText("+")).toHaveLength(2);
 	});
 
-	// ACCESSIBILITY
 	it("passes vitest-axe accessibility checks", async () => {
 		const { container } = render(<KeyboardHint keys={["Cmd", "K"]} />);
 
@@ -29,7 +27,6 @@ describe("KeyboardHint", () => {
 		expect(results).toHaveNoViolations();
 	});
 
-	// API CONTRACT
 	it("accepts all variant and size props without error", () => {
 		const variants = ["default", "inverted"] as const;
 		const sizes = ["sm", "md", "lg"] as const;

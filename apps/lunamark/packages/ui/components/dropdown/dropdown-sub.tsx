@@ -34,9 +34,6 @@ import { useControllableState } from "../../hooks/use-controllable-state";
 import { useExitAnimation } from "../../hooks/use-exit-animation";
 import { ChevronRightIcon } from "../icons";
 
-// ============================================================================
-// DropdownSub - Submenu provider
-// ============================================================================
 
 export type DropdownSubProps = {
 	children: ReactNode;
@@ -54,10 +51,8 @@ function DropdownSub({
 	const parentContext = useDropdownContext("DropdownSub");
 	const parentSubContext = useDropdownSubContext();
 
-	// Get depth from parent submenu context (or 0 if root)
 	const depth = parentSubContext ? parentSubContext.depth + 1 : 0;
 
-	// Close parent dropdown (or parent submenu)
 	const closeParent = useCallback(() => {
 		if (parentSubContext) {
 			parentSubContext.setIsOpen(false);
@@ -67,7 +62,6 @@ function DropdownSub({
 		}
 	}, [parentContext, parentSubContext]);
 
-	// State management
 	const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
 	const [isOpen, setIsOpenBase] = useControllableState({
@@ -86,14 +80,11 @@ function DropdownSub({
 		[setIsOpenBase]
 	);
 
-	// IDs for accessibility
 	const contentId = useId();
 
-	// Refs for list navigation
 	const listRef = useRef<(HTMLElement | null)[]>([]);
 	const labelsRef = useRef<(string | null)[]>([]);
 
-	// Floating UI setup - always to the right
 	const { refs, floatingStyles, context } = useFloating({
 		open: isOpen,
 		onOpenChange: setIsOpen,
@@ -106,7 +97,6 @@ function DropdownSub({
 		whileElementsMounted: autoUpdate,
 	});
 
-	// Interactions
 	const hover = useHover(context, {
 		enabled: true,
 		delay: { open: 75, close: 150 },
@@ -124,7 +114,7 @@ function DropdownSub({
 		activeIndex,
 		onNavigate: setActiveIndex,
 		loop: true,
-		nested: true, // Important for nested submenu behavior
+		nested: true,
 	});
 
 	const typeahead = useTypeahead(context, {
@@ -181,10 +171,6 @@ function DropdownSub({
 	);
 }
 
-// ============================================================================
-// DropdownSubTrigger - Item that opens submenu
-// ============================================================================
-
 export type DropdownSubTriggerProps = {
 	children: ReactNode;
 	disabled?: boolean;
@@ -208,7 +194,6 @@ function DropdownSubTrigger({
 	textValue,
 	...props
 }: DropdownSubTriggerProps) {
-	// We need both parent context (for registering in parent list) and sub context (for triggering submenu)
 	const parentSubContext = useDropdownSubContext();
 	const parentContext = useDropdownContext("DropdownSubTrigger");
 	const subContext = useDropdownSubContext();
@@ -219,20 +204,19 @@ function DropdownSubTrigger({
 		);
 	}
 
-	// Use parent's list registration (either parent dropdown or parent submenu)
 	const parentList = parentSubContext
 		? {
-				activeIndex: parentSubContext.activeIndex,
-				listRef: parentSubContext.listRef,
-				labelsRef: parentSubContext.labelsRef,
-				getItemProps: parentSubContext.getSubItemProps,
-			}
+			activeIndex: parentSubContext.activeIndex,
+			listRef: parentSubContext.listRef,
+			labelsRef: parentSubContext.labelsRef,
+			getItemProps: parentSubContext.getSubItemProps,
+		}
 		: {
-				activeIndex: parentContext.activeIndex,
-				listRef: parentContext.listRef,
-				labelsRef: parentContext.labelsRef,
-				getItemProps: parentContext.getItemProps,
-			};
+			activeIndex: parentContext.activeIndex,
+			listRef: parentContext.listRef,
+			labelsRef: parentContext.labelsRef,
+			getItemProps: parentContext.getItemProps,
+		};
 
 	const { activeIndex, listRef, labelsRef, getItemProps } = parentList;
 	const { refs, getSubTriggerProps, isOpen, contentId } = subContext;
@@ -240,7 +224,6 @@ function DropdownSubTrigger({
 	const itemRef = useRef<HTMLButtonElement>(null);
 	const index = useRef<number>(-1);
 
-	// Register in parent's list
 	const refCallback = useCallback(
 		(node: HTMLButtonElement | null) => {
 			itemRef.current = node;
@@ -259,7 +242,6 @@ function DropdownSubTrigger({
 		[refs, listRef, labelsRef, textValue]
 	);
 
-	// Cleanup on unmount
 	useEffect(() => {
 		return () => {
 			if (itemRef.current) {
@@ -304,10 +286,6 @@ function DropdownSubTrigger({
 		</button>
 	);
 }
-
-// ============================================================================
-// DropdownSubContent - Submenu floating content
-// ============================================================================
 
 export type DropdownSubContentProps = {
 	children: ReactNode;

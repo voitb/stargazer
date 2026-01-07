@@ -3,21 +3,18 @@
 import { useCallback, useRef, type KeyboardEvent } from "react";
 import type { ToggleGroupContextValue } from "./toggle-group.context";
 
-// Single selection mode props
 type SingleSelectionOptions = {
 	type: "single";
 	value: string | null;
 	onValueChange: (value: string | null) => void;
 };
 
-// Multiple selection mode props
 type MultipleSelectionOptions = {
 	type: "multiple";
 	values: string[];
 	onValuesChange: (values: string[]) => void;
 };
 
-// Base options shared by both modes
 type BaseOptions = {
 	size?: "sm" | "md" | "lg";
 	variant?: "ring" | "contained";
@@ -28,13 +25,10 @@ export type UseToggleGroupOptions = BaseOptions &
 	(SingleSelectionOptions | MultipleSelectionOptions);
 
 export type UseToggleGroupReturn = {
-	// Context value to pass to provider
 	contextValue: ToggleGroupContextValue;
 
-	// Keyboard handler for the container
 	handleKeyDown: (event: KeyboardEvent<HTMLDivElement>) => void;
 
-	// Computed props for the container element
 	containerProps: {
 		role: "radiogroup" | "toolbar";
 		onKeyDown: (event: KeyboardEvent<HTMLDivElement>) => void;
@@ -51,10 +45,8 @@ export function useToggleGroup(
 		orientation = "horizontal",
 	} = options;
 
-	// Item registration for keyboard navigation
 	const itemsRef = useRef<Map<string, HTMLButtonElement>>(new Map());
 
-	// Extract values based on mode
 	const isSingle = type === "single";
 	const value = isSingle ? (options as SingleSelectionOptions).value : null;
 	const values = !isSingle
@@ -67,7 +59,6 @@ export function useToggleGroup(
 		? (options as MultipleSelectionOptions).onValuesChange
 		: undefined;
 
-	// Item registration callbacks
 	const registerItem = useCallback(
 		(itemValue: string, element: HTMLButtonElement) => {
 			itemsRef.current.set(itemValue, element);
@@ -79,7 +70,6 @@ export function useToggleGroup(
 		itemsRef.current.delete(itemValue);
 	}, []);
 
-	// Selection state helpers
 	const isItemSelected = useCallback(
 		(itemValue: string) => {
 			if (isSingle) {
@@ -90,7 +80,6 @@ export function useToggleGroup(
 		[isSingle, value, values]
 	);
 
-	// Toggle handler
 	const onItemToggle = useCallback(
 		(itemValue: string) => {
 			if (isSingle && onValueChange) {
@@ -105,7 +94,6 @@ export function useToggleGroup(
 		[isSingle, value, values, onValueChange, onValuesChange]
 	);
 
-	// Keyboard navigation
 	const handleKeyDown = useCallback(
 		(event: KeyboardEvent<HTMLDivElement>) => {
 			const items = Array.from(itemsRef.current.values());
@@ -157,7 +145,6 @@ export function useToggleGroup(
 		[orientation]
 	);
 
-	// Build context value
 	const contextValue: ToggleGroupContextValue = {
 		type,
 		value,
@@ -171,7 +158,6 @@ export function useToggleGroup(
 		isItemSelected,
 	};
 
-	// Container props
 	const containerProps = {
 		role: (type === "single" ? "radiogroup" : "toolbar") as
 			| "radiogroup"

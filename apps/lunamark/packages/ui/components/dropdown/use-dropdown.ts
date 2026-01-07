@@ -21,36 +21,24 @@ import { useControllableState } from "../../hooks/use-controllable-state";
 import { useExitAnimation } from "../../hooks/use-exit-animation";
 
 export type UseDropdownOptions = {
-	// State
 	defaultOpen?: boolean;
 	open?: boolean;
 	onOpenChange?: (open: boolean) => void;
-
-	// Positioning
 	placement?: Placement;
 	sideOffset?: number;
-
-	// Behavior
 	trigger?: "hover" | "click";
 	loop?: boolean;
 	modal?: boolean;
 };
 
 export type UseDropdownReturn = {
-	// State
 	isOpen: boolean;
 	setIsOpen: (open: boolean) => void;
-
-	// Navigation state
 	activeIndex: number | null;
 	setActiveIndex: (index: number | null) => void;
 	selectedIndex: number | null;
-
-	// Refs
 	listRef: React.MutableRefObject<(HTMLElement | null)[]>;
 	labelsRef: React.MutableRefObject<(string | null)[]>;
-
-	// Floating UI returns
 	refs: {
 		setReference: (node: HTMLElement | null) => void;
 		setFloating: (node: HTMLElement | null) => void;
@@ -58,23 +46,15 @@ export type UseDropdownReturn = {
 	floatingStyles: React.CSSProperties;
 	floatingContext: FloatingContext;
 	placement: Placement;
-
-	// Interaction prop getters
 	getReferenceProps: () => Record<string, unknown>;
 	getFloatingProps: () => Record<string, unknown>;
 	getItemProps: (options: {
 		active: boolean;
 		onClick?: () => void;
 	}) => Record<string, unknown>;
-
-	// Behavior
 	shouldRender: boolean;
 	dataState: "open" | "closed";
-
-	// IDs
 	contentId: string;
-
-	// Options passthrough
 	trigger: "hover" | "click";
 };
 
@@ -89,18 +69,15 @@ export function useDropdown(options: UseDropdownOptions = {}): UseDropdownReturn
 		loop = true,
 	} = options;
 
-	// Navigation state
 	const [activeIndex, setActiveIndex] = useState<number | null>(null);
 	const selectedIndex: number | null = null;
 
-	// State management with controlled/uncontrolled support
 	const [isOpen, setIsOpenBase] = useControllableState({
 		value: controlledOpen,
 		defaultValue: defaultOpen,
 		onChange: onOpenChange,
 	});
 
-	// Reset active index when closing
 	const setIsOpen = useCallback(
 		(nextOpen: boolean) => {
 			setIsOpenBase(nextOpen);
@@ -111,14 +88,11 @@ export function useDropdown(options: UseDropdownOptions = {}): UseDropdownReturn
 		[setIsOpenBase]
 	);
 
-	// IDs for accessibility
 	const contentId = useId();
 
-	// Refs for list navigation
 	const listRef = useRef<(HTMLElement | null)[]>([]);
 	const labelsRef = useRef<(string | null)[]>([]);
 
-	// Floating UI setup
 	const {
 		refs,
 		floatingStyles,
@@ -136,7 +110,6 @@ export function useDropdown(options: UseDropdownOptions = {}): UseDropdownReturn
 		whileElementsMounted: autoUpdate,
 	});
 
-	// Interaction hooks
 	const hover = useHover(context, {
 		enabled: trigger === "hover",
 		move: false,
@@ -168,7 +141,6 @@ export function useDropdown(options: UseDropdownOptions = {}): UseDropdownReturn
 		onMatch: isOpen ? setActiveIndex : undefined,
 	});
 
-	// Combine interactions
 	const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions([
 		hover,
 		click,
@@ -178,42 +150,26 @@ export function useDropdown(options: UseDropdownOptions = {}): UseDropdownReturn
 		typeahead,
 	]);
 
-	// Exit animation - delays unmount for close animation
 	const shouldRender = useExitAnimation(isOpen, 150);
 
 	return {
-		// State
 		isOpen,
 		setIsOpen,
-
-		// Navigation
 		activeIndex,
 		setActiveIndex,
 		selectedIndex,
-
-		// Refs
 		listRef,
 		labelsRef,
-
-		// Floating UI
 		refs,
 		floatingStyles,
 		floatingContext: context,
 		placement: actualPlacement,
-
-		// Prop getters
 		getReferenceProps,
 		getFloatingProps,
 		getItemProps,
-
-		// Behavior
 		shouldRender,
 		dataState: isOpen ? "open" : "closed",
-
-		// IDs
 		contentId,
-
-		// Options
 		trigger,
 	};
 }

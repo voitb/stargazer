@@ -189,8 +189,8 @@ describe("Popover", () => {
 		const results = await axe(document.body, {
 			rules: {
 				region: { enabled: false },
-				"aria-command-name": { enabled: false }, // Floating UI focus guards
-				"aria-dialog-name": { enabled: false }, // Popovers don't require titles like modals
+				"aria-command-name": { enabled: false }, 
+				"aria-dialog-name": { enabled: false }, 
 			},
 		});
 		expect(results).toHaveNoViolations();

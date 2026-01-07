@@ -1,4 +1,3 @@
-// Column (compound component)
 export {
 	Column,
 	ColumnHeader,

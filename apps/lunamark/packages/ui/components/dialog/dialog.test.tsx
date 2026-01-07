@@ -51,18 +51,17 @@ describe("Dialog", () => {
 		document.body.style.overflow = "";
 	});
 
-	// BEHAVIOR
 	it("renders when open and unmounts when closed", async () => {
 		vi.useFakeTimers();
 		const { rerender } = render(
-			<Dialog open={true} onOpenChange={() => {}}>
+			<Dialog open={true} onOpenChange={() => { }}>
 				<DialogContent>Content</DialogContent>
 			</Dialog>,
 		);
 		expect(screen.getByRole("dialog")).toBeInTheDocument();
 
 		rerender(
-			<Dialog open={false} onOpenChange={() => {}}>
+			<Dialog open={false} onOpenChange={() => { }}>
 				<DialogContent>Content</DialogContent>
 			</Dialog>,
 		);
@@ -73,14 +72,14 @@ describe("Dialog", () => {
 
 	it("uses data-state for exit animation", () => {
 		const { rerender } = render(
-			<Dialog open={true} onOpenChange={() => {}}>
+			<Dialog open={true} onOpenChange={() => { }}>
 				<DialogContent data-testid="dialog">Content</DialogContent>
 			</Dialog>,
 		);
 		expect(screen.getByTestId("dialog")).toHaveAttribute("data-state", "open");
 
 		rerender(
-			<Dialog open={false} onOpenChange={() => {}}>
+			<Dialog open={false} onOpenChange={() => { }}>
 				<DialogContent data-testid="dialog">Content</DialogContent>
 			</Dialog>,
 		);
@@ -90,24 +89,23 @@ describe("Dialog", () => {
 	it("locks body scroll when open and restores on close", () => {
 		document.body.style.overflow = "auto";
 		const { rerender } = render(
-			<Dialog open={true} onOpenChange={() => {}}>
+			<Dialog open={true} onOpenChange={() => { }}>
 				<DialogContent>Content</DialogContent>
 			</Dialog>,
 		);
 		expect(document.body.style.overflow).toBe("hidden");
 
 		rerender(
-			<Dialog open={false} onOpenChange={() => {}}>
+			<Dialog open={false} onOpenChange={() => { }}>
 				<DialogContent>Content</DialogContent>
 			</Dialog>,
 		);
 		expect(document.body.style.overflow).toBe("auto");
 	});
 
-	// ACCESSIBILITY
 	it("has correct ARIA attributes", () => {
 		render(
-			<Dialog open={true} onOpenChange={() => {}}>
+			<Dialog open={true} onOpenChange={() => { }}>
 				<DialogContent>
 					<DialogTitle>My Title</DialogTitle>
 					<DialogDescription>My Description</DialogDescription>
@@ -138,7 +136,6 @@ describe("Dialog", () => {
 		expect(screen.getByTestId("dialog-content").contains(activeElement)).toBe(true);
 	});
 
-	// INTERACTION
 	it("closes on Escape key", () => {
 		const onOpenChange = vi.fn();
 		render(
@@ -180,20 +177,18 @@ describe("Dialog", () => {
 		});
 	});
 
-	// API CONTRACT
 	it("forwards ref to content element", () => {
 		const ref = createRef<HTMLDivElement>();
 		render(
-			<Dialog open={true} onOpenChange={() => {}}>
+			<Dialog open={true} onOpenChange={() => { }}>
 				<DialogContent ref={ref}>Content</DialogContent>
 			</Dialog>,
 		);
 		expect(ref.current).toBeInstanceOf(HTMLDivElement);
 	});
 
-	// CONTEXT ERROR
 	it("throws error when components used outside Dialog", () => {
-		const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
+		const consoleError = vi.spyOn(console, "error").mockImplementation(() => { });
 		expect(() => render(<DialogContent>Content</DialogContent>)).toThrow(
 			"<DialogContent> must be used within a <Dialog> provider",
 		);

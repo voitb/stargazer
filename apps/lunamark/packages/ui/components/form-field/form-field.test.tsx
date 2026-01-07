@@ -1,4 +1,4 @@
-// @vitest-environment jsdom
+
 import { render, screen } from "@testing-library/react";
 import { createRef } from "react";
 import { describe, expect, it } from "vitest";
@@ -13,7 +13,6 @@ import {
 } from "./index";
 
 describe("FormField", () => {
-	// BEHAVIOR
 	it("renders label and children", () => {
 		render(
 			<FormField>
@@ -105,7 +104,6 @@ describe("FormField", () => {
 		});
 	});
 
-	// ACCESSIBILITY
 	it("associates label with input via htmlFor", () => {
 		render(
 			<FormField>
@@ -125,8 +123,6 @@ describe("FormField", () => {
 				<FormDescription>Enter your email</FormDescription>
 			</FormField>,
 		);
-
-		// We need to query by selector because getByLabelText sometimes gets confused with multiple aria-describedby
 		const input = container.querySelector("input");
 		expect(input).toHaveAttribute("aria-describedby");
 
@@ -162,7 +158,6 @@ describe("FormField", () => {
 		expect(results).toHaveNoViolations();
 	});
 
-	// RENDER PROPS
 	it("provides correct render props based on state", () => {
 		let receivedProps: FormControlRenderProps | null = null;
 
@@ -193,12 +188,10 @@ describe("FormField", () => {
 			</FormField>,
 		);
 
-		// Now it should have aria-invalid and aria-describedby (pointing to description + error)
 		expect(receivedProps!["aria-describedby"]).toBeDefined();
 		expect(receivedProps!["aria-invalid"]).toBe(true);
 	});
 
-	// API CONTRACT
 	it("forwards ref to container div", () => {
 		const ref = createRef<HTMLDivElement>();
 

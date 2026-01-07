@@ -13,12 +13,10 @@ type ToggleGroupBaseProps = Omit<ComponentProps<"div">, "children"> & {
 export type ToggleGroupProps = ToggleGroupBaseProps & UseToggleGroupOptions;
 
 function ToggleGroup({
-	// Hook options
 	type,
 	size = "md",
 	variant = "ring",
 	orientation = "horizontal",
-	// Element props
 	children,
 	className,
 	ref,
@@ -26,31 +24,29 @@ function ToggleGroup({
 }: ToggleGroupProps) {
 	const containerRef = useRef<HTMLDivElement>(null);
 
-	// Build hook options based on type
 	const hookOptions =
 		type === "single"
 			? {
-					type: "single" as const,
-					value: (props as { value: string | null }).value,
-					onValueChange: (props as { onValueChange: (v: string | null) => void })
-						.onValueChange,
-					size,
-					variant,
-					orientation,
-				}
+				type: "single" as const,
+				value: (props as { value: string | null }).value,
+				onValueChange: (props as { onValueChange: (v: string | null) => void })
+					.onValueChange,
+				size,
+				variant,
+				orientation,
+			}
 			: {
-					type: "multiple" as const,
-					values: (props as { values: string[] }).values,
-					onValuesChange: (props as { onValuesChange: (v: string[]) => void })
-						.onValuesChange,
-					size,
-					variant,
-					orientation,
-				};
+				type: "multiple" as const,
+				values: (props as { values: string[] }).values,
+				onValuesChange: (props as { onValuesChange: (v: string[]) => void })
+					.onValuesChange,
+				size,
+				variant,
+				orientation,
+			};
 
 	const { contextValue, containerProps } = useToggleGroup(hookOptions);
 
-	// Ref merging
 	const combinedRef = (node: HTMLDivElement | null) => {
 		containerRef.current = node;
 		if (typeof ref === "function") {
@@ -60,7 +56,6 @@ function ToggleGroup({
 		}
 	};
 
-	// Extract non-hook props for spreading
 	const {
 		value: _value,
 		onValueChange: _onValueChange,
