@@ -425,10 +425,12 @@ export type ToggleGroupContextValue = {
 
 export const ToggleGroupContext = createContext<ToggleGroupContextValue | null>(null);
 
-export function useToggleGroupContext() {
+export function useToggleGroupContext(componentName: string) {
   const context = useContext(ToggleGroupContext);
   if (!context) {
-    throw new Error("ToggleGroupItem must be used within a ToggleGroup provider");
+    throw new Error(
+      `<${componentName}> must be used within a <ToggleGroup> provider`
+    );
   }
   return context;
 }
@@ -443,7 +445,7 @@ export function useToggleGroupContext() {
 
 // Children consume context
 function ToggleGroupItem({ value, children }) {
-  const { size, isItemSelected, onItemToggle } = useToggleGroupContext();
+  const { size, isItemSelected, onItemToggle } = useToggleGroupContext("ToggleGroupItem");
   const selected = isItemSelected(value);
 
   return (
@@ -463,7 +465,7 @@ function ToggleGroupItem({ value, children }) {
 **Critical hooks:**
 ```tsx
 function DialogContent({ children, className }) {
-  const { isOpen, onOpenChange } = useDialogContext();
+  const { isOpen, onOpenChange } = useDialogContext("DialogContent");
   const contentRef = useRef<HTMLDivElement>(null);
 
   // Exit animation - delays unmount for close animation
@@ -957,7 +959,7 @@ function ToggleGroupItem({ value }) {
 ```tsx
 // CORRECT - child consumes context
 function ToggleGroupItem({ value }) {
-  const { isItemSelected, onItemToggle } = useToggleGroupContext();
+  const { isItemSelected, onItemToggle } = useToggleGroupContext("ToggleGroupItem");
   const selected = isItemSelected(value);
   // ...
 }
@@ -1010,4 +1012,3 @@ function ToggleGroupItem({ value }) {
 | DroppableZone | - | DnD-kit integration |
 | DropIndicator | - | Drag feedback |
 | EmptyState | default, active | sm, md, lg sizes |
-

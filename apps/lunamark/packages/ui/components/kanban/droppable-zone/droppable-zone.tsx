@@ -2,19 +2,19 @@
 
 import { CollisionPriority } from "@dnd-kit/abstract";
 import { useDroppable } from "@dnd-kit/react";
-import type { ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import { cn } from "../../../utils/cn";
+import { mergeRefs } from "../../../utils/merge-refs";
 
-export interface DroppableZoneProps {
+export type DroppableZoneProps = Omit<ComponentProps<"div">, "children"> & {
   id: string;
   type?: string;
   accept?: string[];
   data?: Record<string, unknown>;
   disabled?: boolean;
-  className?: string;
   activeClassName?: string;
   children: ReactNode | ((isDropTarget: boolean) => ReactNode);
-}
+};
 
 export function DroppableZone({
   id,
@@ -25,8 +25,10 @@ export function DroppableZone({
   className,
   activeClassName,
   children,
+  ref,
+  ...props
 }: DroppableZoneProps) {
-  const { ref, isDropTarget } = useDroppable({
+  const { ref: droppableRef, isDropTarget } = useDroppable({
     id,
     type,
     collisionPriority: CollisionPriority.Low,
@@ -35,10 +37,13 @@ export function DroppableZone({
     disabled,
   });
 
+  const combinedRef = mergeRefs(droppableRef, ref);
+
   return (
     <div
-      ref={ref}
+      ref={combinedRef}
       className={cn(className, isDropTarget && activeClassName)}
+      {...props}
     >
       {typeof children === "function" ? children(isDropTarget) : children}
     </div>

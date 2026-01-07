@@ -5,7 +5,7 @@ import {
 	FloatingPortal,
 } from "@floating-ui/react";
 import { X } from "lucide-react";
-import { useExitAnimation } from "../../hooks/use-exit-animation";
+import { useExitAnimation } from "@ui/hooks/animation/use-exit-animation";
 import { cn } from "../../utils/cn";
 import { chipVariants } from "./multi-select-chips.variants";
 import { SelectedChip } from "./selected-chip";

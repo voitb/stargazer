@@ -17,8 +17,8 @@ import {
 	type FloatingContext,
 } from "@floating-ui/react";
 import { useCallback, useId, useRef, useState } from "react";
-import { useControllableState } from "../../hooks/use-controllable-state";
-import { useExitAnimation } from "../../hooks/use-exit-animation";
+import { useControllableState } from "@ui/hooks/state/use-controllable-state";
+import { useExitAnimation } from "@ui/hooks/animation/use-exit-animation";
 
 export type UseDropdownOptions = {
 	defaultOpen?: boolean;

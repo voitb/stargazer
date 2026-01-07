@@ -3,8 +3,9 @@
 import type { VariantProps } from "class-variance-authority";
 import type { ChangeEvent, ComponentProps } from "react";
 import { useEffect, useRef } from "react";
-import { useControllableState } from "../../hooks/use-controllable-state";
+import { useControllableState } from "@ui/hooks/state/use-controllable-state";
 import { cn } from "../../utils/cn";
+import { mergeRefs } from "../../utils/merge-refs";
 import { checkboxVariants } from "./checkbox.variants";
 
 type CheckboxProps = Omit<
@@ -50,16 +51,11 @@ function Checkbox({
     setIsChecked(event.target.checked);
   };
 
+  const combinedRef = mergeRefs(inputRef, ref);
+
   return (
     <input
-      ref={(node) => {
-        inputRef.current = node;
-        if (typeof ref === "function") {
-          ref(node);
-        } else if (ref) {
-          ref.current = node;
-        }
-      }}
+      ref={combinedRef}
       type="checkbox"
       checked={isChecked}
       data-state={dataState}

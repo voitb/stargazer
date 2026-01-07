@@ -71,7 +71,6 @@ describe("useControllableState", () => {
 		it("maintains initial control mode throughout component lifecycle", () => {
 			const onChange = vi.fn();
 
-			// Start UNCONTROLLED (value=undefined)
 			const uncontrolled = renderHook(
 				({ value }) =>
 					useControllableState({ value, defaultValue: "default", onChange }),
@@ -83,11 +82,9 @@ describe("useControllableState", () => {
 			});
 			expect(uncontrolled.result.current[0]).toBe("updated");
 
-			// Try to switch to controlled - should be ignored
 			uncontrolled.rerender({ value: "controlled-attempt" });
 			expect(uncontrolled.result.current[0]).toBe("updated");
 
-			// Start CONTROLLED (value defined)
 			const controlled = renderHook(
 				({ value }) =>
 					useControllableState({ value, defaultValue: "default", onChange }),
@@ -100,7 +97,6 @@ describe("useControllableState", () => {
 			expect(controlled.result.current[0]).toBe("controlled");
 			expect(onChange).toHaveBeenCalledWith("attempt-update");
 
-			// Try to switch to uncontrolled - should stay controlled
 			controlled.rerender({ value: undefined });
 			act(() => {
 				controlled.result.current[1]("still-controlled");

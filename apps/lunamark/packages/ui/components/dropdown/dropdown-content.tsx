@@ -5,7 +5,7 @@ import { FloatingPortal, FloatingFocusManager } from "@floating-ui/react";
 import { cn } from "../../utils/cn";
 import { useDropdownContext } from "./dropdown.context";
 import { dropdownContentVariants } from "./dropdown.variants";
-import { useExitAnimation } from "../../hooks/use-exit-animation";
+import { useExitAnimation } from "@ui/hooks/animation/use-exit-animation";
 
 export type DropdownContentProps = {
 	children: ReactNode;

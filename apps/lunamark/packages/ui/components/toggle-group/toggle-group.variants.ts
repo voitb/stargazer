@@ -10,11 +10,8 @@ export const toggleGroupVariants = cva(
       },
       variant: {
         ring: "gap-1",
-        contained: [
-          "gap-1 p-1 rounded-lg",
-          "bg-[rgb(var(--color-neutral-background-3))/0.5]",
-          "border border-[rgb(var(--color-neutral-stroke-1))/0.3]",
-        ],
+        contained:
+          "gap-1 p-1 rounded-lg bg-[rgb(var(--color-neutral-background-3))/0.5] border border-[rgb(var(--color-neutral-stroke-1))/0.3]",
       },
     },
     defaultVariants: {
@@ -59,9 +56,6 @@ export const toggleGroupItemVariants = cva(
 
 export const toggleGroupItemSelectedVariants = {
   ring: "ring-2 ring-[rgb(var(--color-brand-background))] ring-offset-1 ring-offset-[rgb(var(--color-neutral-background-1))]",
-  contained: [
-    "bg-[rgb(var(--color-neutral-background-1))]",
-    "text-[rgb(var(--color-neutral-foreground-1))]",
-    "shadow-sm border border-[rgb(var(--color-neutral-stroke-1))/0.5]",
-  ].join(" "),
+  contained:
+    "bg-[rgb(var(--color-neutral-background-1))] text-[rgb(var(--color-neutral-foreground-1))] shadow-sm border border-[rgb(var(--color-neutral-stroke-1))/0.5]",
 };

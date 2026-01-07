@@ -1,8 +1,9 @@
 "use client";
 
 import type { VariantProps } from "class-variance-authority";
-import type { ComponentProps, ReactNode, RefCallback } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import { cn } from "../../../utils/cn";
+import { mergeRefs } from "../../../utils/merge-refs";
 import { ColumnContext, type ColumnContextValue } from "./column.context";
 import { columnVariants } from "./column.variants";
 import { useColumn } from "./use-column";
@@ -17,15 +18,13 @@ export type ColumnProps = Omit<ComponentProps<"div">, "children"> &
 		collapsed?: boolean;
 		onCollapsedChange?: (collapsed: boolean) => void;
 		items?: unknown[];
-		fluid?: boolean;
-		size?: "sm" | "md" | "lg";
 		children: ReactNode;
 	};
 
 export function Column({
 	id,
 	className,
-	variant: variantProp,
+	variant = "default",
 	fluid = true,
 	size = "md",
 	collapsed: collapsedProp,
@@ -50,7 +49,7 @@ export function Column({
 		items,
 	});
 
-	const variant = column.isDropTarget ? "active" : (variantProp ?? "default");
+	const internalVariant = column.isDropTarget ? "active" : variant;
 
 	const contextValue: ColumnContextValue = {
 		isDropTarget: column.isDropTarget,
@@ -63,14 +62,7 @@ export function Column({
 		contentId: column.contentId,
 	};
 
-	const combinedRef: RefCallback<HTMLDivElement> = (node) => {
-		column.droppableRef(node);
-		if (typeof ref === "function") {
-			ref(node);
-		} else if (ref) {
-			ref.current = node;
-		}
-	};
+	const combinedRef = mergeRefs(column.droppableRef, ref);
 
 	return (
 		<ColumnContext.Provider value={contextValue}>
@@ -81,7 +73,7 @@ export function Column({
 				data-state={column.dataState}
 				data-drop-target={column.isDropTarget}
 				className={cn(
-					columnVariants({ variant, fluid, collapsed: column.isCollapsed }),
+					columnVariants({ variant: internalVariant, fluid, collapsed: column.isCollapsed }),
 					className
 				)}
 				{...props}

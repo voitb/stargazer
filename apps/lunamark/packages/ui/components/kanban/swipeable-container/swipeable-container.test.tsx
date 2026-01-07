@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { SwipeableContainer } from "./swipeable-container";
 
-vi.mock("@ui/hooks/use-swipe-navigation", () => ({
+vi.mock("@ui/hooks/navigation/use-swipe-navigation", () => ({
     useSwipeNavigation: ({ onIndexChange: _onIndexChange }: { onIndexChange: (index: number) => void }) => ({
         handleTouchStart: vi.fn(),
         handleTouchMove: vi.fn(),

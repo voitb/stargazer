@@ -152,7 +152,7 @@ describe("ToggleGroup", () => {
 		it("throws when ToggleGroupItem used outside provider", () => {
 			const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
 			expect(() => render(<ToggleGroupItem value="a">A</ToggleGroupItem>)).toThrow(
-				"ToggleGroupItem must be used within a ToggleGroup provider"
+				"<ToggleGroupItem> must be used within a <ToggleGroup> provider"
 			);
 			consoleError.mockRestore();
 		});

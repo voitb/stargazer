@@ -2,7 +2,7 @@
 
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps, ReactNode } from "react";
-import { useControllableState } from "../../hooks/use-controllable-state";
+import { useControllableState } from "@ui/hooks/state/use-controllable-state";
 import { cn } from "../../utils/cn";
 import { toggleVariants } from "./toggle.variants";
 

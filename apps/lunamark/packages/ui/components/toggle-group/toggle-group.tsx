@@ -2,6 +2,7 @@
 
 import { useRef, type ComponentProps, type ReactNode } from "react";
 import { cn } from "../../utils/cn";
+import { mergeRefs } from "../../utils/merge-refs";
 import { ToggleGroupContext } from "./toggle-group.context";
 import { toggleGroupVariants } from "./toggle-group.variants";
 import { useToggleGroup, type UseToggleGroupOptions } from "./use-toggle-group";
@@ -47,14 +48,7 @@ function ToggleGroup({
 
 	const { contextValue, containerProps } = useToggleGroup(hookOptions);
 
-	const combinedRef = (node: HTMLDivElement | null) => {
-		containerRef.current = node;
-		if (typeof ref === "function") {
-			ref(node);
-		} else if (ref) {
-			(ref as React.RefObject<HTMLDivElement | null>).current = node;
-		}
-	};
+	const combinedRef = mergeRefs(containerRef, ref);
 
 	const {
 		value: _value,

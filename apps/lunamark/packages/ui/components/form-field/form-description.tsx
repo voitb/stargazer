@@ -7,7 +7,7 @@ import type { ComponentProps } from "react";
 type FormDescriptionProps = ComponentProps<"p">;
 
 function FormDescription({ className, id, ref, ...props }: FormDescriptionProps) {
-	const { descriptionId } = useFormFieldContext();
+	const { descriptionId } = useFormFieldContext("FormDescription");
 
 	return (
 		<p

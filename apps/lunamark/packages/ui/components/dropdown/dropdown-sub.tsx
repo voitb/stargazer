@@ -30,8 +30,8 @@ import {
 	dropdownItemVariants,
 	dropdownSubTriggerChevronVariants,
 } from "./dropdown.variants";
-import { useControllableState } from "../../hooks/use-controllable-state";
-import { useExitAnimation } from "../../hooks/use-exit-animation";
+import { useControllableState } from "@ui/hooks/state/use-controllable-state";
+import { useExitAnimation } from "@ui/hooks/animation/use-exit-animation";
 import { ChevronRightIcon } from "../icons";
 
 
@@ -196,13 +196,7 @@ function DropdownSubTrigger({
 }: DropdownSubTriggerProps) {
 	const parentSubContext = useDropdownSubContext();
 	const parentContext = useDropdownContext("DropdownSubTrigger");
-	const subContext = useDropdownSubContext();
-
-	if (!subContext) {
-		throw new Error(
-			"<DropdownSubTrigger> must be used within a <DropdownSub> provider"
-		);
-	}
+	const subContext = useDropdownSubContext("DropdownSubTrigger");
 
 	const parentList = parentSubContext
 		? {
@@ -300,13 +294,7 @@ function DropdownSubContent({
 	className,
 	...props
 }: DropdownSubContentProps) {
-	const subContext = useDropdownSubContext();
-
-	if (!subContext) {
-		throw new Error(
-			"<DropdownSubContent> must be used within a <DropdownSub> provider"
-		);
-	}
+	const subContext = useDropdownSubContext("DropdownSubContent");
 
 	const {
 		isOpen,

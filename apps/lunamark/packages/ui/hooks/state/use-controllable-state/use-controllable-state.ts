@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useRef, useState, useTransition } from "react";
 
 type UseControllableStateProps<T> = {
   value?: T;
@@ -14,24 +14,23 @@ export function useControllableState<T>({
   onChange,
 }: UseControllableStateProps<T>): [T, (value: T) => void] {
   const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
+  const [, startTransition] = useTransition();
 
-  // Stable reference to initial controlled mode - prevents mode switching bugs
   const isControlledRef = useRef(controlledValue !== undefined);
   const isControlled = isControlledRef.current;
 
   const value = isControlled ? controlledValue! : uncontrolledValue;
 
-  const setValue = useCallback(
-    (nextValue: T) => {
+  function setValue(nextValue: T) {
+    startTransition(() => {
       if (isControlled) {
         onChange?.(nextValue);
       } else {
         setUncontrolledValue(nextValue);
         onChange?.(nextValue);
       }
-    },
-    [isControlled, onChange]
-  );
+    });
+  }
 
   return [value, setValue];
 }

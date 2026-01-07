@@ -1,20 +1,7 @@
 import type { ComponentProps } from "react";
-import { cva, type VariantProps } from "class-variance-authority";
+import type { VariantProps } from "class-variance-authority";
 import { cn } from "../../utils/cn";
-
-const dotIconVariants = cva("", {
-	variants: {
-		size: {
-			xs: "h-1.5 w-1.5",
-			sm: "h-2 w-2",
-			md: "h-2.5 w-2.5",
-			lg: "h-3 w-3",
-		},
-	},
-	defaultVariants: {
-		size: "sm",
-	},
-});
+import { dotIconVariants } from "./icon.variants";
 
 type DotIconProps = Omit<ComponentProps<"svg">, "children"> &
 	VariantProps<typeof dotIconVariants>;
@@ -35,5 +22,5 @@ function DotIcon({ size, className, ref, ...props }: DotIconProps) {
 	);
 }
 
-export { DotIcon, dotIconVariants };
+export { DotIcon };
 export type { DotIconProps };

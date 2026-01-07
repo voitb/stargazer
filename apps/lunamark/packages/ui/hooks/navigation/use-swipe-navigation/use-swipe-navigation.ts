@@ -1,18 +1,27 @@
-import { useRef, useCallback, useEffect } from "react";
+"use client";
+
+import { useRef, useEffect, type RefObject } from "react";
 
 interface UseSwipeNavigationOptions {
   itemCount: number;
   activeIndex: number;
   onIndexChange: (index: number) => void;
   threshold?: number;
-  enableKeyboard?: boolean; // For arrow key navigation
+  enableKeyboard?: boolean;
 }
 
+type SwipeTouchEvent = {
+  touches: {
+    length: number;
+    [index: number]: { clientX: number };
+  };
+};
+
 interface UseSwipeNavigationReturn {
-  handleTouchStart: (e: React.TouchEvent) => void;
-  handleTouchMove: (e: React.TouchEvent) => void;
+  handleTouchStart: (e: SwipeTouchEvent) => void;
+  handleTouchMove: (e: SwipeTouchEvent) => void;
   handleTouchEnd: () => void;
-  containerRef: React.RefObject<HTMLDivElement>;
+  containerRef: RefObject<HTMLDivElement | null>;
 }
 
 export function useSwipeNavigation({
@@ -26,15 +35,15 @@ export function useSwipeNavigation({
   const touchEndX = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+  function handleTouchStart(e: SwipeTouchEvent) {
     touchStartX.current = e.touches[0].clientX;
-  }, []);
+  }
 
-  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+  function handleTouchMove(e: SwipeTouchEvent) {
     touchEndX.current = e.touches[0].clientX;
-  }, []);
+  }
 
-  const handleTouchEnd = useCallback(() => {
+  function handleTouchEnd() {
     const diff = touchStartX.current - touchEndX.current;
 
     if (Math.abs(diff) > threshold) {
@@ -44,9 +53,8 @@ export function useSwipeNavigation({
         onIndexChange(activeIndex - 1);
       }
     }
-  }, [activeIndex, itemCount, onIndexChange, threshold]);
+  }
 
-  // Keyboard navigation for accessibility
   useEffect(() => {
     if (!enableKeyboard || !containerRef.current) return;
 

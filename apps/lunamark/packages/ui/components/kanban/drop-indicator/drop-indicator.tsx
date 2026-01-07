@@ -1,11 +1,28 @@
-export interface DropIndicatorProps {
-  isVisible: boolean;
-}
+import type { ComponentProps } from "react";
+import { cn } from "../../../utils/cn";
 
-export function DropIndicator({ isVisible }: DropIndicatorProps) {
+type DropIndicatorProps = ComponentProps<"div"> & {
+  isVisible: boolean;
+};
+
+export function DropIndicator({
+  isVisible,
+  className,
+  ref,
+  ...props
+}: DropIndicatorProps) {
   if (!isVisible) return null;
 
   return (
-    <div className="h-1 bg-[rgb(var(--color-brand-background))] rounded-full mx-1 my-1 transition-all duration-150 animate-pulse" />
+    <div
+      ref={ref}
+      className={cn(
+        "h-1 rounded-full mx-1 my-1 transition-all duration-150 animate-pulse bg-[rgb(var(--color-brand-background))]",
+        className
+      )}
+      {...props}
+    />
   );
 }
+
+export type { DropIndicatorProps };

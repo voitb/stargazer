@@ -1,29 +1,16 @@
 import type { ComponentProps } from "react";
-import { cva, type VariantProps } from "class-variance-authority";
+import type { VariantProps } from "class-variance-authority";
 import { cn } from "../../utils/cn";
-
-const closeIconVariants = cva("", {
-	variants: {
-		size: {
-			xs: "h-3 w-3",
-			sm: "h-4 w-4",
-			md: "h-5 w-5",
-			lg: "h-6 w-6",
-		},
-	},
-	defaultVariants: {
-		size: "sm",
-	},
-});
+import { iconVariants } from "./icon.variants";
 
 type CloseIconProps = Omit<ComponentProps<"svg">, "children"> &
-	VariantProps<typeof closeIconVariants>;
+	VariantProps<typeof iconVariants>;
 
 function CloseIcon({ size, className, ref, ...props }: CloseIconProps) {
 	return (
 		<svg
 			ref={ref}
-			className={cn(closeIconVariants({ size }), className)}
+			className={cn(iconVariants({ size }), className)}
 			xmlns="http://www.w3.org/2000/svg"
 			viewBox="0 0 24 24"
 			fill="none"
@@ -40,5 +27,5 @@ function CloseIcon({ size, className, ref, ...props }: CloseIconProps) {
 	);
 }
 
-export { CloseIcon, closeIconVariants };
+export { CloseIcon };
 export type { CloseIconProps };

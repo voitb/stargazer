@@ -16,8 +16,8 @@ import {
 	type FloatingContext,
 } from "@floating-ui/react";
 import { useId } from "react";
-import { useControllableState } from "../../hooks/use-controllable-state";
-import { useExitAnimation } from "../../hooks/use-exit-animation";
+import { useControllableState } from "@ui/hooks/state/use-controllable-state";
+import { useExitAnimation } from "@ui/hooks/animation/use-exit-animation";
 
 export type UsePopoverOptions = {
 	defaultOpen?: boolean;

@@ -1,4 +1,7 @@
+import type { VariantProps } from "class-variance-authority";
+import type { ComponentProps } from "react";
 import { cn } from "@ui/utils";
+import { columnTabVariants, columnTabsVariants } from "./column-tabs.variants";
 
 interface ColumnTab {
   id: string;
@@ -7,11 +10,11 @@ interface ColumnTab {
   color?: string;
 }
 
-interface ColumnTabsProps {
+interface ColumnTabsProps extends ComponentProps<"div"> {
   tabs: ColumnTab[];
   activeIndex: number;
   onTabChange: (index: number) => void;
-  className?: string;
+  variant?: VariantProps<typeof columnTabsVariants>["variant"];
 }
 
 export function ColumnTabs({
@@ -19,20 +22,13 @@ export function ColumnTabs({
   activeIndex,
   onTabChange,
   className,
+  variant,
 }: ColumnTabsProps) {
   return (
     <div
       role="tablist"
       aria-label="Kanban columns"
-      className={cn(
-        "flex gap-2 px-4 py-3",
-        "overflow-x-auto scrollbar-none",
-        "sticky top-0 z-10",
-        "bg-[rgb(var(--color-neutral-background-1))/0.9]",
-        "backdrop-blur-md",
-        "border-b border-[rgb(var(--color-neutral-stroke-1))/0.2]",
-        className,
-      )}
+      className={cn(columnTabsVariants({ variant }), className)}
     >
       {tabs.map((tab, index) => (
         <button
@@ -44,13 +40,9 @@ export function ColumnTabs({
           tabIndex={activeIndex === index ? 0 : -1}
           onClick={() => onTabChange(index)}
           className={cn(
-            "flex items-center px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap",
-            "transition-all duration-200",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--color-brand-background))/0.5]",
-            "min-h-11",
-            activeIndex === index
-              ? "bg-[rgb(var(--color-brand-background))] text-[rgb(var(--color-brand-foreground-on-brand))] shadow-md"
-              : "bg-[rgb(var(--color-neutral-background-3))] text-[rgb(var(--color-neutral-foreground-2))] hover:bg-[rgb(var(--color-neutral-background-3))/0.8]",
+            columnTabVariants({
+              state: activeIndex === index ? "active" : "inactive",
+            }),
           )}
         >
           {tab.color && (
@@ -69,3 +61,5 @@ export function ColumnTabs({
     </div>
   );
 }
+
+export type { ColumnTab, ColumnTabsProps };

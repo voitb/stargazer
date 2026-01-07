@@ -1,8 +1,8 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useId } from "react";
 import { DialogContext, type DialogContextValue } from "./dialog.context";
+import { useDialog } from "./use-dialog";
 
 export type DialogProps = {
 	open: boolean;
@@ -17,15 +17,21 @@ export function Dialog({
 	closeOnBackdropClick = true,
 	children,
 }: DialogProps) {
-	const titleId = useId();
-	const descriptionId = useId();
-
-	const contextValue: DialogContextValue = {
+	const dialog = useDialog({
 		open,
 		onOpenChange,
 		closeOnBackdropClick,
-		titleId,
-		descriptionId,
+	});
+
+	const contextValue: DialogContextValue = {
+		open: dialog.open,
+		onOpenChange: dialog.onOpenChange,
+		titleId: dialog.titleId,
+		descriptionId: dialog.descriptionId,
+		contentRef: dialog.contentRef,
+		shouldRender: dialog.shouldRender,
+		handleBackdropClick: dialog.handleBackdropClick,
+		dataState: dialog.dataState,
 	};
 
 	return (

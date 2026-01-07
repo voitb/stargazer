@@ -9,7 +9,7 @@ export type ColumnContextValue = {
 	itemCount: number;
 	isEmpty: boolean;
 	dataState: "default" | "active" | "collapsed";
-	size: "sm" | "md" | "lg";
+	size: "sm" | "md" | "lg" | null;
 	contentId: string;
 };
 

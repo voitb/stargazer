@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { FloatingPortal } from "@floating-ui/react";
-import { useExitAnimation } from "../../hooks/use-exit-animation";
+import { useExitAnimation } from "@ui/hooks/animation/use-exit-animation";
 import { cn } from "../../utils/cn";
 import { useTooltipContext } from "./tooltip.context";
 import {

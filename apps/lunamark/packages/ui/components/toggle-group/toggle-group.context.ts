@@ -21,11 +21,13 @@ export const ToggleGroupContext = createContext<ToggleGroupContextValue | null>(
 	null
 );
 
-export function useToggleGroupContext(): ToggleGroupContextValue {
+export function useToggleGroupContext(
+	componentName: string
+): ToggleGroupContextValue {
 	const context = useContext(ToggleGroupContext);
 	if (!context) {
 		throw new Error(
-			"ToggleGroupItem must be used within a ToggleGroup provider"
+			`<${componentName}> must be used within a <ToggleGroup> provider`
 		);
 	}
 	return context;
