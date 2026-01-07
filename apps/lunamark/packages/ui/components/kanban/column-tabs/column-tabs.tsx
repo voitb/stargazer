@@ -47,7 +47,7 @@ export function ColumnTabs({
             "flex items-center px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap",
             "transition-all duration-200",
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--color-brand-background))/0.5]",
-            "min-h-11", // Accessibility: minimum touch target
+            "min-h-11",
             activeIndex === index
               ? "bg-[rgb(var(--color-brand-background))] text-[rgb(var(--color-brand-foreground-on-brand))] shadow-md"
               : "bg-[rgb(var(--color-neutral-background-3))] text-[rgb(var(--color-neutral-foreground-2))] hover:bg-[rgb(var(--color-neutral-background-3))/0.8]",

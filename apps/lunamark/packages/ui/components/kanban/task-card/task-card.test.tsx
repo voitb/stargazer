@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { createRef } from "react";
 import { describe, expect, it, vi } from "vitest";
-import { TaskCard, TaskCardHeader, TaskCardContent, TaskCardFooter } from "./task-card";
+import { TaskCard, TaskCardHeader, TaskCardContent, TaskCardFooter } from "./index";
 
 describe("TaskCard", () => {
 	it("renders children", () => {
