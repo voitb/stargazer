@@ -8,6 +8,8 @@ import { X } from "lucide-react";
 import { useExitAnimation } from "../../hooks/use-exit-animation";
 import { cn } from "../../utils/cn";
 import { chipVariants } from "./multi-select-chips.variants";
+import { SelectedChip } from "./selected-chip";
+import { UnselectedChip } from "./unselected-chip";
 import {
 	useMultiSelectChips,
 	type MultiSelectChipsOption,
@@ -24,50 +26,6 @@ export interface MultiSelectChipsProps {
 	size?: "sm" | "md";
 	"aria-label"?: string;
 	className?: string;
-}
-
-interface SelectedChipProps {
-	label: string;
-	size: "sm" | "md";
-	onRemove: () => void;
-}
-
-interface UnselectedChipProps {
-	label: string;
-	size: "sm" | "md";
-	onSelect: () => void;
-}
-
-function SelectedChip({ label, size, onRemove }: SelectedChipProps) {
-	return (
-		<button
-			type="button"
-			onClick={onRemove}
-			data-state="selected"
-			aria-pressed={true}
-			className={cn(chipVariants({ variant: "selected", size }))}
-		>
-			{label}
-			<X
-				className={size === "sm" ? "h-2.5 w-2.5" : "h-3 w-3"}
-				aria-hidden="true"
-			/>
-		</button>
-	);
-}
-
-function UnselectedChip({ label, size, onSelect }: UnselectedChipProps) {
-	return (
-		<button
-			type="button"
-			className={chipVariants({ variant: "unselected", size })}
-			data-state="unselected"
-			aria-pressed={false}
-			onClick={onSelect}
-		>
-			{label}
-		</button>
-	);
 }
 
 function MultiSelectChips({
@@ -190,7 +148,7 @@ function MultiSelectChips({
 														size,
 													}),
 													activeIndex === index &&
-														"ring-2 ring-[rgb(var(--color-neutral-stroke-focus))]",
+													"ring-2 ring-[rgb(var(--color-neutral-stroke-focus))]",
 												)}
 												{...getItemProps({
 													onClick: () => handleToggle(option.value),
