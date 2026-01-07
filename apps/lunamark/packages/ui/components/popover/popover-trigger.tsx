@@ -32,7 +32,6 @@ function PopoverTrigger({ children }: PopoverTriggerProps) {
 		return children(triggerProps);
 	}
 
-	// Destructure isOpen to avoid passing it to the DOM element
 	const { isOpen: _isOpen, ...domProps } = triggerProps;
 
 	return (

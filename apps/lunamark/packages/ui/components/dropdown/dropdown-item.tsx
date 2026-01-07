@@ -15,10 +15,6 @@ import {
 import { useControllableState } from "../../hooks/use-controllable-state";
 import { CheckIcon, DotIcon } from "../icons";
 
-// ============================================================================
-// DropdownItem - Basic menu item
-// ============================================================================
-
 export type DropdownItemProps = {
 	children: ReactNode;
 	onSelect?: () => void;
@@ -48,11 +44,9 @@ function DropdownItem({
 	textValue,
 	...props
 }: DropdownItemProps) {
-	// Check if we're in a submenu context
 	const subContext = useDropdownSubContext();
 	const mainContext = useDropdownContext("DropdownItem");
 
-	// Use submenu context if available, otherwise use main context
 	const context = subContext
 		? {
 				setIsOpen: subContext.setIsOpen,
@@ -74,7 +68,6 @@ function DropdownItem({
 	const itemRef = useRef<HTMLButtonElement>(null);
 	const index = useRef<number>(-1);
 
-	// Register item on mount
 	const refCallback = useCallback(
 		(node: HTMLButtonElement | null) => {
 			itemRef.current = node;
@@ -92,7 +85,6 @@ function DropdownItem({
 		[listRef, labelsRef, textValue]
 	);
 
-	// Cleanup on unmount
 	useEffect(() => {
 		return () => {
 			if (itemRef.current) {
@@ -111,7 +103,6 @@ function DropdownItem({
 		if (disabled) return;
 		onSelect?.();
 		setIsOpen(false);
-		// Also close parent if in submenu
 		if (subContext) {
 			subContext.closeParent();
 		}
@@ -146,10 +137,6 @@ function DropdownItem({
 		</button>
 	);
 }
-
-// ============================================================================
-// DropdownCheckboxItem - Checkbox-style menu item
-// ============================================================================
 
 export type DropdownCheckboxItemProps = {
 	children: ReactNode;
@@ -192,7 +179,6 @@ function DropdownCheckboxItem({
 	const itemRef = useRef<HTMLButtonElement>(null);
 	const index = useRef<number>(-1);
 
-	// Register item on mount
 	const refCallback = useCallback(
 		(node: HTMLButtonElement | null) => {
 			itemRef.current = node;
@@ -210,7 +196,6 @@ function DropdownCheckboxItem({
 		[listRef, labelsRef, textValue]
 	);
 
-	// Cleanup on unmount
 	useEffect(() => {
 		return () => {
 			if (itemRef.current) {
@@ -228,7 +213,6 @@ function DropdownCheckboxItem({
 	const handleToggle = useCallback(() => {
 		if (disabled) return;
 		setIsChecked(!isChecked);
-		// Note: Checkbox items don't close the menu on toggle
 	}, [disabled, isChecked, setIsChecked]);
 
 	return (
@@ -248,7 +232,7 @@ function DropdownCheckboxItem({
 				dropdownItemVariants({
 					highlighted: isHighlighted,
 					disabled,
-					inset: true, // Always inset for indicator space
+					inset: true,
 				}),
 				className
 			)}
@@ -269,10 +253,6 @@ function DropdownCheckboxItem({
 		</button>
 	);
 }
-
-// ============================================================================
-// DropdownRadioItem - Radio-style menu item
-// ============================================================================
 
 export type DropdownRadioItemProps = {
 	children: ReactNode;
@@ -311,7 +291,6 @@ function DropdownRadioItem({
 	const itemRef = useRef<HTMLButtonElement>(null);
 	const index = useRef<number>(-1);
 
-	// Register item on mount
 	const refCallback = useCallback(
 		(node: HTMLButtonElement | null) => {
 			itemRef.current = node;
@@ -329,7 +308,6 @@ function DropdownRadioItem({
 		[listRef, labelsRef, textValue]
 	);
 
-	// Cleanup on unmount
 	useEffect(() => {
 		return () => {
 			if (itemRef.current) {
@@ -347,7 +325,6 @@ function DropdownRadioItem({
 	const handleSelect = useCallback(() => {
 		if (disabled) return;
 		onValueChange(value);
-		// Note: Radio items don't close the menu on selection
 	}, [disabled, onValueChange, value]);
 
 	return (
@@ -367,7 +344,7 @@ function DropdownRadioItem({
 				dropdownItemVariants({
 					highlighted: isHighlighted,
 					disabled,
-					inset: true, // Always inset for indicator space
+					inset: true,
 				}),
 				className
 			)}

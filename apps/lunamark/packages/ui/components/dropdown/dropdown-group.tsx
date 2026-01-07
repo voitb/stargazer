@@ -6,9 +6,6 @@ import { cn } from "../../utils/cn";
 import { DropdownRadioGroupContext } from "./dropdown.context";
 import { useControllableState } from "../../hooks/use-controllable-state";
 
-// ============================================================================
-// DropdownGroup - Simple grouping container
-// ============================================================================
 
 export type DropdownGroupProps = {
 	children: ReactNode;
@@ -33,10 +30,6 @@ function DropdownGroup({
 		</div>
 	);
 }
-
-// ============================================================================
-// DropdownRadioGroup - Radio group container
-// ============================================================================
 
 export type DropdownRadioGroupProps = {
 	children: ReactNode;

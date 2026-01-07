@@ -5,7 +5,6 @@ import { axe } from "vitest-axe";
 import { Label } from "./label";
 
 describe("Label", () => {
-	// BEHAVIOR
 	it("renders children correctly", () => {
 		render(<Label>Username</Label>);
 
@@ -18,7 +17,6 @@ describe("Label", () => {
 		expect(screen.getByText("*")).toBeInTheDocument();
 	});
 
-	// ACCESSIBILITY
 	it("associates with input element via htmlFor", () => {
 		render(
 			<>
@@ -42,7 +40,6 @@ describe("Label", () => {
 		expect(results).toHaveNoViolations();
 	});
 
-	// API CONTRACT
 	it("forwards ref to label element", () => {
 		const ref = createRef<HTMLLabelElement>();
 

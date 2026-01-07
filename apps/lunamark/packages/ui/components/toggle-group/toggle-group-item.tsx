@@ -35,7 +35,6 @@ function ToggleGroupItem({
 	const buttonRef = useRef<HTMLButtonElement>(null);
 	const isSelected = isItemSelected(value);
 
-	// Register/unregister item for keyboard navigation
 	useEffect(() => {
 		const element = buttonRef.current;
 		if (element) {
@@ -44,7 +43,6 @@ function ToggleGroupItem({
 		return () => unregisterItem(value);
 	}, [value, registerItem, unregisterItem]);
 
-	// Ref merging
 	const combinedRef = (node: HTMLButtonElement | null) => {
 		buttonRef.current = node;
 		if (typeof ref === "function") {
@@ -54,7 +52,6 @@ function ToggleGroupItem({
 		}
 	};
 
-	// Roving tabindex: only first focusable item (or selected) should have tabIndex 0
 	const isFirstFocusable =
 		type === "single"
 			? groupValue === null || groupValue === value
@@ -62,7 +59,6 @@ function ToggleGroupItem({
 
 	const tabIndex = isSelected || isFirstFocusable ? 0 : -1;
 
-	// ARIA attributes differ between single (radio) and multiple (toggle) modes
 	const ariaProps =
 		type === "single"
 			? { role: "radio" as const, "aria-checked": isSelected }

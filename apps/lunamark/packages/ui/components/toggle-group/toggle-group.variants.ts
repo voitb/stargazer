@@ -57,7 +57,6 @@ export const toggleGroupItemVariants = cva(
   }
 );
 
-// Selected state classes (applied dynamically)
 export const toggleGroupItemSelectedVariants = {
   ring: "ring-2 ring-[rgb(var(--color-brand-background))] ring-offset-1 ring-offset-[rgb(var(--color-neutral-background-1))]",
   contained: [

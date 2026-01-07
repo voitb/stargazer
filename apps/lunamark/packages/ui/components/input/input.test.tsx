@@ -6,7 +6,7 @@ import { axe } from "vitest-axe";
 import { Input } from "./input";
 
 describe("Input", () => {
-	// BEHAVIOR
+
 	it("renders as an input element", () => {
 		render(<Input aria-label="Test input" />);
 
@@ -30,7 +30,6 @@ describe("Input", () => {
 		expect(input).toHaveValue("Hello world");
 	});
 
-	// ACCESSIBILITY
 	it("is keyboard focusable", () => {
 		render(<Input aria-label="Test input" />);
 
@@ -63,7 +62,6 @@ describe("Input", () => {
 		expect(results).toHaveNoViolations();
 	});
 
-	// API CONTRACT
 	it("forwards ref to input element", () => {
 		const ref = createRef<HTMLInputElement>();
 
@@ -104,7 +102,6 @@ describe("Input", () => {
 		expect(screen.getByRole("textbox")).toHaveClass("custom-class");
 	});
 
-	// STATES
 	it("is disabled when disabled prop is set", () => {
 		render(<Input disabled aria-label="Test" />);
 

@@ -49,7 +49,6 @@ export function DialogContent({
 			data-state={dataState}
 			onClick={handleBackdropClick}
 		>
-			{/* Overlay */}
 			<div
 				data-dialog-overlay
 				data-state={dataState}
@@ -57,7 +56,6 @@ export function DialogContent({
 				aria-hidden="true"
 			/>
 
-			{/* Content */}
 			<div
 				ref={combinedRef}
 				role="dialog"

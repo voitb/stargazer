@@ -214,9 +214,7 @@ describe("Dropdown", () => {
 		render(<TestDropdown open={true} />);
 		const results = await axe(document.body, {
 			rules: {
-				// Floating UI focus guards have role="button" without accessible names - known framework issue
 				"aria-command-name": { enabled: false },
-				// Component testing doesn't have page landmarks
 				region: { enabled: false },
 			},
 		});
@@ -249,7 +247,7 @@ describe("Dropdown", () => {
 	});
 
 	it("throws when components used outside provider", () => {
-		const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
+		const consoleError = vi.spyOn(console, "error").mockImplementation(() => { });
 
 		expect(() => render(<DropdownTrigger>Trigger</DropdownTrigger>)).toThrow(
 			"<DropdownTrigger> must be used within a <Dropdown> provider",
