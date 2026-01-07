@@ -58,6 +58,53 @@ describe("FormField", () => {
 		expect(screen.getByText("Invalid email")).toBeInTheDocument();
 	});
 
+	it("renders with horizontal layout variant", () => {
+		const { container } = render(
+			<FormField layout="horizontal">
+				<FormLabel>Email</FormLabel>
+				<FormControl>
+					{(props) => <input type="email" {...props} />}
+				</FormControl>
+			</FormField>,
+		);
+
+		const field = container.firstChild as HTMLElement;
+		expect(field).toHaveClass("flex");
+	});
+
+	it("renders with compact layout variant", () => {
+		render(
+			<FormField layout="compact">
+				<FormLabel>Email</FormLabel>
+				<FormControl>
+					{(props) => <input type="email" {...props} />}
+				</FormControl>
+			</FormField>,
+		);
+
+		expect(screen.getByRole("textbox")).toBeInTheDocument();
+	});
+
+	it("accepts all layout and size props without error", () => {
+		const layouts = ["vertical", "horizontal", "compact"] as const;
+		const sizes = ["sm", "md", "lg"] as const;
+
+		layouts.forEach((layout) => {
+			sizes.forEach((size) => {
+				const { unmount } = render(
+					<FormField layout={layout} size={size}>
+						<FormLabel>Email</FormLabel>
+						<FormControl>
+							{(props) => <input type="email" {...props} />}
+						</FormControl>
+					</FormField>,
+				);
+				expect(screen.getByRole("textbox")).toBeInTheDocument();
+				unmount();
+			});
+		});
+	});
+
 	// ACCESSIBILITY
 	it("associates label with input via htmlFor", () => {
 		render(

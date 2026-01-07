@@ -1,20 +1,25 @@
 "use client";
 
+import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps, ReactNode } from "react";
 import { useId } from "react";
 import { cn } from "../../utils/cn";
+import { filterGroupVariants } from "./filter-group.variants";
 
-type FilterGroupProps = ComponentProps<"div"> & {
-	label: string;
-	visible?: boolean;
-	children: ReactNode;
-};
+type FilterGroupProps = ComponentProps<"div"> &
+	VariantProps<typeof filterGroupVariants> & {
+		label: string;
+		visible?: boolean;
+		children: ReactNode;
+	};
 
 function FilterGroup({
 	label,
 	visible = true,
 	children,
 	className,
+	size,
+	variant,
 	ref,
 	...props
 }: FilterGroupProps) {
@@ -27,7 +32,7 @@ function FilterGroup({
 			ref={ref}
 			role="group"
 			aria-labelledby={labelId}
-			className={cn("flex items-center gap-3", className)}
+			className={cn(filterGroupVariants({ size, variant }), className)}
 			{...props}
 		>
 			<span

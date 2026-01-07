@@ -1,18 +1,26 @@
+import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps } from "react";
 import { cn } from "../../utils/cn";
+import { labelVariants } from "./label.variants";
 
-type LabelProps = ComponentProps<"label"> & {
-	required?: boolean;
-};
+type LabelProps = ComponentProps<"label"> &
+	VariantProps<typeof labelVariants> & {
+		required?: boolean;
+	};
 
-function Label({ className, children, required, ref, ...props }: LabelProps) {
+function Label({
+	className,
+	children,
+	required,
+	variant,
+	size,
+	ref,
+	...props
+}: LabelProps) {
 	return (
 		<label
 			ref={ref}
-			className={cn(
-				"text-sm font-medium leading-none text-[rgb(var(--color-neutral-foreground-1))] peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
-				className
-			)}
+			className={cn(labelVariants({ variant, size }), className)}
 			{...props}
 		>
 			{children}
