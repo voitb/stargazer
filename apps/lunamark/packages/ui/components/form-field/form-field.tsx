@@ -1,7 +1,7 @@
 "use client";
 
 import type { VariantProps } from "class-variance-authority";
-import { useId, type ComponentProps } from "react";
+import { useId, useMemo, type ComponentProps } from "react";
 import { cn } from "../../utils/cn";
 import { formFieldVariants } from "./form-field.variants";
 import { FormFieldContext } from "./form-field.context";
@@ -25,16 +25,19 @@ function FormField({
 	const descriptionId = `${id}-description`;
 	const errorId = `${id}-error`;
 
+	const contextValue = useMemo(
+		() => ({
+			id,
+			inputId,
+			descriptionId,
+			errorId,
+			error,
+		}),
+		[id, inputId, descriptionId, errorId, error]
+	);
+
 	return (
-		<FormFieldContext.Provider
-			value={{
-				id,
-				inputId,
-				descriptionId,
-				errorId,
-				error,
-			}}
-		>
+		<FormFieldContext.Provider value={contextValue}>
 			<div
 				ref={ref}
 				className={cn(formFieldVariants({ layout, size }), className)}

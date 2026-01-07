@@ -30,22 +30,49 @@ function Popover({
 		trigger,
 	});
 
+	const {
+		isOpen,
+		setIsOpen,
+		getReferenceProps,
+		getFloatingProps,
+		refs,
+		floatingStyles,
+		placement: actualPlacement,
+		contentId,
+		floatingContext,
+		shouldRender,
+		dataState,
+	} = popover;
+
 	const contextValue: PopoverContextValue = useMemo(
 		() => ({
-			isOpen: popover.isOpen,
-			setIsOpen: popover.setIsOpen,
+			isOpen,
+			setIsOpen,
 			trigger,
-			getReferenceProps: popover.getReferenceProps,
-			getFloatingProps: popover.getFloatingProps,
-			refs: popover.refs,
-			floatingStyles: popover.floatingStyles,
-			placement: popover.placement,
-			contentId: popover.contentId,
-			floatingContext: popover.floatingContext,
-			shouldRender: popover.shouldRender,
-			dataState: popover.dataState,
+			getReferenceProps,
+			getFloatingProps,
+			refs,
+			floatingStyles,
+			placement: actualPlacement,
+			contentId,
+			floatingContext,
+			shouldRender,
+			dataState,
 		}),
-		[popover, trigger]
+		[
+			isOpen,
+			setIsOpen,
+			trigger,
+			getReferenceProps,
+			getFloatingProps,
+			refs,
+			floatingStyles,
+			actualPlacement,
+			contentId,
+			floatingContext,
+			shouldRender,
+			dataState,
+		]
 	);
 
 	return (
