@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { render, screen } from "@testing-library/react";
 import { createRef } from "react";
 import { describe, expect, it } from "vitest";
@@ -8,7 +9,7 @@ import {
 	CardFooter,
 	CardHeader,
 	CardTitle,
-} from "./card";
+} from "./index";
 
 describe("Card", () => {
 	it("renders as div with expected data-slot", () => {

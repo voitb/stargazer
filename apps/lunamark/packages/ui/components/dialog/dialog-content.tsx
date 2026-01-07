@@ -25,7 +25,6 @@ export function DialogContent({
 	const { open, onOpenChange, closeOnBackdropClick, titleId, descriptionId } =
 		useDialogContext("DialogContent");
 
-	// Use the unified useDialog hook for behavior
 	const { contentRef, shouldRender, handleBackdropClick, dataState } =
 		useDialog({
 			open,
@@ -33,14 +32,12 @@ export function DialogContent({
 			closeOnBackdropClick,
 		});
 
-	// Combine refs
 	const combinedRef = (node: HTMLDivElement | null) => {
-		(contentRef as React.MutableRefObject<HTMLDivElement | null>).current =
-			node;
+		contentRef.current = node;
 		if (typeof ref === "function") {
 			ref(node);
 		} else if (ref) {
-			(ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+			ref.current = node;
 		}
 	};
 
