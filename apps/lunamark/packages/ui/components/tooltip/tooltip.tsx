@@ -33,19 +33,41 @@ export function Tooltip({
 		sideOffset,
 	});
 
+	const {
+		isOpen,
+		setIsOpen,
+		refs,
+		floatingStyles,
+		floatingContext,
+		placement: actualPlacement,
+		getReferenceProps,
+		getFloatingProps,
+		contentId,
+	} = tooltip;
+
 	const contextValue = useMemo(
 		() => ({
-			isOpen: tooltip.isOpen,
-			setIsOpen: tooltip.setIsOpen,
-			refs: tooltip.refs,
-			floatingStyles: tooltip.floatingStyles,
-			floatingContext: tooltip.floatingContext,
-			placement: tooltip.placement,
-			getReferenceProps: tooltip.getReferenceProps,
-			getFloatingProps: tooltip.getFloatingProps,
-			contentId: tooltip.contentId,
+			isOpen,
+			setIsOpen,
+			refs,
+			floatingStyles,
+			floatingContext,
+			placement: actualPlacement,
+			getReferenceProps,
+			getFloatingProps,
+			contentId,
 		}),
-		[tooltip]
+		[
+			isOpen,
+			setIsOpen,
+			refs,
+			floatingStyles,
+			floatingContext,
+			actualPlacement,
+			getReferenceProps,
+			getFloatingProps,
+			contentId,
+		]
 	);
 
 	return (

@@ -1,7 +1,7 @@
 "use client";
 
 import type { VariantProps } from "class-variance-authority";
-import type { ComponentProps, ReactNode } from "react";
+import { useMemo, type ComponentProps, ReactNode } from "react";
 import { cn } from "../../../utils/cn";
 import { mergeRefs } from "../../../utils/merge-refs";
 import { ColumnContext, type ColumnContextValue } from "./column.context";
@@ -49,20 +49,43 @@ export function Column({
 		items,
 	});
 
-	const internalVariant = column.isDropTarget ? "active" : variant;
+	const {
+		droppableRef,
+		isDropTarget,
+		isCollapsed,
+		toggleCollapsed,
+		itemCount,
+		isEmpty,
+		dataState,
+		contentId,
+	} = column;
 
-	const contextValue: ColumnContextValue = {
-		isDropTarget: column.isDropTarget,
-		isCollapsed: column.isCollapsed,
-		toggleCollapsed: column.toggleCollapsed,
-		itemCount: column.itemCount,
-		isEmpty: column.isEmpty,
-		dataState: column.dataState,
-		size,
-		contentId: column.contentId,
-	};
+	const internalVariant = isDropTarget ? "active" : variant;
 
-	const combinedRef = mergeRefs(column.droppableRef, ref);
+	const contextValue: ColumnContextValue = useMemo(
+		() => ({
+			isDropTarget,
+			isCollapsed,
+			toggleCollapsed,
+			itemCount,
+			isEmpty,
+			dataState,
+			size,
+			contentId,
+		}),
+		[
+			isDropTarget,
+			isCollapsed,
+			toggleCollapsed,
+			itemCount,
+			isEmpty,
+			dataState,
+			size,
+			contentId,
+		]
+	);
+
+	const combinedRef = mergeRefs(droppableRef, ref);
 
 	return (
 		<ColumnContext.Provider value={contextValue}>
@@ -70,8 +93,8 @@ export function Column({
 				ref={combinedRef}
 				role="region"
 				data-slot="column"
-				data-state={column.dataState}
-				data-drop-target={column.isDropTarget}
+				data-state={dataState}
+				data-drop-target={isDropTarget}
 				className={cn(
 					columnVariants({ variant: internalVariant, fluid, collapsed: column.isCollapsed }),
 					className

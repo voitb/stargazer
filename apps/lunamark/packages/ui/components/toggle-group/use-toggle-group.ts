@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, type KeyboardEvent } from "react";
+import { useCallback, useMemo, useRef, type KeyboardEvent } from "react";
 import type { ToggleGroupContextValue } from "./toggle-group.context";
 
 type SingleSelectionOptions = {
@@ -145,18 +145,32 @@ export function useToggleGroup(
 		[orientation]
 	);
 
-	const contextValue: ToggleGroupContextValue = {
-		type,
-		value,
-		values,
-		onItemToggle,
-		size,
-		variant,
-		orientation,
-		registerItem,
-		unregisterItem,
-		isItemSelected,
-	};
+	const contextValue: ToggleGroupContextValue = useMemo(
+		() => ({
+			type,
+			value,
+			values,
+			onItemToggle,
+			size,
+			variant,
+			orientation,
+			registerItem,
+			unregisterItem,
+			isItemSelected,
+		}),
+		[
+			type,
+			value,
+			values,
+			onItemToggle,
+			size,
+			variant,
+			orientation,
+			registerItem,
+			unregisterItem,
+			isItemSelected,
+		]
+	);
 
 	const containerProps = {
 		role: (type === "single" ? "radiogroup" : "toolbar") as
