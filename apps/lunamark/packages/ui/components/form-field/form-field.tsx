@@ -1,16 +1,21 @@
 "use client";
 
+import type { VariantProps } from "class-variance-authority";
 import { useId, type ComponentProps } from "react";
 import { cn } from "../../utils/cn";
+import { formFieldVariants } from "./form-field.variants";
 import { FormFieldContext } from "./form-field.context";
 
-type FormFieldProps = ComponentProps<"div"> & {
-	error?: string;
-};
+type FormFieldProps = ComponentProps<"div"> &
+	VariantProps<typeof formFieldVariants> & {
+		error?: string;
+	};
 
 function FormField({
 	className,
 	error,
+	layout,
+	size,
 	children,
 	ref,
 	...props
@@ -30,7 +35,11 @@ function FormField({
 				error,
 			}}
 		>
-			<div ref={ref} className={cn("space-y-1.5", className)} {...props}>
+			<div
+				ref={ref}
+				className={cn(formFieldVariants({ layout, size }), className)}
+				{...props}
+			>
 				{children}
 			</div>
 		</FormFieldContext.Provider>

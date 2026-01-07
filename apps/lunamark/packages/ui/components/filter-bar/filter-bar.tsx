@@ -1,19 +1,24 @@
+import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps, ReactNode } from "react";
 import { cn } from "../../utils/cn";
 import { Button } from "../button";
+import { filterBarVariants } from "./filter-bar.variants";
 
-type FilterBarProps = ComponentProps<"div"> & {
-	children: ReactNode;
-	hasActiveFilters?: boolean;
-	onClear?: () => void;
-	"aria-label"?: string;
-};
+type FilterBarProps = ComponentProps<"div"> &
+	VariantProps<typeof filterBarVariants> & {
+		children: ReactNode;
+		hasActiveFilters?: boolean;
+		onClear?: () => void;
+		"aria-label"?: string;
+	};
 
 function FilterBar({
 	children,
 	hasActiveFilters = false,
 	onClear,
 	className,
+	size,
+	variant,
 	ref,
 	"aria-label": ariaLabel,
 	...props
@@ -23,11 +28,7 @@ function FilterBar({
 			ref={ref}
 			role="toolbar"
 			aria-label={ariaLabel}
-			className={cn(
-				"flex items-center gap-6 px-6 py-3",
-				"border-b border-[rgb(var(--color-neutral-stroke-1)/0.5)]",
-				className,
-			)}
+			className={cn(filterBarVariants({ size, variant }), className)}
 			data-filter-bar
 			{...props}
 		>
