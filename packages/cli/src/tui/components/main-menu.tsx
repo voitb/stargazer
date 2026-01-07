@@ -12,6 +12,7 @@ const menuOptions: MenuOption[] = [
   { label: '📚 Discover conventions', value: 'discover' },
   { label: '💬 Continue previous session', value: 'continue' },
   { label: '📂 Browse history', value: 'history' },
+  { label: '⚙️  Settings', value: 'settings' },
   { label: '❓ Help', value: 'help' },
   { label: '🚪 Exit', value: 'exit' },
 ];

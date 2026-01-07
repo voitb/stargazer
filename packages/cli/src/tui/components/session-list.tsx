@@ -1,16 +1,10 @@
 import { Box, Text } from 'ink';
 import { Select } from '@inkjs/ui';
 import { formatDistanceToNow } from 'date-fns';
-
-interface SessionEntry {
-  id: string;
-  projectName: string;
-  updatedAt: string;
-  messageCount: number;
-}
+import type { SessionIndexEntry } from '../storage/types.js';
 
 interface SessionListProps {
-  sessions: readonly SessionEntry[];
+  sessions: readonly SessionIndexEntry[];
   onSelect: (sessionId: string) => void;
   onBack: () => void;
 }

@@ -1,9 +1,9 @@
 import type * as z from 'zod';
 import type { Result } from '../shared/result';
-import type { Model } from './models';
 
 export type GenerateOptions = {
-  readonly model?: Model;
+  /** Model name - can be any valid Gemini model string */
+  readonly model?: string;
   readonly temperature?: number;
 };
 

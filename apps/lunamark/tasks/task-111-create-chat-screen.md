@@ -1,7 +1,7 @@
 ---
 id: task-111
 title: Create ChatScreen
-status: pending
+status: completed
 priority: high
 labels:
   - cli

@@ -1,7 +1,7 @@
 ---
 id: task-117
 title: Create main App component
-status: pending
+status: completed
 priority: high
 labels:
   - cli

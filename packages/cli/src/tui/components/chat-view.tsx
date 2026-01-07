@@ -1,15 +1,9 @@
 import { Box, Text } from 'ink';
-import { ChatMessage } from './chat-message.js';
-
-interface MessageData {
-  id: string;
-  role: 'user' | 'assistant' | 'system';
-  content: string;
-  timestamp: string;
-}
+import { ChatMessage as ChatMessageComponent } from './chat-message.js';
+import type { ChatMessage } from '../storage/types.js';
 
 interface ChatViewProps {
-  messages: readonly MessageData[];
+  messages: readonly ChatMessage[];
 }
 
 export function ChatView({ messages }: ChatViewProps) {
@@ -24,7 +18,7 @@ export function ChatView({ messages }: ChatViewProps) {
   return (
     <Box flexDirection="column" padding={1}>
       {messages.map((message) => (
-        <ChatMessage key={message.id} message={message} />
+        <ChatMessageComponent key={message.id} message={message} />
       ))}
     </Box>
   );

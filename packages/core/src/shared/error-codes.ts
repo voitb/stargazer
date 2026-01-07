@@ -8,6 +8,7 @@ export type ErrorCode =
   | 'CONFIG_INVALID'
   | 'GIT_ERROR'
   | 'TIMEOUT'
+  | 'CONNECTION_ERROR'
   | 'FILE_NOT_FOUND';
 
 export type ApiError = {

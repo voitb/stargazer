@@ -1,7 +1,7 @@
 ---
 id: task-100
 title: Create storage module index
-status: pending
+status: completed
 priority: medium
 labels:
   - cli
