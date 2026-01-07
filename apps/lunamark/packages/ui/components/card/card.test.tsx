@@ -39,9 +39,9 @@ describe("Card Sub-components", () => {
 		{ Component: CardContent, slot: "card-content", tag: "DIV" },
 		{ Component: CardFooter, slot: "card-footer", tag: "DIV" },
 	])("$slot renders with correct structure and forwards ref", ({ Component, slot, tag }) => {
-		const ref = createRef<HTMLElement>();
+		const ref = createRef<HTMLDivElement>();
 		render(
-			<Component ref={ref as React.Ref<HTMLElement>} data-testid="element" className="custom">
+			<Component ref={ref} data-testid="element" className="custom">
 				Content
 			</Component>,
 		);
