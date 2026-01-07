@@ -3,24 +3,13 @@
 import { createContext, useContext } from "react";
 
 export type ColumnContextValue = {
-	// DnD state
 	isDropTarget: boolean;
-
-	// Collapse state
 	isCollapsed: boolean;
 	toggleCollapsed: () => void;
-
-	// Computed values
 	itemCount: number;
 	isEmpty: boolean;
-
-	// Data attributes (for sub-component styling)
 	dataState: "default" | "active" | "collapsed";
-
-	// Sizing (passed from Column root)
 	size: "sm" | "md" | "lg";
-
-	// IDs for accessibility
 	contentId: string;
 };
 

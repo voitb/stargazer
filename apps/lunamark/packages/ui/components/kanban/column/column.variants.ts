@@ -1,10 +1,9 @@
 import { cva } from "class-variance-authority";
 
-// Main column variants - size replaced with fluid for responsive design
 export const columnVariants = cva(
   [
     "flex flex-col rounded-xl",
-    "kanban-column-transition", // Use CSS utility with motion tokens
+    "kanban-column-transition",
     "backdrop-blur-sm",
     "border border-[rgb(var(--color-neutral-stroke-1))/0.3]",
   ].join(" "),
@@ -40,7 +39,6 @@ export const columnVariants = cva(
   }
 );
 
-// Column header variants - updated for responsive context
 export const columnHeaderVariants = cva("flex items-center gap-2.5", {
   variants: {
     size: {
@@ -54,7 +52,6 @@ export const columnHeaderVariants = cva("flex items-center gap-2.5", {
   },
 });
 
-// Count badge variants - updated for responsive context
 export const countBadgeVariants = cva(
   [
     "font-bold px-2 py-0.5 rounded-full min-w-[20px] text-center",

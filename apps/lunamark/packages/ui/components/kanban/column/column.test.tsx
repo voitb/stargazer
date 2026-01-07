@@ -6,7 +6,6 @@ import { ColumnContent } from "./column-content";
 import { ColumnFooter } from "./column-footer";
 import { ColumnHeader } from "./column-header";
 
-// Mock DnD-kit to avoid complex setup
 vi.mock("@dnd-kit/react", () => ({
 	useDroppable: () => ({
 		ref: vi.fn(),
@@ -15,7 +14,7 @@ vi.mock("@dnd-kit/react", () => ({
 }));
 
 describe("Column", () => {
-	it("renders children with new compound API", () => {
+	it("renders children with compound component API", () => {
 		render(
 			<Column id="test">
 				<ColumnHeader title="Todo" />
@@ -24,17 +23,6 @@ describe("Column", () => {
 			</Column>
 		);
 		expect(screen.getByText("Test content")).toBeInTheDocument();
-		expect(screen.getByText("Footer")).toBeInTheDocument();
-	});
-
-	it("renders with legacy header/footer props API", () => {
-		render(
-			<Column id="legacy" header={<span>Header</span>} footer={<span>Footer</span>}>
-				Content
-			</Column>
-		);
-		expect(screen.getByText("Header")).toBeInTheDocument();
-		expect(screen.getByText("Content")).toBeInTheDocument();
 		expect(screen.getByText("Footer")).toBeInTheDocument();
 	});
 
@@ -58,18 +46,21 @@ describe("Column", () => {
 		expect(screen.getByTestId("column")).toHaveAttribute("role", "region");
 	});
 
-	it("accepts all variant/size props without error", () => {
+	it("accepts all variant/fluid/size props without error", () => {
 		const variants = ["default", "active"] as const;
+		const fluids = [true, false] as const;
 		const sizes = ["sm", "md", "lg"] as const;
 		variants.forEach((variant) => {
-			sizes.forEach((size) => {
-				const { unmount } = render(
-					<Column id={`${variant}-${size}`} variant={variant} size={size}>
-						<ColumnContent>Content</ColumnContent>
-					</Column>
-				);
-				expect(screen.getByText("Content")).toBeInTheDocument();
-				unmount();
+			fluids.forEach((fluid) => {
+				sizes.forEach((size) => {
+					const { unmount } = render(
+						<Column id={`${variant}-${fluid}-${size}`} variant={variant} fluid={fluid} size={size}>
+							<ColumnContent>Content</ColumnContent>
+						</Column>
+					);
+					expect(screen.getByText("Content")).toBeInTheDocument();
+					unmount();
+				});
 			});
 		});
 	});
@@ -109,6 +100,17 @@ describe("Column", () => {
 			</Column>
 		);
 		expect(screen.getByText("3")).toBeInTheDocument();
+	});
+
+	it("passes size to context for header/badge", () => {
+		render(
+			<Column id="size" size="lg" items={[1, 2]}>
+				<ColumnHeader title="Large" />
+				<ColumnContent>Content</ColumnContent>
+			</Column>
+		);
+		expect(screen.getByText("Large")).toBeInTheDocument();
+		expect(screen.getByText("2")).toBeInTheDocument();
 	});
 });
 
