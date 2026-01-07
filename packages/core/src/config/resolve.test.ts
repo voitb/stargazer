@@ -16,9 +16,9 @@ describe('resolveConfig', () => {
   });
 
   it('overrides model when specified', () => {
-    const config = resolveConfig({ model: 'gemini-2.0-pro' });
+    const config = resolveConfig({ model: 'gemini-2.0-flash' });
 
-    expect(config.model).toBe('gemini-2.0-pro');
+    expect(config.model).toBe('gemini-2.0-flash');
     expect(config.minSeverity).toBe(DEFAULT_CONFIG.minSeverity);
   });
 
@@ -52,12 +52,12 @@ describe('resolveConfig', () => {
 
   it('handles partial config with multiple overrides', () => {
     const config = resolveConfig({
-      model: 'gemini-2.0-pro',
+      model: 'gemini-2.0-flash',
       minSeverity: 'medium',
       maxIssues: 10,
     });
 
-    expect(config.model).toBe('gemini-2.0-pro');
+    expect(config.model).toBe('gemini-2.0-flash');
     expect(config.minSeverity).toBe('medium');
     expect(config.maxIssues).toBe(10);
     expect(config.ignore).toEqual(DEFAULT_CONFIG.ignore);
