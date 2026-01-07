@@ -1,15 +1,26 @@
+// @vitest-environment jsdom
 import { render, screen } from "@testing-library/react";
 import { createRef } from "react";
 import { describe, expect, it } from "vitest";
 import { axe } from "vitest-axe";
-import { FormField, type FormFieldRenderProps } from "./form-field";
+import {
+	FormControl,
+	type FormControlRenderProps,
+	FormDescription,
+	FormError,
+	FormField,
+	FormLabel,
+} from "./index";
 
 describe("FormField", () => {
 	// BEHAVIOR
 	it("renders label and children", () => {
 		render(
-			<FormField label="Username">
-				<input type="text" />
+			<FormField>
+				<FormLabel>Username</FormLabel>
+				<FormControl>
+					{(props) => <input type="text" {...props} />}
+				</FormControl>
 			</FormField>,
 		);
 
@@ -17,32 +28,42 @@ describe("FormField", () => {
 		expect(screen.getByRole("textbox")).toBeInTheDocument();
 	});
 
-	it("renders description when provided and no error", () => {
+	it("renders description when provided", () => {
 		render(
-			<FormField label="Email" description="We'll never share it">
-				<input type="email" />
+			<FormField>
+				<FormLabel>Email</FormLabel>
+				<FormControl>
+					{(props) => <input type="email" {...props} />}
+				</FormControl>
+				<FormDescription>We'll never share it</FormDescription>
 			</FormField>,
 		);
 
 		expect(screen.getByText("We'll never share it")).toBeInTheDocument();
 	});
 
-	it("renders error and hides description when error provided", () => {
+	it("renders error and still renders description (unless manually hidden)", () => {
 		render(
-			<FormField label="Email" description="Help text" error="Invalid email">
-				<input type="email" />
+			<FormField error="Invalid email">
+				<FormLabel>Email</FormLabel>
+				<FormControl>
+					{(props) => <input type="email" {...props} />}
+				</FormControl>
+				<FormDescription>Help text</FormDescription>
+				<FormError />
 			</FormField>,
 		);
 
-		expect(screen.queryByText("Help text")).not.toBeInTheDocument();
+		expect(screen.getByText("Help text")).toBeInTheDocument();
 		expect(screen.getByText("Invalid email")).toBeInTheDocument();
 	});
 
 	// ACCESSIBILITY
 	it("associates label with input via htmlFor", () => {
 		render(
-			<FormField label="Username">
-				{(props) => <input {...props} type="text" />}
+			<FormField>
+				<FormLabel>Username</FormLabel>
+				<FormControl>{(props) => <input {...props} />}</FormControl>
 			</FormField>,
 		);
 
@@ -50,24 +71,31 @@ describe("FormField", () => {
 	});
 
 	it("links description to input via aria-describedby", () => {
-		render(
-			<FormField label="Email" description="Enter your email">
-				{(props) => <input {...props} type="email" />}
+		const { container } = render(
+			<FormField>
+				<FormLabel>Email</FormLabel>
+				<FormControl>{(props) => <input {...props} />}</FormControl>
+				<FormDescription>Enter your email</FormDescription>
 			</FormField>,
 		);
 
-		const input = screen.getByLabelText("Email");
+		// We need to query by selector because getByLabelText sometimes gets confused with multiple aria-describedby
+		const input = container.querySelector("input");
 		expect(input).toHaveAttribute("aria-describedby");
 
-		const describedById = input.getAttribute("aria-describedby");
-		const descriptionElement = document.getElementById(describedById!);
+		const describedById = input?.getAttribute("aria-describedby");
+		const descriptionElement = document.getElementById(
+			describedById?.split(" ")[0] || "",
+		);
 		expect(descriptionElement).toHaveTextContent("Enter your email");
 	});
 
 	it("error has role=alert for screen readers", () => {
 		render(
-			<FormField label="Email" error="Invalid email">
-				{(props) => <input {...props} type="email" />}
+			<FormField error="Invalid email">
+				<FormLabel>Email</FormLabel>
+				<FormControl>{(props) => <input {...props} />}</FormControl>
+				<FormError />
 			</FormField>,
 		);
 
@@ -76,8 +104,10 @@ describe("FormField", () => {
 
 	it("passes axe accessibility checks", async () => {
 		const { container } = render(
-			<FormField label="Email" description="Help text">
-				{(props) => <input {...props} type="email" />}
+			<FormField>
+				<FormLabel>Email</FormLabel>
+				<FormControl>{(props) => <input {...props} />}</FormControl>
+				<FormDescription>Help text</FormDescription>
 			</FormField>,
 		);
 
@@ -87,14 +117,16 @@ describe("FormField", () => {
 
 	// RENDER PROPS
 	it("provides correct render props based on state", () => {
-		let receivedProps: FormFieldRenderProps | null = null;
+		let receivedProps: FormControlRenderProps | null = null;
 
 		const { rerender } = render(
-			<FormField label="Email">
-				{(props) => {
-					receivedProps = props;
-					return <input {...props} type="email" />;
-				}}
+			<FormField>
+				<FormControl>
+					{(props) => {
+						receivedProps = props;
+						return <input {...props} />;
+					}}
+				</FormControl>
 			</FormField>,
 		);
 
@@ -102,14 +134,19 @@ describe("FormField", () => {
 		expect(receivedProps!["aria-invalid"]).toBeUndefined();
 
 		rerender(
-			<FormField label="Email" description="Help" error="Error">
-				{(props) => {
-					receivedProps = props;
-					return <input {...props} type="email" />;
-				}}
+			<FormField error="Error">
+				<FormControl>
+					{(props) => {
+						receivedProps = props;
+						return <input {...props} />;
+					}}
+				</FormControl>
+				<FormDescription>Help</FormDescription>
+				<FormError />
 			</FormField>,
 		);
 
+		// Now it should have aria-invalid and aria-describedby (pointing to description + error)
 		expect(receivedProps!["aria-describedby"]).toBeDefined();
 		expect(receivedProps!["aria-invalid"]).toBe(true);
 	});
@@ -119,8 +156,9 @@ describe("FormField", () => {
 		const ref = createRef<HTMLDivElement>();
 
 		render(
-			<FormField ref={ref} label="Test">
-				<input type="text" />
+			<FormField ref={ref}>
+				<FormLabel>Test</FormLabel>
+				<FormControl>{(props) => <input {...props} />}</FormControl>
 			</FormField>,
 		);
 

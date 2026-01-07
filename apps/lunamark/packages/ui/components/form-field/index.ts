@@ -1,5 +1,9 @@
 export { FormField } from "./form-field";
-export type { FormFieldProps, FormFieldRenderProps } from "./form-field";
+export type { FormFieldProps } from "./form-field";
+export { FormLabel } from "./form-label";
+export type { FormLabelProps } from "./form-label";
+export { FormControl } from "./form-control";
+export type { FormControlRenderProps } from "./form-control";
 export { FormDescription } from "./form-description";
 export type { FormDescriptionProps } from "./form-description";
 export { FormError } from "./form-error";
