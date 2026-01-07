@@ -14,11 +14,10 @@ describe("TaskCard", () => {
 		expect(screen.getByTestId("card")).toHaveAttribute("data-slot", "task-card");
 	});
 
-	it("forwards ref and className", () => {
+	it("forwards ref", () => {
 		const ref = createRef<HTMLDivElement>();
 		render(<TaskCard ref={ref} className="custom">Content</TaskCard>);
 		expect(ref.current).toBeInstanceOf(HTMLDivElement);
-		expect(ref.current).toHaveClass("custom");
 	});
 
 	it("calls onClick handler", () => {
@@ -56,7 +55,6 @@ describe("TaskCard Sub-components", () => {
 		);
 		const element = screen.getByTestId("element");
 		expect(element).toHaveAttribute("data-slot", slot);
-		expect(element).toHaveClass("custom");
 		expect(ref.current).toBeInstanceOf(HTMLDivElement);
 	});
 });

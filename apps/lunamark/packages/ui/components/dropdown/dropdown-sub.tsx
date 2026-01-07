@@ -1,5 +1,6 @@
 "use client";
 
+import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps, ReactNode } from "react";
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import {
@@ -34,6 +35,7 @@ import { useControllableState } from "@ui/hooks/state/use-controllable-state";
 import { useExitAnimation } from "@ui/hooks/animation/use-exit-animation";
 import { ChevronRightIcon } from "../icons";
 
+type DropdownSubTriggerVariantProps = VariantProps<typeof dropdownItemVariants>;
 
 export type DropdownSubProps = {
 	children: ReactNode;
@@ -173,7 +175,6 @@ function DropdownSub({
 
 export type DropdownSubTriggerProps = {
 	children: ReactNode;
-	disabled?: boolean;
 	className?: string;
 	textValue?: string;
 } & Omit<
@@ -185,7 +186,8 @@ export type DropdownSubTriggerProps = {
 	| "type"
 	| "role"
 	| "tabIndex"
->;
+> &
+	Omit<DropdownSubTriggerVariantProps, "variant" | "highlighted" | "inset">;
 
 function DropdownSubTrigger({
 	children,
@@ -287,7 +289,8 @@ export type DropdownSubContentProps = {
 } & Omit<
 	ComponentProps<"div">,
 	"children" | "className" | "style" | "id" | "role"
->;
+> &
+	VariantProps<typeof dropdownContentVariants>;
 
 function DropdownSubContent({
 	children,

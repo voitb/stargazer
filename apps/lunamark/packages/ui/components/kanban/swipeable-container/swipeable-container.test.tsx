@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import { createRef } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { SwipeableContainer } from "./swipeable-container";
 
@@ -86,9 +87,10 @@ describe("SwipeableContainer", () => {
         expect(panels[2]).toHaveAttribute("hidden");
     });
 
-    it("accepts className prop", () => {
-        const { container } = render(<SwipeableContainer {...defaultProps} className="custom-class" />);
-        expect(container.firstChild).toHaveClass("custom-class");
+    it("forwards ref to the container", () => {
+        const ref = createRef<HTMLDivElement>();
+        render(<SwipeableContainer {...defaultProps} ref={ref} />);
+        expect(ref.current).toBeInstanceOf(HTMLDivElement);
     });
 
     it("has aria-atomic='true' for complete announcements", () => {

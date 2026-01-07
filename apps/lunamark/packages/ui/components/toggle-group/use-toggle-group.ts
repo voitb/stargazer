@@ -1,7 +1,12 @@
 "use client";
 
+import type { VariantProps } from "class-variance-authority";
 import { useCallback, useMemo, useRef, type KeyboardEvent } from "react";
 import type { ToggleGroupContextValue } from "./toggle-group.context";
+import {
+	toggleGroupItemVariants,
+	toggleGroupVariants,
+} from "./toggle-group.variants";
 
 type SingleSelectionOptions = {
 	type: "single";
@@ -15,10 +20,13 @@ type MultipleSelectionOptions = {
 	onValuesChange: (values: string[]) => void;
 };
 
+type ToggleGroupVariantProps = VariantProps<typeof toggleGroupVariants>;
+type ToggleGroupItemVariantProps = VariantProps<typeof toggleGroupItemVariants>;
+
 type BaseOptions = {
-	size?: "sm" | "md" | "lg";
-	variant?: "ring" | "contained";
-	orientation?: "horizontal" | "vertical";
+	size?: ToggleGroupItemVariantProps["size"];
+	variant?: ToggleGroupVariantProps["variant"];
+	orientation?: ToggleGroupVariantProps["orientation"];
 };
 
 export type UseToggleGroupOptions = BaseOptions &

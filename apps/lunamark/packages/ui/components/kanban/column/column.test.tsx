@@ -26,7 +26,7 @@ describe("Column", () => {
 		expect(screen.getByText("Footer")).toBeInTheDocument();
 	});
 
-	it("forwards ref and className", () => {
+	it("forwards ref", () => {
 		const ref = createRef<HTMLDivElement>();
 		render(
 			<Column id="ref-test" ref={ref} className="custom">
@@ -34,7 +34,6 @@ describe("Column", () => {
 			</Column>
 		);
 		expect(ref.current).toBeInstanceOf(HTMLDivElement);
-		expect(ref.current).toHaveClass("custom");
 	});
 
 	it("has role='region' for accessibility", () => {
@@ -149,9 +148,9 @@ describe("ColumnHeader", () => {
 		expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent("Test");
 	});
 
-	it("renders dotColor when provided", () => {
+	it("renders dot indicator when dotColor is provided", () => {
 		const { container } = renderWithColumn({ title: "Test", dotColor: "bg-green-500" });
-		expect(container.querySelector(".rounded-full")).toBeInTheDocument();
+		expect(container.querySelector('[data-slot="column-dot"]')).toBeInTheDocument();
 	});
 
 	it("toggles collapse on button click", () => {

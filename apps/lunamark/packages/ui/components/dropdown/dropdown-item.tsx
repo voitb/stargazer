@@ -1,5 +1,6 @@
 "use client";
 
+import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps, ReactNode } from "react";
 import { useCallback, useEffect, useRef } from "react";
 import { cn } from "../../utils/cn";
@@ -15,12 +16,12 @@ import {
 import { useControllableState } from "@ui/hooks/state/use-controllable-state";
 import { CheckIcon, DotIcon } from "../icons";
 
+type DropdownItemVariantProps = VariantProps<typeof dropdownItemVariants>;
+
 export type DropdownItemProps = {
 	children: ReactNode;
 	onSelect?: () => void;
-	disabled?: boolean;
 	destructive?: boolean;
-	inset?: boolean;
 	className?: string;
 	textValue?: string;
 } & Omit<
@@ -32,7 +33,8 @@ export type DropdownItemProps = {
 	| "type"
 	| "role"
 	| "tabIndex"
->;
+> &
+	Omit<DropdownItemVariantProps, "variant" | "highlighted">;
 
 function DropdownItem({
 	children,
@@ -143,7 +145,6 @@ export type DropdownCheckboxItemProps = {
 	checked?: boolean;
 	defaultChecked?: boolean;
 	onCheckedChange?: (checked: boolean) => void;
-	disabled?: boolean;
 	className?: string;
 	textValue?: string;
 } & Omit<
@@ -155,7 +156,8 @@ export type DropdownCheckboxItemProps = {
 	| "type"
 	| "role"
 	| "tabIndex"
->;
+> &
+	Omit<DropdownItemVariantProps, "variant" | "highlighted" | "inset">;
 
 function DropdownCheckboxItem({
 	children,
@@ -257,7 +259,6 @@ function DropdownCheckboxItem({
 export type DropdownRadioItemProps = {
 	children: ReactNode;
 	value: string;
-	disabled?: boolean;
 	className?: string;
 	textValue?: string;
 } & Omit<
@@ -270,7 +271,8 @@ export type DropdownRadioItemProps = {
 	| "role"
 	| "tabIndex"
 	| "value"
->;
+> &
+	Omit<DropdownItemVariantProps, "variant" | "highlighted" | "inset">;
 
 function DropdownRadioItem({
 	children,

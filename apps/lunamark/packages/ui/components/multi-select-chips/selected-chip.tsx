@@ -1,12 +1,15 @@
 "use client";
 
+import type { VariantProps } from "class-variance-authority";
 import { X } from "lucide-react";
 import { cn } from "../../utils/cn";
 import { chipVariants } from "./multi-select-chips.variants";
 
+type ChipVariantProps = VariantProps<typeof chipVariants>;
+
 interface SelectedChipProps {
     label: string;
-    size: "sm" | "md";
+    size: ChipVariantProps["size"];
     onRemove: () => void;
 }
 

@@ -1,5 +1,6 @@
 "use client";
 
+import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps } from "react";
 import { cn } from "../../utils/cn";
 import { useDialogContext } from "./dialog.context";
@@ -9,7 +10,8 @@ import {
 	dialogTitleVariants,
 } from "./dialog.variants";
 
-export type DialogHeaderProps = ComponentProps<"div">;
+export type DialogHeaderProps = ComponentProps<"div"> &
+	VariantProps<typeof dialogHeaderVariants>;
 
 export function DialogHeader({ className, ref, ...props }: DialogHeaderProps) {
 	return (
@@ -21,7 +23,8 @@ export function DialogHeader({ className, ref, ...props }: DialogHeaderProps) {
 	);
 }
 
-export type DialogTitleProps = ComponentProps<"h2">;
+export type DialogTitleProps = ComponentProps<"h2"> &
+	VariantProps<typeof dialogTitleVariants>;
 
 export function DialogTitle({ className, ref, ...props }: DialogTitleProps) {
 	const { titleId } = useDialogContext("DialogTitle");
@@ -36,7 +39,8 @@ export function DialogTitle({ className, ref, ...props }: DialogTitleProps) {
 	);
 }
 
-export type DialogDescriptionProps = ComponentProps<"p">;
+export type DialogDescriptionProps = ComponentProps<"p"> &
+	VariantProps<typeof dialogDescriptionVariants>;
 
 export function DialogDescription({
 	className,

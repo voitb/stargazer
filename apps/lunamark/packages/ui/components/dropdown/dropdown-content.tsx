@@ -1,5 +1,6 @@
 "use client";
 
+import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps, ReactNode } from "react";
 import { FloatingPortal, FloatingFocusManager } from "@floating-ui/react";
 import { cn } from "../../utils/cn";
@@ -13,7 +14,8 @@ export type DropdownContentProps = {
 } & Omit<
 	ComponentProps<"div">,
 	"children" | "className" | "style" | "id" | "role"
->;
+> &
+	VariantProps<typeof dropdownContentVariants>;
 
 function DropdownContent({
 	children,
