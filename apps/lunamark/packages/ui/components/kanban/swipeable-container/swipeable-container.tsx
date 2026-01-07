@@ -25,7 +25,6 @@ export function SwipeableContainer({
       enableKeyboard: true,
     });
 
-  // Get active tab info for screen reader announcement
   const activeChild = children[activeIndex] as React.ReactElement<{ 'aria-label'?: string }> | null;
   const activeTabLabel =
     activeChild?.props?.["aria-label"] || "Column " + String(activeIndex + 1);
@@ -37,7 +36,6 @@ export function SwipeableContainer({
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
-      // Accessibility: announce column changes to screen readers
       role="region"
       aria-live={ariaLive}
       aria-atomic="true"
