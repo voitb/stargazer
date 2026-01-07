@@ -27,16 +27,6 @@ function getFocusableElements(container: HTMLElement): HTMLElement[] {
   );
 }
 
-/**
- * Traps focus within a container element when active.
- * Restores focus to the previously focused element when deactivated.
- *
- * Uses the `inert` attribute on sibling elements to prevent screen readers
- * from navigating outside the focus trap (WCAG 2.2 AA compliance).
- *
- * @param ref - Ref to the container element
- * @param isActive - Whether the focus trap is active
- */
 export function useFocusTrap(
   ref: RefObject<HTMLElement | null>,
   isActive: boolean
@@ -47,7 +37,6 @@ export function useFocusTrap(
     const container = ref.current;
     const previouslyFocused = document.activeElement as HTMLElement | null;
 
-    // Mark sibling elements as inert for screen reader isolation
     const siblings = Array.from(document.body.children).filter(
       (el): el is HTMLElement =>
         el instanceof HTMLElement && el !== container && !el.contains(container)

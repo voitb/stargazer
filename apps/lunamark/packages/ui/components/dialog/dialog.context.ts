@@ -1,13 +1,17 @@
 "use client";
 
+import type { MouseEvent, RefObject } from "react";
 import { createContext, useContext } from "react";
 
 export type DialogContextValue = {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
-	closeOnBackdropClick: boolean;
 	titleId: string;
 	descriptionId: string;
+	contentRef: RefObject<HTMLDivElement | null>;
+	shouldRender: boolean;
+	handleBackdropClick: (event: MouseEvent<HTMLDivElement>) => void;
+	dataState: "open" | "closed";
 };
 
 export const DialogContext = createContext<DialogContextValue | null>(null);

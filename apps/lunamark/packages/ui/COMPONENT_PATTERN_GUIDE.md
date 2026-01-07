@@ -643,6 +643,7 @@ Before committing, check for:
 - `COMPONENT_ARCHITECTURE.md` - Architecture decisions
 - `DESIGN_DECISIONS.md` - Design rationale
 - `IMPLEMENTATION.md` - Implementation details
+- `AI_COMPONENT_UNIFICATION.md` - Unified AI component and hook rules
 
 ### Reference Components
 - `components/button/` - Basic CVA pattern

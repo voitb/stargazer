@@ -52,3 +52,4 @@ export { ColumnTabs } from "./column-tabs";
 export type { ColumnTab, ColumnTabsProps } from "./column-tabs";
 
 export { SwipeableContainer } from "./swipeable-container";
+export type { SwipeableContainerProps } from "./swipeable-container";

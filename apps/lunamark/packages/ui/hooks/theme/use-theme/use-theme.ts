@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useSyncExternalStore } from "react";
+import { useEffect, useSyncExternalStore, useTransition } from "react";
 
 type Theme = "light" | "dark" | "system";
 type ResolvedTheme = "light" | "dark";
@@ -58,25 +58,19 @@ export interface UseThemeReturn {
   setTheme: (theme: Theme) => void;
 }
 
-/**
- * Manages theme state with localStorage persistence and system preference detection.
- * Supports light, dark, and system (auto) themes.
- *
- * @example
- * const { theme, resolvedTheme, setTheme } = useTheme();
- * // theme: "light" | "dark" | "system" (user selection)
- * // resolvedTheme: "light" | "dark" (actual applied theme)
- */
 export function useTheme(): UseThemeReturn {
   const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const resolvedTheme = resolveTheme(theme);
+  const [, startTransition] = useTransition();
 
-  const setTheme = useCallback((newTheme: Theme) => {
-    currentTheme = newTheme;
-    localStorage.setItem(STORAGE_KEY, newTheme);
-    applyTheme(resolveTheme(newTheme));
-    notifyListeners();
-  }, []);
+  function setTheme(newTheme: Theme) {
+    startTransition(() => {
+      currentTheme = newTheme;
+      localStorage.setItem(STORAGE_KEY, newTheme);
+      applyTheme(resolveTheme(newTheme));
+      notifyListeners();
+    });
+  }
 
   useEffect(() => {
     applyTheme(resolvedTheme);

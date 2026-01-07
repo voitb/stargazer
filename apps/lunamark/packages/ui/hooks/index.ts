@@ -1,12 +1,12 @@
-export { useBodyScrollLock } from "./use-body-scroll-lock";
-export { useControllableState } from "./use-controllable-state";
-export { useExitAnimation } from "./use-exit-animation";
-export { useFocusTrap } from "./use-focus-trap";
-export { useImageLoadingStatus } from "./use-image-loading-status";
-export { useKeyboardShortcut } from "./use-keyboard-shortcut";
-export { useTheme } from "./use-theme";
-export { useSwipeNavigation } from "./use-swipe-navigation";
+export { useTheme } from "./theme";
+export { useControllableState } from "./state";
+export { useExitAnimation } from "./animation";
+export { useFocusTrap } from "./focus";
+export { useBodyScrollLock } from "./scroll";
+export { useSwipeNavigation } from "./navigation";
+export { useKeyboardShortcut } from "./navigation";
+export { useImageLoadingStatus } from "./loading";
 
-export type { ImageLoadingStatus } from "./use-image-loading-status";
-export type { KeyboardShortcutConfig } from "./use-keyboard-shortcut";
-export type { UseThemeReturn } from "./use-theme";
+export type { ImageLoadingStatus } from "./loading/use-image-loading-status";
+export type { KeyboardShortcutConfig } from "./navigation/use-keyboard-shortcut";
+export type { UseThemeReturn } from "./theme/use-theme";

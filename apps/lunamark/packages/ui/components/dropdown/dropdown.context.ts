@@ -87,6 +87,18 @@ export type DropdownSubContextValue = {
 export const DropdownSubContext =
 	createContext<DropdownSubContextValue | null>(null);
 
-export function useDropdownSubContext(): DropdownSubContextValue | null {
-	return useContext(DropdownSubContext);
+export function useDropdownSubContext(
+	componentName: string
+): DropdownSubContextValue;
+export function useDropdownSubContext(): DropdownSubContextValue | null;
+export function useDropdownSubContext(
+	componentName?: string
+): DropdownSubContextValue | null {
+	const context = useContext(DropdownSubContext);
+	if (!context && componentName) {
+		throw new Error(
+			`<${componentName}> must be used within a <DropdownSub> provider`
+		);
+	}
+	return context;
 }

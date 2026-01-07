@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, type ComponentProps, type ReactNode } from "react";
 import { cn } from "../../utils/cn";
+import { mergeRefs } from "../../utils/merge-refs";
 import { useToggleGroupContext } from "./toggle-group.context";
 import {
 	toggleGroupItemVariants,
@@ -30,7 +31,7 @@ function ToggleGroupItem({
 		value: groupValue,
 		values: groupValues,
 		type,
-	} = useToggleGroupContext();
+	} = useToggleGroupContext("ToggleGroupItem");
 
 	const buttonRef = useRef<HTMLButtonElement>(null);
 	const isSelected = isItemSelected(value);
@@ -43,14 +44,7 @@ function ToggleGroupItem({
 		return () => unregisterItem(value);
 	}, [value, registerItem, unregisterItem]);
 
-	const combinedRef = (node: HTMLButtonElement | null) => {
-		buttonRef.current = node;
-		if (typeof ref === "function") {
-			ref(node);
-		} else if (ref) {
-			(ref as React.RefObject<HTMLButtonElement | null>).current = node;
-		}
-	};
+	const combinedRef = mergeRefs(buttonRef, ref);
 
 	const isFirstFocusable =
 		type === "single"

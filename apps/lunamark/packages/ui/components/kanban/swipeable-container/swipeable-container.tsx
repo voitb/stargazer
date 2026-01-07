@@ -1,14 +1,15 @@
-import type { ReactNode } from "react";
-import { cn } from "@ui/utils";
-import { useSwipeNavigation } from "@ui/hooks/use-swipe-navigation";
+"use client";
 
-interface SwipeableContainerProps {
+import type { ComponentProps, ReactElement, ReactNode } from "react";
+import { useSwipeNavigation } from "@ui/hooks/navigation/use-swipe-navigation";
+import { cn, mergeRefs } from "@ui/utils";
+
+export type SwipeableContainerProps = ComponentProps<"div"> & {
   children: ReactNode[];
   activeIndex: number;
   onIndexChange: (index: number) => void;
-  className?: string;
   ariaLive?: "off" | "polite" | "assertive";
-}
+};
 
 export function SwipeableContainer({
   children,
@@ -16,6 +17,8 @@ export function SwipeableContainer({
   onIndexChange,
   className,
   ariaLive = "polite",
+  ref,
+  ...props
 }: SwipeableContainerProps) {
   const { handleTouchStart, handleTouchMove, handleTouchEnd, containerRef } =
     useSwipeNavigation({
@@ -25,13 +28,17 @@ export function SwipeableContainer({
       enableKeyboard: true,
     });
 
-  const activeChild = children[activeIndex] as React.ReactElement<{ 'aria-label'?: string }> | null;
+  const combinedRef = mergeRefs(containerRef, ref);
+
+  const activeChild = children[activeIndex] as
+    | ReactElement<{ "aria-label"?: string }>
+    | undefined;
   const activeTabLabel =
     activeChild?.props?.["aria-label"] || "Column " + String(activeIndex + 1);
 
   return (
     <div
-      ref={containerRef}
+      ref={combinedRef}
       className={cn("flex-1 overflow-hidden", className)}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
@@ -40,6 +47,7 @@ export function SwipeableContainer({
       aria-live={ariaLive}
       aria-atomic="true"
       aria-label={"Showing " + activeTabLabel}
+      {...props}
     >
       <div
         className="flex transition-transform duration-300 ease-out h-full"

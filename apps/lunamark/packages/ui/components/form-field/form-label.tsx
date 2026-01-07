@@ -8,7 +8,7 @@ import { useFormFieldContext } from "./form-field.context";
 type FormLabelProps = ComponentProps<typeof Label>;
 
 function FormLabel({ className, children, ref, ...props }: FormLabelProps) {
-    const { inputId, error } = useFormFieldContext();
+    const { inputId, error } = useFormFieldContext("FormLabel");
 
     return (
         <Label

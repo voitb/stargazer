@@ -204,6 +204,7 @@ See [DESIGN_DECISIONS.md](./DESIGN_DECISIONS.md#testing-philosophy) for the full
 | Purpose | Path |
 |---------|------|
 | Full Documentation | `CLAUDE.md` |
+| Unified AI Guide | `AI_COMPONENT_UNIFICATION.md` |
 | Token CSS | `styles/tokens.css` |
 | Animations | `styles/animations.css` |
 | Component Exports | `components/index.ts` |

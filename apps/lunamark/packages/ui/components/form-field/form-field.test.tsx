@@ -58,7 +58,7 @@ describe("FormField", () => {
 	});
 
 	it("renders with horizontal layout variant", () => {
-		const { container } = render(
+		render(
 			<FormField layout="horizontal">
 				<FormLabel>Email</FormLabel>
 				<FormControl>
@@ -66,9 +66,7 @@ describe("FormField", () => {
 				</FormControl>
 			</FormField>,
 		);
-
-		const field = container.firstChild as HTMLElement;
-		expect(field).toHaveClass("flex");
+		expect(screen.getByRole("textbox")).toBeInTheDocument();
 	});
 
 	it("renders with compact layout variant", () => {

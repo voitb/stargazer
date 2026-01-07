@@ -14,7 +14,7 @@ import {
 } from "@floating-ui/react";
 import type { CSSProperties } from "react";
 import { useRef, useState } from "react";
-import { useControllableState } from "../../hooks/use-controllable-state";
+import { useControllableState } from "@ui/hooks/state/use-controllable-state";
 
 export interface MultiSelectChipsOption {
 	value: string;

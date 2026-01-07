@@ -1,11 +1,11 @@
 "use client";
 
 import { useCallback, useId, useRef } from "react";
-import { useBodyScrollLock } from "../../hooks/use-body-scroll-lock";
-import { useControllableState } from "../../hooks/use-controllable-state";
-import { useExitAnimation } from "../../hooks/use-exit-animation";
-import { useFocusTrap } from "../../hooks/use-focus-trap";
-import { useKeyboardShortcut } from "../../hooks/use-keyboard-shortcut";
+import { useBodyScrollLock } from "@ui/hooks/scroll/use-body-scroll-lock";
+import { useControllableState } from "@ui/hooks/state/use-controllable-state";
+import { useExitAnimation } from "@ui/hooks/animation/use-exit-animation";
+import { useFocusTrap } from "@ui/hooks/focus/use-focus-trap";
+import { useKeyboardShortcut } from "@ui/hooks/navigation/use-keyboard-shortcut";
 
 export type UseDialogOptions = {
 	defaultOpen?: boolean;
@@ -87,9 +87,6 @@ export function useDialog(options: UseDialogOptions = {}): UseDialogReturn {
 		[closeOnBackdropClick, setOpen]
 	);
 
-	const handleOpen = useCallback(() => setOpen(true), [setOpen]);
-	const handleClose = useCallback(() => setOpen(false), [setOpen]);
-
 	return {
 		open: isOpen,
 		setOpen,
@@ -104,7 +101,7 @@ export function useDialog(options: UseDialogOptions = {}): UseDialogReturn {
 		getTriggerProps: () => ({
 			"aria-haspopup": "dialog" as const,
 			"aria-expanded": isOpen,
-			onClick: handleOpen,
+			onClick: () => setOpen(true),
 		}),
 
 		getContentProps: () => ({
@@ -116,6 +113,6 @@ export function useDialog(options: UseDialogOptions = {}): UseDialogReturn {
 
 		getTitleProps: () => ({ id: titleId }),
 		getDescriptionProps: () => ({ id: descriptionId }),
-		getCloseProps: () => ({ onClick: handleClose }),
+		getCloseProps: () => ({ onClick: () => setOpen(false) }),
 	};
 }

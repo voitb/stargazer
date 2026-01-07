@@ -12,7 +12,7 @@ import {
 	dropdownItemVariants,
 	dropdownIndicatorVariants,
 } from "./dropdown.variants";
-import { useControllableState } from "../../hooks/use-controllable-state";
+import { useControllableState } from "@ui/hooks/state/use-controllable-state";
 import { CheckIcon, DotIcon } from "../icons";
 
 export type DropdownItemProps = {
@@ -49,19 +49,19 @@ function DropdownItem({
 
 	const context = subContext
 		? {
-				setIsOpen: subContext.setIsOpen,
-				activeIndex: subContext.activeIndex,
-				listRef: subContext.listRef,
-				labelsRef: subContext.labelsRef,
-				getItemProps: subContext.getSubItemProps,
-			}
+			setIsOpen: subContext.setIsOpen,
+			activeIndex: subContext.activeIndex,
+			listRef: subContext.listRef,
+			labelsRef: subContext.labelsRef,
+			getItemProps: subContext.getSubItemProps,
+		}
 		: {
-				setIsOpen: mainContext.setIsOpen,
-				activeIndex: mainContext.activeIndex,
-				listRef: mainContext.listRef,
-				labelsRef: mainContext.labelsRef,
-				getItemProps: mainContext.getItemProps,
-			};
+			setIsOpen: mainContext.setIsOpen,
+			activeIndex: mainContext.activeIndex,
+			listRef: mainContext.listRef,
+			labelsRef: mainContext.labelsRef,
+			getItemProps: mainContext.getItemProps,
+		};
 
 	const { setIsOpen, activeIndex, listRef, labelsRef, getItemProps } = context;
 
@@ -99,14 +99,14 @@ function DropdownItem({
 
 	const isHighlighted = activeIndex === index.current;
 
-	const handleSelect = useCallback(() => {
+	const handleSelect = () => {
 		if (disabled) return;
 		onSelect?.();
 		setIsOpen(false);
 		if (subContext) {
 			subContext.closeParent();
 		}
-	}, [disabled, onSelect, setIsOpen, subContext]);
+	};
 
 	return (
 		<button
@@ -210,10 +210,10 @@ function DropdownCheckboxItem({
 
 	const isHighlighted = activeIndex === index.current;
 
-	const handleToggle = useCallback(() => {
+	const handleToggle = () => {
 		if (disabled) return;
 		setIsChecked(!isChecked);
-	}, [disabled, isChecked, setIsChecked]);
+	};
 
 	return (
 		<button
@@ -322,10 +322,10 @@ function DropdownRadioItem({
 
 	const isHighlighted = activeIndex === index.current;
 
-	const handleSelect = useCallback(() => {
+	const handleSelect = () => {
 		if (disabled) return;
 		onValueChange(value);
-	}, [disabled, onValueChange, value]);
+	};
 
 	return (
 		<button

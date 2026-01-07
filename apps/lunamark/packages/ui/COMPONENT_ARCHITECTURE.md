@@ -198,10 +198,12 @@ Context can be inline in the main component file:
 // toggle-group.tsx
 const ToggleGroupContext = createContext<ToggleGroupContextValue | null>(null);
 
-function useToggleGroupContext() {
+function useToggleGroupContext(componentName: string) {
   const context = useContext(ToggleGroupContext);
   if (!context) {
-    throw new Error("ToggleGroupItem must be used within ToggleGroup");
+    throw new Error(
+      `<${componentName}> must be used within a <ToggleGroup> provider`
+    );
   }
   return context;
 }
@@ -286,18 +288,12 @@ Use `data-state` attribute for CSS animations:
 Portal components need to merge internal refs (for behavior) with forwarded refs (for consumers):
 
 ```typescript
+// import { mergeRefs } from "@ui/utils";
 function DialogContent({ ref, ...props }: DialogContentProps) {
   const { contentRef } = useDialog({ /* ... */ });
 
   // Combine internal ref with forwarded ref
-  const combinedRef = (node: HTMLDivElement | null) => {
-    (contentRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
-    if (typeof ref === "function") {
-      ref(node);
-    } else if (ref) {
-      (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
-    }
-  };
+  const combinedRef = mergeRefs(contentRef, ref);
 
   return <div ref={combinedRef}>...</div>;
 }

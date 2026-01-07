@@ -7,7 +7,7 @@ import type { ComponentProps } from "react";
 type FormErrorProps = ComponentProps<"p">;
 
 function FormError({ className, children, id, ref, ...props }: FormErrorProps) {
-	const { errorId, error } = useFormFieldContext();
+	const { errorId, error } = useFormFieldContext("FormError");
 
 	if (!error) {
 		return null;
