@@ -1,11 +1,14 @@
 "use client";
 
+import type { VariantProps } from "class-variance-authority";
 import { cn } from "../../utils/cn";
 import { chipVariants } from "./multi-select-chips.variants";
 
+type ChipVariantProps = VariantProps<typeof chipVariants>;
+
 interface UnselectedChipProps {
     label: string;
-    size: "sm" | "md";
+    size: ChipVariantProps["size"];
     onSelect: () => void;
 }
 

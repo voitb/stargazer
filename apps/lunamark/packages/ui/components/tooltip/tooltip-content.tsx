@@ -1,20 +1,17 @@
 "use client";
 
+import type { VariantProps } from "class-variance-authority";
 import type { ReactNode } from "react";
 import { FloatingPortal } from "@floating-ui/react";
 import { useExitAnimation } from "@ui/hooks/animation/use-exit-animation";
 import { cn } from "../../utils/cn";
 import { useTooltipContext } from "./tooltip.context";
-import {
-	tooltipContentVariants,
-	type TooltipContentVariants,
-} from "./tooltip.variants";
+import { tooltipContentVariants } from "./tooltip.variants";
 
 export type TooltipContentProps = {
 	children: ReactNode;
 	className?: string;
-	variant?: TooltipContentVariants["variant"];
-};
+} & VariantProps<typeof tooltipContentVariants>;
 
 export function TooltipContent({
 	children,

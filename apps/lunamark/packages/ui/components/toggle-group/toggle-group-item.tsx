@@ -1,5 +1,6 @@
 "use client";
 
+import type { VariantProps } from "class-variance-authority";
 import { useEffect, useRef, type ComponentProps, type ReactNode } from "react";
 import { cn } from "../../utils/cn";
 import { mergeRefs } from "../../utils/merge-refs";
@@ -9,10 +10,11 @@ import {
 	toggleGroupItemSelectedVariants,
 } from "./toggle-group.variants";
 
-export type ToggleGroupItemProps = Omit<ComponentProps<"button">, "value"> & {
-	value: string;
-	children: ReactNode;
-};
+export type ToggleGroupItemProps = Omit<ComponentProps<"button">, "value"> &
+	Omit<VariantProps<typeof toggleGroupItemVariants>, "size" | "variant"> & {
+		value: string;
+		children: ReactNode;
+	};
 
 function ToggleGroupItem({
 	value,

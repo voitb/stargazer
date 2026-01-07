@@ -1,5 +1,6 @@
 "use client";
 
+import type { VariantProps } from "class-variance-authority";
 import {
 	FloatingFocusManager,
 	FloatingPortal,
@@ -23,7 +24,7 @@ export interface MultiSelectChipsProps {
 	onToggle?: (value: string) => void;
 	options: MultiSelectChipsOption[];
 	maxDisplay?: number;
-	size?: "sm" | "md";
+	size?: VariantProps<typeof chipVariants>["size"];
 	"aria-label"?: string;
 	className?: string;
 }

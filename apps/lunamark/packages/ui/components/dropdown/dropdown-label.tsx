@@ -1,14 +1,15 @@
 "use client";
 
+import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps, ReactNode } from "react";
 import { cn } from "../../utils/cn";
 import { dropdownLabelVariants } from "./dropdown.variants";
 
 export type DropdownLabelProps = {
 	children: ReactNode;
-	inset?: boolean;
 	className?: string;
-} & Omit<ComponentProps<"div">, "children" | "className">;
+} & Omit<ComponentProps<"div">, "children" | "className"> &
+	VariantProps<typeof dropdownLabelVariants>;
 
 function DropdownLabel({
 	children,

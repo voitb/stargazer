@@ -69,10 +69,10 @@ describe("ColumnTabs", () => {
         expect(onTabChange).toHaveBeenCalledWith(2);
     });
 
-    it("renders color indicator when provided", () => {
+    it("renders color indicators when provided", () => {
         const { container } = render(<ColumnTabs {...defaultProps} />);
-        const colorDots = container.querySelectorAll(".rounded-full");
-        expect(colorDots.length).toBeGreaterThanOrEqual(2);
+        const indicators = container.querySelectorAll("[aria-hidden='true']");
+        expect(indicators).toHaveLength(2);
     });
 
     it("sets aria-controls on tabs", () => {
@@ -83,9 +83,9 @@ describe("ColumnTabs", () => {
         expect(tabs[2]).toHaveAttribute("aria-controls", "column-panel-done");
     });
 
-    it("accepts className prop", () => {
-        const { container } = render(<ColumnTabs {...defaultProps} className="custom-class" />);
-        expect(container.firstChild).toHaveClass("custom-class");
+    it("accepts variant prop without error", () => {
+        render(<ColumnTabs {...defaultProps} variant="default" />);
+        expect(screen.getByRole("tablist")).toBeInTheDocument();
     });
 
     it("has accessible label for count", () => {

@@ -1,5 +1,6 @@
 "use client";
 
+import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps, ReactNode } from "react";
 import { cn } from "../../utils/cn";
 import { CloseIcon } from "../icons";
@@ -9,7 +10,8 @@ import { popoverCloseVariants } from "./popover.variants";
 export type PopoverCloseProps = {
 	children?: ReactNode;
 	className?: string;
-} & Omit<ComponentProps<"button">, "children" | "className" | "type" | "onClick">;
+} & Omit<ComponentProps<"button">, "children" | "className" | "type" | "onClick"> &
+	VariantProps<typeof popoverCloseVariants>;
 
 function PopoverClose({ children, className, ...props }: PopoverCloseProps) {
 	const { setIsOpen } = usePopoverContext("PopoverClose");

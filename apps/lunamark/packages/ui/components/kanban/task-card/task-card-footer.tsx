@@ -1,11 +1,13 @@
 "use client";
 
+import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps } from "react";
 import { CardFooter } from "../../card";
 import { cn } from "../../../utils/cn";
 import { taskCardFooterVariants } from "./task-card.variants";
 
-export type TaskCardFooterProps = ComponentProps<"div">;
+export type TaskCardFooterProps = ComponentProps<"div"> &
+	VariantProps<typeof taskCardFooterVariants>;
 
 export function TaskCardFooter({
     className,

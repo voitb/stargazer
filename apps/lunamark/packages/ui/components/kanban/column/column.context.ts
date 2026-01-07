@@ -1,6 +1,10 @@
 "use client";
 
+import type { VariantProps } from "class-variance-authority";
 import { createContext, useContext } from "react";
+import { columnVariants } from "./column.variants";
+
+type ColumnVariantProps = VariantProps<typeof columnVariants>;
 
 export type ColumnContextValue = {
 	isDropTarget: boolean;
@@ -9,7 +13,7 @@ export type ColumnContextValue = {
 	itemCount: number;
 	isEmpty: boolean;
 	dataState: "default" | "active" | "collapsed";
-	size: "sm" | "md" | "lg" | null;
+	size: NonNullable<ColumnVariantProps["size"]> | null;
 	contentId: string;
 };
 

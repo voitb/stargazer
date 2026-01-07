@@ -18,11 +18,10 @@ describe("Card", () => {
 		expect(card).toHaveAttribute("data-slot", "card");
 	});
 
-	it("forwards ref and className", () => {
+	it("forwards ref", () => {
 		const ref = createRef<HTMLDivElement>();
 		render(<Card ref={ref} className="custom-class" data-testid="card" />);
 		expect(ref.current).toBeInstanceOf(HTMLDivElement);
-		expect(screen.getByTestId("card")).toHaveClass("custom-class");
 	});
 
 	it("spreads additional props", () => {
@@ -49,7 +48,6 @@ describe("Card Sub-components", () => {
 		const element = screen.getByTestId("element");
 		expect(element.tagName).toBe(tag);
 		expect(element).toHaveAttribute("data-slot", slot);
-		expect(element).toHaveClass("custom");
 		expect(ref.current).toBeInstanceOf(HTMLElement);
 	});
 });

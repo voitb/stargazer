@@ -1,6 +1,14 @@
 "use client";
 
+import type { VariantProps } from "class-variance-authority";
 import { createContext, useContext } from "react";
+import {
+	toggleGroupItemVariants,
+	toggleGroupVariants,
+} from "./toggle-group.variants";
+
+type ToggleGroupVariantProps = VariantProps<typeof toggleGroupVariants>;
+type ToggleGroupItemVariantProps = VariantProps<typeof toggleGroupItemVariants>;
 
 export type ToggleGroupContextValue = {
 	type: "single" | "multiple";
@@ -12,9 +20,9 @@ export type ToggleGroupContextValue = {
 	registerItem: (value: string, element: HTMLButtonElement) => void;
 	unregisterItem: (value: string) => void;
 
-	size: "sm" | "md" | "lg";
-	variant: "ring" | "contained";
-	orientation: "horizontal" | "vertical";
+	size: ToggleGroupItemVariantProps["size"];
+	variant: ToggleGroupVariantProps["variant"];
+	orientation: ToggleGroupVariantProps["orientation"];
 };
 
 export const ToggleGroupContext = createContext<ToggleGroupContextValue | null>(

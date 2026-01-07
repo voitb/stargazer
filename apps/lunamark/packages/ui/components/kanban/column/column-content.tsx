@@ -1,11 +1,13 @@
 "use client";
 
+import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps } from "react";
 import { cn } from "../../../utils/cn";
 import { useColumnContext } from "./column.context";
 import { columnContentVariants } from "./column.variants";
 
-export type ColumnContentProps = ComponentProps<"div">;
+export type ColumnContentProps = ComponentProps<"div"> &
+	Omit<VariantProps<typeof columnContentVariants>, "state">;
 
 export function ColumnContent({
 	className,
