@@ -7,7 +7,7 @@ function CardHeader({ className, ref, ...props }: CardHeaderProps) {
     return (
         <div
             ref={ref}
-            data-slot="card-header"
+            data-card-header
             className={cn("flex flex-col space-y-1.5 p-6", className)}
             {...props}
         />

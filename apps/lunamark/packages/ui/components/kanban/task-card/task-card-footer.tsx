@@ -18,7 +18,7 @@ export function TaskCardFooter({
     return (
         <CardFooter
             ref={ref}
-            data-slot="task-card-footer"
+            data-task-card-footer
             className={cn(taskCardFooterVariants(), className)}
             {...props}
         >

@@ -98,7 +98,6 @@ function DropdownItem({
 			ref={combinedRef}
 			type="button"
 			role="menuitem"
-			disabled={disabled}
 			data-dropdown-item
 			data-highlighted={isHighlighted}
 			data-disabled={disabled}
@@ -112,6 +111,7 @@ function DropdownItem({
 				className
 			)}
 			{...itemProps}
+			disabled={disabled || undefined}
 			tabIndex={isHighlighted ? 0 : -1}
 		>
 			{children}
@@ -209,8 +209,7 @@ function DropdownCheckboxItem({
 			ref={combinedRef}
 			type="button"
 			role="menuitemcheckbox"
-			aria-checked={isChecked}
-			disabled={disabled}
+			aria-checked={isChecked ?? undefined}
 			data-dropdown-item
 			data-dropdown-checkbox-item
 			data-highlighted={isHighlighted}
@@ -225,6 +224,7 @@ function DropdownCheckboxItem({
 				className
 			)}
 			{...itemProps}
+			disabled={disabled || undefined}
 			tabIndex={isHighlighted ? 0 : -1}
 		>
 			<span
@@ -326,7 +326,6 @@ function DropdownRadioItem({
 			type="button"
 			role="menuitemradio"
 			aria-checked={isSelected}
-			disabled={disabled}
 			data-dropdown-item
 			data-dropdown-radio-item
 			data-highlighted={isHighlighted}
@@ -341,6 +340,7 @@ function DropdownRadioItem({
 				className
 			)}
 			{...itemProps}
+			disabled={disabled || undefined}
 			tabIndex={isHighlighted ? 0 : -1}
 		>
 			<span

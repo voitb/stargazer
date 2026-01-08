@@ -18,7 +18,7 @@ export function TaskCardContent({
     return (
         <CardContent
             ref={ref}
-            data-slot="task-card-content"
+            data-task-card-content
             className={cn(taskCardContentVariants(), className)}
             {...props}
         >

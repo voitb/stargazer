@@ -64,12 +64,13 @@ function ToggleGroupItem({
 			ref={combinedRef}
 			type="button"
 			{...ariaProps}
+			data-toggle-group-item
 			data-state={isSelected ? "on" : "off"}
 			tabIndex={tabIndex}
 			onClick={() => onItemToggle(value)}
 			className={cn(
 				toggleGroupItemVariants({ size, variant }),
-				isSelected && toggleGroupItemSelectedVariants[variant],
+				isSelected && variant && toggleGroupItemSelectedVariants[variant],
 				className
 			)}
 			{...props}

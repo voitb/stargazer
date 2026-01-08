@@ -1,5 +1,5 @@
 import { renderHook } from "@testing-library/react";
-import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
+import { describe, expect, it, beforeEach, afterEach } from "vitest";
 import { useBodyScrollLock } from "./use-body-scroll-lock";
 
 describe("useBodyScrollLock", () => {

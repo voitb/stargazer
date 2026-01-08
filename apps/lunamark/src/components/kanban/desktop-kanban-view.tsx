@@ -1,5 +1,5 @@
 import { DragDropProvider, DragOverlay } from "@dnd-kit/react";
-import type { Sensor } from "@dnd-kit/dom";
+import type { Sensors } from "@dnd-kit/dom";
 import { KanbanColumn } from "./column";
 import { TaskCardContent } from "./task-card-content";
 import type { Column, Task } from "@/schemas/task";
@@ -9,7 +9,7 @@ interface DesktopKanbanViewProps {
   columns: Column[];
   taskEditor: ReturnType<typeof useTaskEditor>;
   activeTask: Task | null;
-  sensors: Sensor[];
+  sensors: Sensors;
   onDragStart: (event: any) => void;
   onDragOver: (event: any) => void;
   onDragEnd: (event: any) => void;

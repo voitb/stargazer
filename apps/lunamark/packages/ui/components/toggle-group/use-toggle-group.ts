@@ -184,7 +184,7 @@ export function useToggleGroup(
 	);
 
 	const containerProps = {
-		role: type === "single" ? "radiogroup" : "toolbar",
+		role: type === "single" ? ("radiogroup" as const) : ("toolbar" as const),
 		onKeyDown: handleKeyDown,
 	};
 

@@ -7,7 +7,7 @@ function CardContent({ className, ref, ...props }: CardContentProps) {
     return (
         <div
             ref={ref}
-            data-slot="card-content"
+            data-card-content
             className={cn("p-6 pt-0", className)}
             {...props}
         />

@@ -11,7 +11,7 @@ This file consolidates the component + hook patterns for Lunamark so AI models f
 - **Types:** Use `ComponentProps<"element">` (React 19+ pattern).
 - **Exports:** Barrel export component + types, and variants only when they exist.
 - **Client:** Add `"use client"` to any file that uses React hooks or context.
-- **data-slot:** Keep `data-slot` attributes for public components to enable styling hooks and testing.
+- **Semantic Data Attributes:** Use semantic boolean data attributes like `data-dialog-content`, `data-card`, `data-toggle-group-item` for public components to enable styling hooks and testing.
 
 ---
 

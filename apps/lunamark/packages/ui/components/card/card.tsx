@@ -10,7 +10,7 @@ function Card({ className, variant, size, ref, ...props }: CardProps) {
 	return (
 		<div
 			ref={ref}
-			data-slot="card"
+			data-card
 			className={cn(cardVariants({ variant, size }), className)}
 			{...props}
 		/>

@@ -248,7 +248,6 @@ function DropdownSubTrigger({
 			aria-haspopup="menu"
 			aria-expanded={isOpen}
 			aria-controls={isOpen ? contentId : undefined}
-			disabled={disabled}
 			data-dropdown-sub-trigger
 			data-highlighted={isHighlighted}
 			data-disabled={disabled}
@@ -261,6 +260,7 @@ function DropdownSubTrigger({
 				className
 			)}
 			{...triggerProps}
+			disabled={disabled || undefined}
 			tabIndex={isHighlighted ? 0 : -1}
 		>
 			{children}

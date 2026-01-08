@@ -24,7 +24,7 @@ export function ColumnContent({
 			ref={ref}
 			id={contentId}
 			aria-hidden={isCollapsed}
-			data-slot="column-content"
+			data-column-content
 			data-state={state}
 			className={cn(columnContentVariants({ state }), className)}
 			{...props}

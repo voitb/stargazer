@@ -42,7 +42,7 @@ When working with the Lunamark UI components, ALWAYS follow these rules:
 
 7. **Context Stability**: Provider values MUST be memoized with `useMemo`; use `useCallback` only for functions stored in the provider value or used in effects/ref callbacks
 
-8. **data-slot**: Keep `data-slot` attributes on public components for styling and testing hooks
+8. **Semantic Data Attributes**: Use semantic boolean data attributes like `data-dialog-content`, `data-card`, `data-toggle-group-item` on public components for styling and testing hooks
 
 ---
 

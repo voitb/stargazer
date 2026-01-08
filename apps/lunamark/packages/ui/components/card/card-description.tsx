@@ -7,7 +7,7 @@ function CardDescription({ className, ref, ...props }: CardDescriptionProps) {
     return (
         <p
             ref={ref}
-            data-slot="card-description"
+            data-card-description
             className={cn(
                 "text-sm text-[rgb(var(--color-neutral-foreground-2))]",
                 className
