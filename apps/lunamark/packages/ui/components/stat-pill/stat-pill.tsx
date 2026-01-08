@@ -3,10 +3,12 @@ import type { ComponentProps, ComponentType } from "react";
 import { cn } from "@ui/utils";
 import { statPillVariants } from "./stat-pill.variants";
 
-const iconSizeClasses = {
+type StatPillSize = NonNullable<VariantProps<typeof statPillVariants>["size"]>;
+
+const iconSizeClasses: Record<StatPillSize, string> = {
   sm: "w-3 h-3",
   md: "w-3.5 h-3.5",
-} as const;
+};
 
 type StatPillProps = Omit<ComponentProps<"div">, "children"> &
   VariantProps<typeof statPillVariants> & {

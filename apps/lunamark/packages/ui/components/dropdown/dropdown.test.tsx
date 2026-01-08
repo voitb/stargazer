@@ -45,19 +45,16 @@ function TestDropdown({
 		<Dropdown trigger={trigger} open={open} onOpenChange={onOpenChange}>
 			<DropdownTrigger>
 				{({ isOpen: _isOpen, ...props }: DropdownTriggerRenderProps) => (
-					<button data-testid="trigger" {...props}>
-						Open Menu
-					</button>
+					<button {...props}>Open Menu</button>
 				)}
 			</DropdownTrigger>
-			<DropdownContent data-testid="content">
+			<DropdownContent>
 				<DropdownLabel>Actions</DropdownLabel>
 				{items.map((item) => (
 					<DropdownItem
 						key={item.value}
 						onSelect={item.onSelect}
 						disabled={item.disabled}
-						data-testid={`item-${item.value}`}
 					>
 						{item.label}
 					</DropdownItem>
@@ -73,41 +70,41 @@ describe("Dropdown", () => {
 		const { user } = setup(
 			<div>
 				<TestDropdown />
-				<button data-testid="outside">Outside</button>
+				<button>Outside</button>
 			</div>,
 		);
 
-		expect(screen.queryByTestId("content")).not.toBeInTheDocument();
+		expect(screen.queryByRole("menu")).not.toBeInTheDocument();
 
-		await user.click(screen.getByTestId("trigger"));
-		expect(screen.getByTestId("content")).toBeInTheDocument();
+		await user.click(screen.getByRole("button", { name: "Open Menu" }));
+		expect(screen.getByRole("menu")).toBeInTheDocument();
 
 		await user.keyboard("{Escape}");
 		await waitFor(() => {
-			expect(screen.queryByTestId("content")).not.toBeInTheDocument();
+			expect(screen.queryByRole("menu")).not.toBeInTheDocument();
 		});
 
-		await user.click(screen.getByTestId("trigger"));
-		expect(screen.getByTestId("content")).toBeInTheDocument();
+		await user.click(screen.getByRole("button", { name: "Open Menu" }));
+		expect(screen.getByRole("menu")).toBeInTheDocument();
 
-		await user.click(screen.getByTestId("outside"));
+		await user.click(screen.getByRole("button", { name: "Outside" }));
 		await waitFor(() => {
-			expect(screen.queryByTestId("content")).not.toBeInTheDocument();
+			expect(screen.queryByRole("menu")).not.toBeInTheDocument();
 		});
 	});
 
 	it("opens on hover when trigger='hover'", async () => {
 		const { user } = setup(<TestDropdown trigger="hover" />);
 
-		await user.hover(screen.getByTestId("trigger"));
+		await user.hover(screen.getByRole("button", { name: "Open Menu" }));
 		await waitFor(() => {
-			expect(screen.getByTestId("content")).toBeInTheDocument();
+			expect(screen.getByRole("menu")).toBeInTheDocument();
 		});
 
-		await user.unhover(screen.getByTestId("trigger"));
+		await user.unhover(screen.getByRole("button", { name: "Open Menu" }));
 		await waitFor(
 			() => {
-				expect(screen.queryByTestId("content")).not.toBeInTheDocument();
+				expect(screen.queryByRole("menu")).not.toBeInTheDocument();
 			},
 			{ timeout: 500 },
 		);
@@ -119,26 +116,26 @@ describe("Dropdown", () => {
 			<TestDropdown items={[{ value: "test", label: "Test", onSelect }]} />,
 		);
 
-		await user.click(screen.getByTestId("trigger"));
-		await user.click(screen.getByTestId("item-test"));
+		await user.click(screen.getByRole("button", { name: "Open Menu" }));
+		await user.click(screen.getByRole("menuitem", { name: "Test" }));
 
 		expect(onSelect).toHaveBeenCalled();
 		await waitFor(() => {
-			expect(screen.queryByTestId("content")).not.toBeInTheDocument();
+			expect(screen.queryByRole("menu")).not.toBeInTheDocument();
 		});
 	});
 
 	it("supports controlled open state", async () => {
 		const { user, rerender } = setup(<TestDropdown open={true} />);
 
-		expect(screen.getByTestId("content")).toBeInTheDocument();
+		expect(screen.getByRole("menu")).toBeInTheDocument();
 
 		await user.keyboard("{Escape}");
-		expect(screen.getByTestId("content")).toBeInTheDocument();
+		expect(screen.getByRole("menu")).toBeInTheDocument();
 
 		rerender(<TestDropdown open={false} />);
 		await waitFor(() => {
-			expect(screen.queryByTestId("content")).not.toBeInTheDocument();
+			expect(screen.queryByRole("menu")).not.toBeInTheDocument();
 		});
 	});
 
@@ -146,7 +143,7 @@ describe("Dropdown", () => {
 		const onOpenChange = vi.fn();
 		const { user } = setup(<TestDropdown onOpenChange={onOpenChange} />);
 
-		await user.click(screen.getByTestId("trigger"));
+		await user.click(screen.getByRole("button", { name: "Open Menu" }));
 		expect(onOpenChange).toHaveBeenCalledWith(true);
 
 		await user.keyboard("{Escape}");
@@ -165,22 +162,22 @@ describe("Dropdown", () => {
 			/>,
 		);
 
-		await user.click(screen.getByTestId("trigger"));
+		await user.click(screen.getByRole("button", { name: "Open Menu" }));
 
 		await user.keyboard("{ArrowDown}");
-		expect(screen.getByTestId("item-first")).toHaveAttribute("data-highlighted", "true");
+		expect(screen.getByRole("menuitem", { name: "First" })).toHaveAttribute("data-highlighted", "true");
 
 		await user.keyboard("{ArrowDown}");
-		expect(screen.getByTestId("item-second")).toHaveAttribute("data-highlighted", "true");
+		expect(screen.getByRole("menuitem", { name: "Second" })).toHaveAttribute("data-highlighted", "true");
 
 		await user.keyboard("{ArrowUp}");
-		expect(screen.getByTestId("item-first")).toHaveAttribute("data-highlighted", "true");
+		expect(screen.getByRole("menuitem", { name: "First" })).toHaveAttribute("data-highlighted", "true");
 
 		await user.keyboard("{ArrowUp}");
-		expect(screen.getByTestId("item-third")).toHaveAttribute("data-highlighted", "true");
+		expect(screen.getByRole("menuitem", { name: "Third" })).toHaveAttribute("data-highlighted", "true");
 
 		await user.keyboard("{ArrowDown}");
-		expect(screen.getByTestId("item-first")).toHaveAttribute("data-highlighted", "true");
+		expect(screen.getByRole("menuitem", { name: "First" })).toHaveAttribute("data-highlighted", "true");
 
 		await user.keyboard("{Enter}");
 		expect(onSelect).toHaveBeenCalled();
@@ -189,10 +186,10 @@ describe("Dropdown", () => {
 	it("supports typeahead search", async () => {
 		const { user } = setup(<TestDropdown />);
 
-		await user.click(screen.getByTestId("trigger"));
+		await user.click(screen.getByRole("button", { name: "Open Menu" }));
 		await user.keyboard("s");
 
-		expect(screen.getByTestId("item-settings")).toHaveAttribute("data-highlighted", "true");
+		expect(screen.getByRole("menuitem", { name: "Settings" })).toHaveAttribute("data-highlighted", "true");
 	});
 
 	it("disabled items don't trigger onSelect", async () => {
@@ -203,11 +200,11 @@ describe("Dropdown", () => {
 			/>,
 		);
 
-		await user.click(screen.getByTestId("trigger"));
-		await user.click(screen.getByTestId("item-disabled"));
+		await user.click(screen.getByRole("button", { name: "Open Menu" }));
+		await user.click(screen.getByRole("menuitem", { name: "Disabled" }));
 
 		expect(onSelect).not.toHaveBeenCalled();
-		expect(screen.getByTestId("content")).toBeInTheDocument();
+		expect(screen.getByRole("menu")).toBeInTheDocument();
 	});
 
 	it("passes axe accessibility checks", async () => {
@@ -226,7 +223,7 @@ describe("Dropdown", () => {
 			<Dropdown>
 				<DropdownTrigger>
 					{({ isOpen, ...props }: DropdownTriggerRenderProps) => (
-						<button data-testid="trigger" data-open={isOpen} {...props}>
+						<button data-open={isOpen} {...props}>
 							{isOpen ? "Close" : "Open"}
 						</button>
 					)}
@@ -237,13 +234,13 @@ describe("Dropdown", () => {
 			</Dropdown>,
 		);
 
-		expect(screen.getByTestId("trigger")).toHaveTextContent("Open");
-		expect(screen.getByTestId("trigger")).toHaveAttribute("data-open", "false");
+		expect(screen.getByRole("button", { name: "Open" })).toHaveTextContent("Open");
+		expect(screen.getByRole("button", { name: "Open" })).toHaveAttribute("data-open", "false");
 
-		await user.click(screen.getByTestId("trigger"));
+		await user.click(screen.getByRole("button", { name: "Open" }));
 
-		expect(screen.getByTestId("trigger")).toHaveTextContent("Close");
-		expect(screen.getByTestId("trigger")).toHaveAttribute("data-open", "true");
+		expect(screen.getByRole("button", { name: "Close" })).toHaveTextContent("Close");
+		expect(screen.getByRole("button", { name: "Close" })).toHaveAttribute("data-open", "true");
 	});
 
 	it("throws when components used outside provider", () => {
@@ -256,7 +253,7 @@ describe("Dropdown", () => {
 			"<DropdownContent> must be used within a <Dropdown> provider",
 		);
 		expect(() => render(<DropdownItem>Item</DropdownItem>)).toThrow(
-			"<DropdownItem> must be used within a <Dropdown> provider",
+			"<DropdownItem> must be used within a <DropdownContent> or <DropdownSubContent> provider",
 		);
 
 		consoleError.mockRestore();

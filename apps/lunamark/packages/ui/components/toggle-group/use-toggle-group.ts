@@ -55,17 +55,18 @@ export function useToggleGroup(
 
 	const itemsRef = useRef<Map<string, HTMLButtonElement>>(new Map());
 
-	const isSingle = type === "single";
-	const value = isSingle ? (options as SingleSelectionOptions).value : null;
-	const values = !isSingle
-		? (options as MultipleSelectionOptions).values
-		: [];
-	const onValueChange = isSingle
-		? (options as SingleSelectionOptions).onValueChange
-		: undefined;
-	const onValuesChange = !isSingle
-		? (options as MultipleSelectionOptions).onValuesChange
-		: undefined;
+	let value: string | null = null;
+	let values: string[] = [];
+	let onValueChange: ((nextValue: string | null) => void) | undefined;
+	let onValuesChange: ((nextValues: string[]) => void) | undefined;
+
+	if (type === "single") {
+		value = options.value;
+		onValueChange = options.onValueChange;
+	} else {
+		values = options.values;
+		onValuesChange = options.onValuesChange;
+	}
 
 	const registerItem = useCallback(
 		(itemValue: string, element: HTMLButtonElement) => {
@@ -80,26 +81,28 @@ export function useToggleGroup(
 
 	const isItemSelected = useCallback(
 		(itemValue: string) => {
-			if (isSingle) {
+			if (type === "single") {
 				return value === itemValue;
 			}
 			return values.includes(itemValue);
 		},
-		[isSingle, value, values]
+		[type, value, values]
 	);
 
 	const onItemToggle = useCallback(
 		(itemValue: string) => {
-			if (isSingle && onValueChange) {
-				onValueChange(value === itemValue ? null : itemValue);
-			} else if (!isSingle && onValuesChange) {
+			if (type === "single") {
+				onValueChange?.(value === itemValue ? null : itemValue);
+				return;
+			}
+			if (onValuesChange) {
 				const newValues = values.includes(itemValue)
 					? values.filter((v) => v !== itemValue)
 					: [...values, itemValue];
 				onValuesChange(newValues);
 			}
 		},
-		[isSingle, value, values, onValueChange, onValuesChange]
+		[type, value, values, onValueChange, onValuesChange]
 	);
 
 	const handleKeyDown = useCallback(
@@ -181,9 +184,7 @@ export function useToggleGroup(
 	);
 
 	const containerProps = {
-		role: (type === "single" ? "radiogroup" : "toolbar") as
-			| "radiogroup"
-			| "toolbar",
+		role: type === "single" ? "radiogroup" : "toolbar",
 		onKeyDown: handleKeyDown,
 	};
 

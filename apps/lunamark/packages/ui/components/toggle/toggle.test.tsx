@@ -65,7 +65,9 @@ describe("Toggle", () => {
 		const user = userEvent.setup();
 		render(
 			<Toggle>
-				{(props) => <button {...props}>{props.pressed ? "ON" : "OFF"}</button>}
+				{({ pressed, ...props }) => (
+					<button {...props}>{pressed ? "ON" : "OFF"}</button>
+				)}
 			</Toggle>
 		);
 

@@ -3,16 +3,12 @@
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps, ReactNode } from "react";
 import { useCallback, useEffect, useRef } from "react";
-import { cn } from "@ui/utils";
+import { cn, mergeRefs } from "@ui/utils";
 import {
-	useDropdownContext,
+	useDropdownListContext,
 	useDropdownRadioGroupContext,
-	useDropdownSubContext,
 } from "./dropdown.context";
-import {
-	dropdownItemVariants,
-	dropdownIndicatorVariants,
-} from "./dropdown.variants";
+import { dropdownItemVariants } from "./dropdown.variants";
 import { useControllableState } from "@ui/hooks/state/use-controllable-state";
 import { CheckIcon, DotIcon } from "../icons";
 
@@ -44,28 +40,11 @@ function DropdownItem({
 	inset = false,
 	className,
 	textValue,
+	ref,
 	...props
 }: DropdownItemProps) {
-	const subContext = useDropdownSubContext();
-	const mainContext = useDropdownContext("DropdownItem");
-
-	const context = subContext
-		? {
-			setIsOpen: subContext.setIsOpen,
-			activeIndex: subContext.activeIndex,
-			listRef: subContext.listRef,
-			labelsRef: subContext.labelsRef,
-			getItemProps: subContext.getSubItemProps,
-		}
-		: {
-			setIsOpen: mainContext.setIsOpen,
-			activeIndex: mainContext.activeIndex,
-			listRef: mainContext.listRef,
-			labelsRef: mainContext.labelsRef,
-			getItemProps: mainContext.getItemProps,
-		};
-
-	const { setIsOpen, activeIndex, listRef, labelsRef, getItemProps } = context;
+	const { activeIndex, listRef, labelsRef, getItemProps, closeMenu } =
+		useDropdownListContext("DropdownItem");
 
 	const itemRef = useRef<HTMLButtonElement>(null);
 	const index = useRef<number>(-1);
@@ -86,6 +65,7 @@ function DropdownItem({
 		},
 		[listRef, labelsRef, textValue]
 	);
+	const combinedRef = mergeRefs(refCallback, ref);
 
 	useEffect(() => {
 		return () => {
@@ -104,18 +84,20 @@ function DropdownItem({
 	const handleSelect = () => {
 		if (disabled) return;
 		onSelect?.();
-		setIsOpen(false);
-		if (subContext) {
-			subContext.closeParent();
-		}
+		closeMenu();
 	};
+
+	const itemProps = getItemProps({
+		active: isHighlighted,
+		onClick: handleSelect,
+		...props,
+	});
 
 	return (
 		<button
-			ref={refCallback}
+			ref={combinedRef}
 			type="button"
 			role="menuitem"
-			tabIndex={isHighlighted ? 0 : -1}
 			disabled={disabled}
 			data-dropdown-item
 			data-highlighted={isHighlighted}
@@ -129,11 +111,8 @@ function DropdownItem({
 				}),
 				className
 			)}
-			{...getItemProps({
-				active: isHighlighted,
-				onClick: handleSelect,
-			})}
-			{...props}
+			{...itemProps}
+			tabIndex={isHighlighted ? 0 : -1}
 		>
 			{children}
 		</button>
@@ -167,10 +146,11 @@ function DropdownCheckboxItem({
 	disabled = false,
 	className,
 	textValue,
+	ref,
 	...props
 }: DropdownCheckboxItemProps) {
 	const { activeIndex, listRef, labelsRef, getItemProps } =
-		useDropdownContext("DropdownCheckboxItem");
+		useDropdownListContext("DropdownCheckboxItem");
 
 	const [isChecked, setIsChecked] = useControllableState({
 		value: controlledChecked,
@@ -197,6 +177,7 @@ function DropdownCheckboxItem({
 		},
 		[listRef, labelsRef, textValue]
 	);
+	const combinedRef = mergeRefs(refCallback, ref);
 
 	useEffect(() => {
 		return () => {
@@ -217,13 +198,18 @@ function DropdownCheckboxItem({
 		setIsChecked(!isChecked);
 	};
 
+	const itemProps = getItemProps({
+		active: isHighlighted,
+		onClick: handleToggle,
+		...props,
+	});
+
 	return (
 		<button
-			ref={refCallback}
+			ref={combinedRef}
 			type="button"
 			role="menuitemcheckbox"
 			aria-checked={isChecked}
-			tabIndex={isHighlighted ? 0 : -1}
 			disabled={disabled}
 			data-dropdown-item
 			data-dropdown-checkbox-item
@@ -238,14 +224,11 @@ function DropdownCheckboxItem({
 				}),
 				className
 			)}
-			{...getItemProps({
-				active: isHighlighted,
-				onClick: handleToggle,
-			})}
-			{...props}
+			{...itemProps}
+			tabIndex={isHighlighted ? 0 : -1}
 		>
 			<span
-				className={cn(dropdownIndicatorVariants())}
+				className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center"
 				data-dropdown-item-indicator
 				data-state={isChecked ? "checked" : "unchecked"}
 			>
@@ -280,10 +263,11 @@ function DropdownRadioItem({
 	disabled = false,
 	className,
 	textValue,
+	ref,
 	...props
 }: DropdownRadioItemProps) {
 	const { activeIndex, listRef, labelsRef, getItemProps } =
-		useDropdownContext("DropdownRadioItem");
+		useDropdownListContext("DropdownRadioItem");
 
 	const { value: selectedValue, onValueChange } =
 		useDropdownRadioGroupContext("DropdownRadioItem");
@@ -309,6 +293,7 @@ function DropdownRadioItem({
 		},
 		[listRef, labelsRef, textValue]
 	);
+	const combinedRef = mergeRefs(refCallback, ref);
 
 	useEffect(() => {
 		return () => {
@@ -329,13 +314,18 @@ function DropdownRadioItem({
 		onValueChange(value);
 	};
 
+	const itemProps = getItemProps({
+		active: isHighlighted,
+		onClick: handleSelect,
+		...props,
+	});
+
 	return (
 		<button
-			ref={refCallback}
+			ref={combinedRef}
 			type="button"
 			role="menuitemradio"
 			aria-checked={isSelected}
-			tabIndex={isHighlighted ? 0 : -1}
 			disabled={disabled}
 			data-dropdown-item
 			data-dropdown-radio-item
@@ -350,14 +340,11 @@ function DropdownRadioItem({
 				}),
 				className
 			)}
-			{...getItemProps({
-				active: isHighlighted,
-				onClick: handleSelect,
-			})}
-			{...props}
+			{...itemProps}
+			tabIndex={isHighlighted ? 0 : -1}
 		>
 			<span
-				className={cn(dropdownIndicatorVariants())}
+				className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center"
 				data-dropdown-item-indicator
 				data-state={isSelected ? "checked" : "unchecked"}
 			>

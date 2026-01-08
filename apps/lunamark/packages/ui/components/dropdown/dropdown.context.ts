@@ -3,12 +3,19 @@
 import { createContext, useContext } from "react";
 import type { FloatingContext, Placement } from "@floating-ui/react";
 
+type DropdownItemInteractionProps = Omit<
+	React.HTMLProps<HTMLElement>,
+	"active" | "selected"
+> & {
+	active?: boolean;
+	selected?: boolean;
+};
+
 export type DropdownContextValue = {
 	isOpen: boolean;
 	setIsOpen: (open: boolean) => void;
 	activeIndex: number | null;
 	setActiveIndex: (index: number | null) => void;
-	selectedIndex: number | null;
 	listRef: React.MutableRefObject<(HTMLElement | null)[]>;
 	labelsRef: React.MutableRefObject<(string | null)[]>;
 	refs: {
@@ -18,12 +25,15 @@ export type DropdownContextValue = {
 	floatingStyles: React.CSSProperties;
 	floatingContext: FloatingContext;
 	placement: Placement;
-	getReferenceProps: () => Record<string, unknown>;
-	getFloatingProps: () => Record<string, unknown>;
-	getItemProps: (options: {
-		active: boolean;
-		onClick?: () => void;
-	}) => Record<string, unknown>;
+	getReferenceProps: (
+		userProps?: React.HTMLProps<Element>
+	) => Record<string, unknown>;
+	getFloatingProps: (
+		userProps?: React.HTMLProps<HTMLElement>
+	) => Record<string, unknown>;
+	getItemProps: (
+		userProps?: DropdownItemInteractionProps
+	) => Record<string, unknown>;
 	contentId: string;
 	trigger: "hover" | "click";
 };
@@ -73,12 +83,15 @@ export type DropdownSubContextValue = {
 	setActiveIndex: (index: number | null) => void;
 	listRef: React.MutableRefObject<(HTMLElement | null)[]>;
 	labelsRef: React.MutableRefObject<(string | null)[]>;
-	getSubTriggerProps: () => Record<string, unknown>;
-	getSubFloatingProps: () => Record<string, unknown>;
-	getSubItemProps: (options: {
-		active: boolean;
-		onClick?: () => void;
-	}) => Record<string, unknown>;
+	getSubTriggerProps: (
+		userProps?: React.HTMLProps<Element>
+	) => Record<string, unknown>;
+	getSubFloatingProps: (
+		userProps?: React.HTMLProps<HTMLElement>
+	) => Record<string, unknown>;
+	getSubItemProps: (
+		userProps?: DropdownItemInteractionProps
+	) => Record<string, unknown>;
 	contentId: string;
 	depth: number;
 	closeParent: () => void;
@@ -98,6 +111,31 @@ export function useDropdownSubContext(
 	if (!context && componentName) {
 		throw new Error(
 			`<${componentName}> must be used within a <DropdownSub> provider`
+		);
+	}
+	return context;
+}
+
+export type DropdownListContextValue = {
+	activeIndex: number | null;
+	listRef: React.MutableRefObject<(HTMLElement | null)[]>;
+	labelsRef: React.MutableRefObject<(string | null)[]>;
+	getItemProps: (
+		userProps?: DropdownItemInteractionProps
+	) => Record<string, unknown>;
+	closeMenu: () => void;
+};
+
+export const DropdownListContext =
+	createContext<DropdownListContextValue | null>(null);
+
+export function useDropdownListContext(
+	componentName: string
+): DropdownListContextValue {
+	const context = useContext(DropdownListContext);
+	if (!context) {
+		throw new Error(
+			`<${componentName}> must be used within a <DropdownContent> or <DropdownSubContent> provider`
 		);
 	}
 	return context;

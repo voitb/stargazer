@@ -2,8 +2,7 @@
 
 import type { VariantProps } from "class-variance-authority";
 import { useMemo, type ComponentProps, ReactNode } from "react";
-import { cn } from "@ui/utils";
-import { mergeRefs } from "@ui/utils";
+import { cn, mergeRefs } from "@ui/utils";
 import { ColumnContext, type ColumnContextValue } from "./column.context";
 import { columnVariants } from "./column.variants";
 import { useColumn } from "./use-column";

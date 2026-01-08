@@ -1,33 +1,45 @@
 import { renderHook, act } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
-const mockMatchMedia = (matches: boolean) => {
-	const listeners: Array<(e: { matches: boolean }) => void> = [];
-	return vi.fn().mockImplementation((query: string) => ({
+const createMatchMedia = (initialMatches: boolean) => {
+	let matches = initialMatches;
+	const listeners = new Set<(e: { matches: boolean }) => void>();
+	const matchMedia = vi.fn().mockImplementation((query: string) => ({
 		matches,
 		media: query,
 		onchange: null,
 		addListener: vi.fn(),
 		removeListener: vi.fn(),
 		addEventListener: (_event: string, callback: (e: { matches: boolean }) => void) => {
-			listeners.push(callback);
+			listeners.add(callback);
 		},
 		removeEventListener: (_event: string, callback: (e: { matches: boolean }) => void) => {
-			const index = listeners.indexOf(callback);
-			if (index > -1) listeners.splice(index, 1);
+			listeners.delete(callback);
 		},
 		dispatchEvent: vi.fn(),
 	}));
+
+	return {
+		matchMedia,
+		setMatches(nextMatches: boolean) {
+			matches = nextMatches;
+			for (const listener of listeners) {
+				listener({ matches: nextMatches });
+			}
+		},
+	};
 };
 
 describe("useTheme", () => {
 	let originalMatchMedia: typeof window.matchMedia;
+	let matchMediaController: ReturnType<typeof createMatchMedia>;
 
 	beforeEach(() => {
 		localStorage.clear();
 		document.documentElement.removeAttribute("data-theme");
 		originalMatchMedia = window.matchMedia;
-		window.matchMedia = mockMatchMedia(false);
+		matchMediaController = createMatchMedia(false);
+		window.matchMedia = matchMediaController.matchMedia;
 		vi.resetModules();
 	});
 
@@ -82,7 +94,8 @@ describe("useTheme", () => {
 
 	describe("system theme resolution", () => {
 		it("resolves system theme based on prefers-color-scheme", async () => {
-			window.matchMedia = mockMatchMedia(false);
+			matchMediaController = createMatchMedia(false);
+			window.matchMedia = matchMediaController.matchMedia;
 			vi.resetModules();
 			const { useTheme } = await import("./use-theme");
 			const { result } = renderHook(() => useTheme());
@@ -90,12 +103,27 @@ describe("useTheme", () => {
 		});
 
 		it("resolves to dark when prefers-color-scheme is dark", async () => {
-			window.matchMedia = mockMatchMedia(true);
+			matchMediaController = createMatchMedia(true);
+			window.matchMedia = matchMediaController.matchMedia;
 			vi.resetModules();
 			const { useTheme } = await import("./use-theme");
 			const { result } = renderHook(() => useTheme());
 
 			act(() => result.current.setTheme("system"));
+
+			expect(result.current.resolvedTheme).toBe("dark");
+		});
+
+		it("updates resolvedTheme when system preference changes", async () => {
+			const { useTheme } = await import("./use-theme");
+			const { result } = renderHook(() => useTheme());
+
+			expect(result.current.theme).toBe("system");
+			expect(result.current.resolvedTheme).toBe("light");
+
+			act(() => {
+				matchMediaController.setMatches(true);
+			});
 
 			expect(result.current.resolvedTheme).toBe("dark");
 		});
@@ -106,6 +134,25 @@ describe("useTheme", () => {
 
 			act(() => result.current.setTheme("dark"));
 
+			expect(result.current.resolvedTheme).toBe("dark");
+		});
+	});
+
+	describe("storage sync", () => {
+		it("updates theme when storage event fires", async () => {
+			const { useTheme } = await import("./use-theme");
+			const { result } = renderHook(() => useTheme());
+
+			act(() => {
+				window.dispatchEvent(
+					new StorageEvent("storage", {
+						key: "ui-theme",
+						newValue: "dark",
+					})
+				);
+			});
+
+			expect(result.current.theme).toBe("dark");
 			expect(result.current.resolvedTheme).toBe("dark");
 		});
 	});

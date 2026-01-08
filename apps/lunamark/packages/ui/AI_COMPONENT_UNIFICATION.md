@@ -7,10 +7,11 @@ This file consolidates the component + hook patterns for Lunamark so AI models f
 ## Non-negotiables
 
 - **Tokens:** Always use `rgb(var(--token-name))` for colors.
-- **Variants:** All components with variants must have a separate `*.variants.ts`.
+- **Variants:** Only create `*.variants.ts` when the component exposes variants. If there are no variants, inline Tailwind classes in the component.
 - **Types:** Use `ComponentProps<"element">` (React 19+ pattern).
-- **Exports:** Barrel export component, types, and variants.
+- **Exports:** Barrel export component + types, and variants only when they exist.
 - **Client:** Add `"use client"` to any file that uses React hooks or context.
+- **data-slot:** Keep `data-slot` attributes for public components to enable styling hooks and testing.
 
 ---
 
@@ -40,6 +41,11 @@ Context provider values should be stable:
 - Use `useCallback` only when the function is part of the provider value,
   used in effect dependencies, or used as a ref callback.
 
+## Import Aliases
+
+- Use `@ui/*` when a relative import would climb more than one `../`.
+- Keep `./` or `../` for same-folder or single-level imports.
+
 ---
 
 ## File Structure Patterns
@@ -48,7 +54,7 @@ Context provider values should be stable:
 ```
 components/button/
   button.tsx
-  button.variants.ts
+  button.variants.ts (only if variants exist)
   index.ts
 ```
 
@@ -57,7 +63,7 @@ components/button/
 components/toggle-group/
   toggle-group.tsx
   toggle-group.context.ts
-  toggle-group.variants.ts
+  toggle-group.variants.ts (only if variants exist)
   index.ts
 ```
 
@@ -67,7 +73,7 @@ components/dialog/
   dialog.tsx
   dialog-content.tsx
   dialog.context.ts
-  dialog.variants.ts
+  dialog.variants.ts (only if variants exist)
   use-dialog.ts
   index.ts
 ```
@@ -87,5 +93,5 @@ components/dialog/
 ```
 export { Component } from "./component";
 export type { ComponentProps } from "./component";
-export { componentVariants } from "./component.variants";
+export { componentVariants } from "./component.variants"; // only if variants exist
 ```

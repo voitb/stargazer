@@ -18,7 +18,6 @@ import {
 } from "@floating-ui/react";
 import { useCallback, useId, useRef, useState } from "react";
 import { useControllableState } from "@ui/hooks/state/use-controllable-state";
-import { useExitAnimation } from "@ui/hooks/animation/use-exit-animation";
 
 export type UseDropdownOptions = {
 	defaultOpen?: boolean;
@@ -31,12 +30,19 @@ export type UseDropdownOptions = {
 	modal?: boolean;
 };
 
+type DropdownItemInteractionProps = Omit<
+	React.HTMLProps<HTMLElement>,
+	"active" | "selected"
+> & {
+	active?: boolean;
+	selected?: boolean;
+};
+
 export type UseDropdownReturn = {
 	isOpen: boolean;
 	setIsOpen: (open: boolean) => void;
 	activeIndex: number | null;
 	setActiveIndex: (index: number | null) => void;
-	selectedIndex: number | null;
 	listRef: React.MutableRefObject<(HTMLElement | null)[]>;
 	labelsRef: React.MutableRefObject<(string | null)[]>;
 	refs: {
@@ -46,14 +52,15 @@ export type UseDropdownReturn = {
 	floatingStyles: React.CSSProperties;
 	floatingContext: FloatingContext;
 	placement: Placement;
-	getReferenceProps: () => Record<string, unknown>;
-	getFloatingProps: () => Record<string, unknown>;
-	getItemProps: (options: {
-		active: boolean;
-		onClick?: () => void;
-	}) => Record<string, unknown>;
-	shouldRender: boolean;
-	dataState: "open" | "closed";
+	getReferenceProps: (
+		userProps?: React.HTMLProps<Element>
+	) => Record<string, unknown>;
+	getFloatingProps: (
+		userProps?: React.HTMLProps<HTMLElement>
+	) => Record<string, unknown>;
+	getItemProps: (
+		userProps?: DropdownItemInteractionProps
+	) => Record<string, unknown>;
 	contentId: string;
 	trigger: "hover" | "click";
 };
@@ -150,14 +157,11 @@ export function useDropdown(options: UseDropdownOptions = {}): UseDropdownReturn
 		typeahead,
 	]);
 
-	const shouldRender = useExitAnimation(isOpen, 150);
-
 	return {
 		isOpen,
 		setIsOpen,
 		activeIndex,
 		setActiveIndex,
-		selectedIndex,
 		listRef,
 		labelsRef,
 		refs,
@@ -167,8 +171,6 @@ export function useDropdown(options: UseDropdownOptions = {}): UseDropdownReturn
 		getReferenceProps,
 		getFloatingProps,
 		getItemProps,
-		shouldRender,
-		dataState: isOpen ? "open" : "closed",
 		contentId,
 		trigger,
 	};

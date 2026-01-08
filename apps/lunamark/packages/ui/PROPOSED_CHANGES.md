@@ -41,7 +41,6 @@ Context providers here pass object values that can trigger consumer re-renders i
 ### Tests
 - `apps/lunamark/packages/ui/components/toggle-button/` has no tests.
 - `apps/lunamark/packages/ui/components/kanban/swipeable-container/swipeable-container.test.tsx` mocks a hook path that doesn’t match the actual import (`@ui/hooks/navigation/use-swipe-navigation`).
-- `apps/lunamark/packages/ui/components/form-field/form-field.test.tsx` asserts base layout classes (e.g., `"flex"`), which conflicts with the "no CSS class tests" rule in `DESIGN_DECISIONS.md`.
 
 ### Hooks Folder Structure
 The hooks folder is already in the requested hook + test subfolder layout. No structural changes required unless we move single-use hooks to component folders (see open questions).
@@ -50,20 +49,19 @@ The hooks folder is already in the requested hook + test subfolder layout. No st
 
 ## Proposed Changes
 
-### 1) Add missing variants files and normalize className usage
+### 1) Inline styles when no variants + normalize className usage
 - **DropIndicator**
-  - Add `drop-indicator.variants.ts` with base classes.
-  - Update component to accept `className`, use `cn()` and variants.
-  - Update `index.ts` export to include variants.
+  - Inline base Tailwind classes in the component and keep `cn()` + `className` merging.
+  - Do **not** create a `drop-indicator.variants.ts` file (no variants).
 - **DroppableZone**
-  - Add `droppable-zone.variants.ts` with base classes and optional `active` state.
   - Convert props to `ComponentProps<"div">` + custom props and merge `ref`.
   - Keep `activeClassName` for backwards compatibility.
+  - Inline classes (no variants file).
 - **SwipeableContainer**
-  - Add `swipeable-container.variants.ts` for base layout styles.
   - Add `"use client"`.
   - Merge forwarded `ref` with `containerRef`.
   - Replace `React.ReactElement` type usage with `ReactElement` import.
+  - Inline classes (no variants file).
 
 ### 2) Enforce logic/component separation for Dialog
 - Move `useDialog` usage into `Dialog` root, and pass all behavior (open state, refs, `shouldRender`, `handleBackdropClick`, `dataState`, ids) through context.

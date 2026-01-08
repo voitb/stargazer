@@ -21,11 +21,5 @@ export type { DialogContextValue } from "./dialog.context";
 export type { UseDialogOptions, UseDialogReturn } from "./use-dialog";
 
 export {
-	dialogOverlayVariants,
 	dialogContentVariants,
-	dialogCloseVariants,
-	dialogHeaderVariants,
-	dialogTitleVariants,
-	dialogDescriptionVariants,
-	dialogFooterVariants,
 } from "./dialog.variants";
