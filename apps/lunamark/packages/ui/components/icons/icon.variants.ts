@@ -45,5 +45,3 @@ export const dotIconVariants = cva("", {
 		size: "sm",
 	},
 });
-
-export type { iconSizes, spinnerSizes, dotIconSizes };

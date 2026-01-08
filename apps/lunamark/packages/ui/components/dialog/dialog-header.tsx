@@ -1,30 +1,25 @@
 "use client";
 
-import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps } from "react";
 import { cn } from "@ui/utils";
 import { useDialogContext } from "./dialog.context";
-import {
-	dialogDescriptionVariants,
-	dialogHeaderVariants,
-	dialogTitleVariants,
-} from "./dialog.variants";
 
-export type DialogHeaderProps = ComponentProps<"div"> &
-	VariantProps<typeof dialogHeaderVariants>;
+export type DialogHeaderProps = ComponentProps<"div">;
 
 export function DialogHeader({ className, ref, ...props }: DialogHeaderProps) {
 	return (
 		<div
 			ref={ref}
-			className={cn(dialogHeaderVariants(), className)}
+			className={cn(
+				"flex flex-col space-y-1.5 text-center sm:text-left",
+				className
+			)}
 			{...props}
 		/>
 	);
 }
 
-export type DialogTitleProps = ComponentProps<"h2"> &
-	VariantProps<typeof dialogTitleVariants>;
+export type DialogTitleProps = ComponentProps<"h2">;
 
 export function DialogTitle({ className, ref, ...props }: DialogTitleProps) {
 	const { titleId } = useDialogContext("DialogTitle");
@@ -33,14 +28,16 @@ export function DialogTitle({ className, ref, ...props }: DialogTitleProps) {
 		<h2
 			id={titleId}
 			ref={ref}
-			className={cn(dialogTitleVariants(), className)}
+			className={cn(
+				"text-lg font-semibold leading-none tracking-tight",
+				className
+			)}
 			{...props}
 		/>
 	);
 }
 
-export type DialogDescriptionProps = ComponentProps<"p"> &
-	VariantProps<typeof dialogDescriptionVariants>;
+export type DialogDescriptionProps = ComponentProps<"p">;
 
 export function DialogDescription({
 	className,
@@ -53,7 +50,10 @@ export function DialogDescription({
 		<p
 			id={descriptionId}
 			ref={ref}
-			className={cn(dialogDescriptionVariants(), className)}
+			className={cn(
+				"text-sm text-[rgb(var(--color-neutral-foreground-1))]/70",
+				className
+			)}
 			{...props}
 		/>
 	);

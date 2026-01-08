@@ -1,20 +1,20 @@
 "use client";
 
-import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps } from "react";
 import { cn } from "@ui/utils";
-import { dropdownSeparatorVariants } from "./dropdown.variants";
 
 export type DropdownSeparatorProps = {
 	className?: string;
-} & Omit<ComponentProps<"div">, "className" | "role"> &
-	VariantProps<typeof dropdownSeparatorVariants>;
+} & Omit<ComponentProps<"div">, "className" | "role">;
 
 function DropdownSeparator({ className, ...props }: DropdownSeparatorProps) {
 	return (
 		<div
 			role="separator"
-			className={cn(dropdownSeparatorVariants(), className)}
+			className={cn(
+				"-mx-1 my-1 h-px bg-[rgb(var(--color-neutral-stroke-1))]",
+				className
+			)}
 			{...props}
 		/>
 	);

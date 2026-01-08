@@ -1,15 +1,12 @@
 "use client";
 
-import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps, ReactNode } from "react";
 import { cn } from "@ui/utils";
-import { dropdownShortcutVariants } from "./dropdown.variants";
 
 export type DropdownShortcutProps = {
 	children: ReactNode;
 	className?: string;
-} & Omit<ComponentProps<"span">, "children" | "className"> &
-	VariantProps<typeof dropdownShortcutVariants>;
+} & Omit<ComponentProps<"span">, "children" | "className">;
 
 function DropdownShortcut({
 	children,
@@ -17,7 +14,13 @@ function DropdownShortcut({
 	...props
 }: DropdownShortcutProps) {
 	return (
-		<span className={cn(dropdownShortcutVariants(), className)} {...props}>
+		<span
+			className={cn(
+				"ml-auto text-xs tracking-widest text-[rgb(var(--color-neutral-foreground-2))]",
+				className
+			)}
+			{...props}
+		>
 			{children}
 		</span>
 	);

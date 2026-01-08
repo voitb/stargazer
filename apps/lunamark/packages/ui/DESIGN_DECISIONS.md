@@ -241,6 +241,18 @@ Existing components using `ComponentPropsWithoutRef` will be migrated to `Compon
 
 ---
 
+## data-slot Attributes
+
+### Decision
+
+Keep `data-slot` attributes on public UI components.
+
+### Rationale
+
+- Enables lightweight styling hooks without introducing new APIs.
+- Provides stable selectors for tests and integrations.
+- Keeps component structure inspectable in consumer apps.
+
 ## Testing Philosophy
 
 ### Decision

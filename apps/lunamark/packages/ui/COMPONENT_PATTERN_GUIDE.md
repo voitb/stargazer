@@ -15,20 +15,20 @@ When working with the Lunamark UI components, ALWAYS follow these rules:
    - ❌ `className="bg-[var(--color-brand-background)]"`
    - ❌ `className="bg-blue-600"`
 
-2. **File Structure**: Components MUST have separate `*.variants.ts` file for CVA definitions
-   - Basic: `[name].tsx`, `[name].variants.ts`, `index.ts`
-   - Compound: `[name].tsx`, `[name].context.ts`, `[name].variants.ts`, `index.ts`
-   - Portal: `[name].tsx`, `use-[name].ts`, `[name].context.ts`, `[name].variants.ts`, `index.ts`
+2. **File Structure**: Only create `*.variants.ts` when the component exposes variants; inline Tailwind classes when there are no variants
+   - Basic: `[name].tsx`, `[name].variants.ts` (if variants), `index.ts`
+   - Compound: `[name].tsx`, `[name].context.ts`, `[name].variants.ts` (if variants), `index.ts`
+   - Portal: `[name].tsx`, `use-[name].ts`, `[name].context.ts`, `[name].variants.ts` (if variants), `index.ts`
 
 3. **TypeScript Pattern**: Use `ComponentProps<"element">` for base types (React 19+)
    - ✅ `type Props = ComponentProps<"button"> & VariantProps<typeof variants>`
    - ❌ `type Props = ComponentPropsWithoutRef<"button">` (legacy)
 
-4. **Export Pattern**: Barrel exports MUST include component, types, and variants
+4. **Export Pattern**: Barrel exports MUST include component + types, and include variants only when they exist
    ```ts
    export { Component } from "./component";
    export type { ComponentProps } from "./component";
-   export { componentVariants } from "./component.variants";
+   export { componentVariants } from "./component.variants"; // only if variants exist
    ```
 
 5. **Testing**: Test BEHAVIOR, not implementation
@@ -39,6 +39,10 @@ When working with the Lunamark UI components, ALWAYS follow these rules:
    - Buttons: `aria-busy` for loading states
    - Forms: `htmlFor`, `aria-describedby`, `aria-invalid`
    - Modals: `role="dialog"`, `aria-modal="true"`
+
+7. **Context Stability**: Provider values MUST be memoized with `useMemo`; use `useCallback` only for functions stored in the provider value or used in effects/ref callbacks
+
+8. **data-slot**: Keep `data-slot` attributes on public components for styling and testing hooks
 
 ---
 
@@ -65,6 +69,11 @@ When working with the Lunamark UI components, ALWAYS follow these rules:
 | Constants | UPPER_SNAKE_CASE | `MAX_FILE_SIZE` |
 | Types/Interfaces | PascalCase (no `I` prefix) | `ButtonProps`, `FormFieldOptions` |
 
+### Import Alias Rule
+
+- Use `@ui/*` when the relative path would climb more than one `../`.
+- Keep `./` or `../` for same-folder or single-level imports.
+
 ### Color Token Quick Reference
 
 | Usage | Token |
@@ -90,7 +99,7 @@ When working with the Lunamark UI components, ALWAYS follow these rules:
 ```
 components/[name]/
 ├── [name].tsx           # Component implementation
-├── [name].variants.ts   # CVA variant definitions
+├── [name].variants.ts   # CVA variant definitions (only if variants exist)
 └── index.ts             # Barrel exports
 ```
 
@@ -125,7 +134,7 @@ export const [name]Variants = cva(
 ```tsx
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps, ReactNode } from "react";
-import { cn } from "../../utils/cn";
+import { cn } from "@ui/utils";
 import { [name]Variants } from "./[name].variants";
 
 type [Name]Props = ComponentProps<"button"> &
@@ -166,7 +175,7 @@ export type { [Name]Props };
 ```ts
 export { [Name] } from "./[name]";
 export type { [Name]Props } from "./[name]";
-export { [name]Variants } from "./[name].variants";
+export { [name]Variants } from "./[name].variants"; // only if variants exist
 ```
 
 ---
@@ -180,7 +189,7 @@ export { [name]Variants } from "./[name].variants";
 components/[name]/
 ├── [name].tsx           # Main + sub-components
 ├── [name].context.ts    # Context definition
-├── [name].variants.ts   # CVA definitions
+├── [name].variants.ts   # CVA definitions (only if variants exist)
 └── index.ts             # Barrel exports
 ```
 
@@ -211,7 +220,7 @@ export function use[Name]Context() {
 ```tsx
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps, ReactNode } from "react";
-import { cn } from "../../utils/cn";
+import { cn } from "@ui/utils";
 import { [name]Variants } from "./[name].variants";
 import {
   [Name]Context,
@@ -291,7 +300,7 @@ components/[name]/
 ├── [name]-trigger.tsx   # Trigger button
 ├── use-[name].ts        # Unified hook with all logic
 ├── [name].context.ts    # Context definition
-├── [name].variants.ts   # CVA definitions
+├── [name].variants.ts   # CVA definitions (only if variants exist)
 └── index.ts             # Barrel exports
 ```
 
@@ -423,8 +432,8 @@ type FormFieldRenderProps = {
 You are generating a basic UI component for the Lunamark Design System.
 
 REQUIREMENTS:
-1. Create 3 files: [name].tsx, [name].variants.ts, index.ts
-2. Use CVA (class-variance-authority) for variants
+1. Create [name].tsx, index.ts, and add [name].variants.ts **only if the component exposes variants**
+2. Use CVA (class-variance-authority) for variants when applicable
 3. ALL colors MUST use rgb(var(--token-name)) format
 4. Use ComponentProps<"element"> for base types
 5. Export component, types, and variants from index.ts
@@ -446,10 +455,10 @@ Follow the Button component as the reference implementation.
 You are reviewing a UI component for compliance with the Lunamark Design System patterns.
 
 CHECKLIST:
-- [ ] Has separate *.variants.ts file with CVA definitions
+- [ ] Has separate *.variants.ts file with CVA definitions (only if the component exposes variants)
 - [ ] ALL colors use rgb(var(--token-name)) format (no var(--token), no hardcoded colors)
 - [ ] Uses ComponentProps<"element"> for base types (React 19+ pattern)
-- [ ] Exports component, types, and variants from index.ts
+- [ ] Exports component + types, and variants only when they exist
 - [ ] Files use kebab-case naming
 - [ ] Component exports use PascalCase
 - [ ] Has behavior-focused tests (not CSS class tests)
@@ -501,7 +510,7 @@ export const buttonVariants = cva(
 ```tsx
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps, ReactNode } from "react";
-import { cn } from "../../utils/cn";
+import { cn } from "@ui/utils";
 import { buttonVariants } from "./button.variants";
 import { Spinner } from "../icons";
 
@@ -576,8 +585,9 @@ export { buttonVariants } from "./button.variants";
 |-------|-------|---------|
 | **Missing rgb() wrapper** | `bg-[var(--color-brand-background)]` | `bg-[rgb(var(--color-brand-background))]` |
 | **Hardcoded colors** | `className="bg-blue-600"` | `className="bg-[rgb(var(--color-brand-background))]"` |
-| **Missing variants.ts** | CVA in component file | Separate `[name].variants.ts` file |
-| **Incomplete exports** | Only export component | Export component, types, AND variants |
+| **Missing variants.ts (when variants exist)** | CVA in component file | Separate `[name].variants.ts` file |
+| **Variants file without variants** | Base-only CVA file | Inline classes in the component |
+| **Incomplete exports** | Only export component | Export component + types, and variants only when they exist |
 | **Testing CSS classes** | `expect(element).toHaveClass("bg-blue-600")` | `expect(element).toHaveAttribute("aria-busy", "true")` |
 | **Legacy TypeScript** | `ComponentPropsWithoutRef<"button">` | `ComponentProps<"button">` (React 19+) |
 | **No accessibility** | `<button>Click</button>` | `<button aria-busy={isLoading}>Click</button>` |
@@ -587,8 +597,8 @@ export { buttonVariants } from "./button.variants";
 Before committing, check for:
 - [ ] No `var(--token)` without `rgb()` wrapper
 - [ ] No hardcoded Tailwind colors (`bg-blue-600`, `text-red-500`)
-- [ ] Every component has `*.variants.ts` file
-- [ ] Every `index.ts` exports variants
+- [ ] Components with variants have `*.variants.ts` files; components without variants inline classes
+- [ ] `index.ts` exports variants only when they exist
 - [ ] Tests don't assert on CSS class names
 - [ ] Interactive elements have proper ARIA attributes
 
@@ -600,7 +610,7 @@ Before committing, check for:
 
 **File Structure:**
 - [ ] Files use kebab-case naming (`my-component.tsx`)
-- [ ] Variants in separate `*.variants.ts` file
+- [ ] Variants in separate `*.variants.ts` file when the component exposes variants
 - [ ] Context in separate `*.context.ts` file (if compound)
 - [ ] Tests in `*.test.tsx` file
 
@@ -619,7 +629,7 @@ Before committing, check for:
 **Exports:**
 - [ ] Exports component: `export { Component }`
 - [ ] Exports types: `export type { ComponentProps }`
-- [ ] Exports variants: `export { componentVariants }`
+- [ ] Exports variants when they exist: `export { componentVariants }`
 - [ ] Exports context (if applicable)
 
 **Testing:**

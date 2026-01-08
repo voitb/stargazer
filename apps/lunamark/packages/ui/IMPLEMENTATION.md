@@ -65,7 +65,7 @@ className="bg-[rgb(var(--color-brand-background)/0.5)]"
 1. Create folder: `components/[name]/`
 2. Create files:
    ```
-   [name].variants.ts  # CVA definitions (if needed)
+   [name].variants.ts  # Only if the component exposes variants
    [name].tsx          # Component
    index.ts            # Barrel export
    ```
@@ -92,7 +92,7 @@ export const nameVariants = cva(
 // [name].tsx
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps } from "react";
-import { cn } from "../../utils/cn";
+import { cn } from "@ui/utils";
 import { nameVariants } from "./[name].variants";
 
 type NameProps = ComponentProps<"div"> &
@@ -111,6 +111,8 @@ function Name({ className, variant, size, ref, ...props }: NameProps) {
 export { Name };
 export type { NameProps };
 ```
+
+If the component has no variants, omit the `*.variants.ts` file and inline Tailwind classes in the component.
 
 ### Finding Token Issues
 
@@ -222,5 +224,7 @@ Before committing:
 - [ ] Interactive elements have `focus-visible:ring-*`
 - [ ] Overlays use `useExitAnimation` hook
 - [ ] ARIA attributes present for interactive components
+- [ ] Context provider values are memoized with `useMemo`
+- [ ] `data-slot` attributes preserved on public components
 - [ ] Light & dark themes render correctly
 - [ ] Types exported from index.ts

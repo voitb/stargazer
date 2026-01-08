@@ -23,12 +23,16 @@ export function ColumnTabs({
   onTabChange,
   className,
   variant,
+  ref,
+  ...props
 }: ColumnTabsProps) {
   return (
     <div
+      ref={ref}
       role="tablist"
       aria-label="Kanban columns"
       className={cn(columnTabsVariants({ variant }), className)}
+      {...props}
     >
       {tabs.map((tab, index) => (
         <button

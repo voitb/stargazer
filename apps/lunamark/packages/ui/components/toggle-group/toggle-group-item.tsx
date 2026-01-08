@@ -2,8 +2,7 @@
 
 import type { VariantProps } from "class-variance-authority";
 import { useEffect, useRef, type ComponentProps, type ReactNode } from "react";
-import { cn } from "@ui/utils";
-import { mergeRefs } from "@ui/utils";
+import { cn, mergeRefs } from "@ui/utils";
 import { useToggleGroupContext } from "./toggle-group.context";
 import {
 	toggleGroupItemVariants,

@@ -1,61 +1,42 @@
 # phase 1
 
-1. swipable-container.test.tsx
-we need to make sure the tests we have correct with [text](apps/lunamark/packages/ui/CLAUDE.md) [text](apps/lunamark/packages/ui/IMPLEMENTATION.md) [text](apps/lunamark/packages/ui/DESIGN_DECISIONS.md) [text](apps/lunamark/packages/ui/COMPONENT_ARCHITECTURE.md)
+1. swipable-container.test.tsx — DONE: validated against docs; tests are behavior/a11y-focused and mock the correct hook path.
 
-2. package/ui/components
-we need to have consistency how the index exprots are done (separate type exports, separate component exports)
+2. package/ui/components — DONE: normalized `apps/lunamark/packages/ui/components/kanban/index.ts` to separate component/type/variant exports for consistency.
 
-3. unify the pattern of the components, variants and hooks
-we need to unify the way we have created the components, variants and hooks in package/ui, we need to create the rule how the components should be created and how the variants should be created and how the hooks should be created, we need to make sure we use that pattern in every package/ui component + index file + we use VariantProps<typeof x> to import the variants from the variants file
+3. unify the pattern of the components, variants and hooks — DONE: updated docs (`AI_COMPONENT_UNIFICATION.md`, `COMPONENT_PATTERN_GUIDE.md`, `COMPONENT_ARCHITECTURE.md`, `CLAUDE.md`) and code to keep variants files only when variants exist, inline classes otherwise, and use `VariantProps<typeof x>` where variants exist.
 
-4. validate tests in the package/ui/hooks
-make sure that our hooks' tests follow the same pattern as the components and variants tests
+4. validate tests in the package/ui/hooks — DONE: reviewed hook tests; aligned with behavior-based pattern and updated theme tests for system/storage changes.
 
-5. validate tests in the package/ui/components
-make sure that our components' tests follow the same pattern as the components and variants tests
+5. validate tests in the package/ui/components — DONE: reviewed component tests; behavior-focused with no CSS class assertions (dropdown test error message updated previously).
 
-6. card components and other
-please use everywhere where it's possible the "@/" pattern
+6. card components and other — DONE: swapped deep relative card imports to `@ui/components/card` and enforced alias rule for deep imports.
 
-7. validate ref passing props
-we need to validate if we need to destruct the props from ref and it won't work with spreading props with ref inside
+7. validate ref passing props — DONE: merged internal + external refs in dropdown content/sub-content and popover content; dropdown item/sub-trigger now merge external refs with internal callbacks.
 
-8. dialog-context
-remove the not needed spacings (context props), dialog.tsx
+8. dialog-context — DONE: validated context usage; `Dialog` owns `useDialog` and shares only required context values, with base-only styling inlined.
 
-9. usave of VariantProps<typeof x>
-check if everything that has variants uses this
+9. usave of VariantProps<typeof x> — DONE: verified variant components use `VariantProps`; removed `VariantProps` from dialog subcomponents after inlining base-only styles.
 
-10. validate dropdown-item
-why we have this ugly context passing? why are we doing something like this? how to improve it?
+10. validate dropdown-item — DONE: introduced `DropdownListContext` to remove awkward context chaining and simplified item prop handling.
 
-11. validate dropdown overall implementation
-as titled, we are redundantly passing omti of children and other, please verify it
+11. validate dropdown overall implementation — DONE: removed redundant state from `use-dropdown`, streamlined prop getters, and inlined base-only styles.
 
-12. validate context pattern
-`<${componentName}> must be used within a <DropdownSub> provider` validate if we need thhis kind of pattern when we don't have other compoennts idk, and why we have context like this if we don't have the compount components lol
+12. validate context pattern — DONE: list context error now points to `DropdownContent`/`DropdownSubContent` providers instead of `DropdownSub`.
 
-13. add useMemo rule
-write the useMemo rule to our markdowns, that when we have the context and we pass data to it we could use useCallabck and useMemo not to rerender values everytime
+13. add useMemo rule — DONE: added provider memoization rule across UI docs.
 
-14. remove all empty variants
-if for example apps/lunamark/packages/ui/components/dropdown/dropdown.variants.ts doesn't have the variants but only inline styling, remove it. 
+14. remove all empty variants — DONE: removed no-variant files (`drop-indicator`, `popover`) and inlined base-only dialog/dropdown classes.
 
-15. remove redundant code
-apps/lunamark/packages/ui/components/icons/icon.variants.ts the variants that are redundant + not user
+15. remove redundant code — DONE: removed redundant exported types from `apps/lunamark/packages/ui/components/icons/icon.variants.ts`.
 
-16. validate if we should use data-slot
-for readers and others - we could remove it possibly (but not sure because we have it in the ui library for developers) because lunamark is local (or self deployable) only, aria-* etc
+16. validate if we should use data-slot — DONE: documented decision to keep `data-slot` on public components.
 
-17. instaed of hardcoding the types use
-ToggleGroupItemVariantProps["size"]; <- use the types like this to have it passed from the variant not hardcoding
+17. instaed of hardcoding the types use — DONE: switched size typing to `VariantProps`-derived types (toggle-group + stat-pill mapping).
 
-18. toggle-group
-improve the implementation, I don't get that big chunk of the tenary, same thing in use-toggle-group, why that shit logic like this + useCallbacks (or is it because of using in context)?
+18. toggle-group — DONE: simplified `ToggleGroup`/`useToggleGroup` logic and removed the large ternary by building options explicitly.
 
-19. validate theme implementation
-apps/lunamark/packages/ui/hooks/theme/use-theme/use-theme.ts check if the implementation is correct or could be imrpoved, maybe split into utils or anything
+19. validate theme implementation — DONE: reworked `use-theme` snapshot handling + tests for system preference and storage updates.
 
 # phase 2
 20. review the lunamark components in the future, not essential for now

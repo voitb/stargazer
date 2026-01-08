@@ -100,7 +100,7 @@ packages/ui/
 ├── components/              # 23+ components
 │   └── [component]/
 │       ├── [component].tsx          # React component
-│       ├── [component].variants.ts  # CVA variant definitions
+│       ├── [component].variants.ts  # CVA variant definitions (only when variants exist)
 │       └── index.ts                 # Barrel export
 ├── hooks/
 │   ├── use-theme.ts
@@ -320,7 +320,7 @@ export const buttonVariants = cva(
 ```tsx
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps } from "react";
-import { cn } from "../../utils/cn";
+import { cn } from "@ui/utils";
 import { buttonVariants } from "./button.variants";
 
 type ButtonProps = ComponentProps<"button"> &
@@ -790,7 +790,7 @@ export { oceanColorTokens } from "./ocean";
 
 **Checklist:**
 - [ ] Create folder: `components/[name]/`
-- [ ] Create `[name].variants.ts` with CVA definitions
+- [ ] Create `[name].variants.ts` with CVA definitions **only if the component exposes variants** (otherwise inline Tailwind classes)
 - [ ] Create `[name].tsx` with component
 - [ ] Create `index.ts` barrel export
 - [ ] Use `cn()` for className merging
@@ -798,7 +798,7 @@ export { oceanColorTokens } from "./ocean";
 - [ ] Add proper TypeScript types
 - [ ] Export from `components/index.ts`
 
-**Template:**
+**Template (with variants):**
 ```tsx
 // components/[name]/[name].variants.ts
 import { cva } from "class-variance-authority";
@@ -817,7 +817,7 @@ export const [name]Variants = cva(
 // components/[name]/[name].tsx
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps } from "react";
-import { cn } from "../../utils/cn";
+import { cn } from "@ui/utils";
 import { [name]Variants } from "./[name].variants";
 
 type [Name]Props = ComponentProps<"div"> &
@@ -841,6 +841,8 @@ export { [Name] } from "./[name]";
 export type { [Name]Props } from "./[name]";
 export { [name]Variants } from "./[name].variants";
 ```
+
+If the component has **no variants**, skip the variants file and inline the Tailwind classes in the component. Do not export variants from `index.ts`.
 
 ---
 

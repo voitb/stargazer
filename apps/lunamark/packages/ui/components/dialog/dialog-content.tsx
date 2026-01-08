@@ -3,14 +3,10 @@
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps } from "react";
 import { createPortal } from "react-dom";
-import { cn } from "@ui/utils";
-import { mergeRefs } from "@ui/utils";
+import { cn, mergeRefs } from "@ui/utils";
 import { DialogClose } from "./dialog-close";
 import { useDialogContext } from "./dialog.context";
-import {
-	dialogContentVariants,
-	dialogOverlayVariants,
-} from "./dialog.variants";
+import { dialogContentVariants } from "./dialog.variants";
 
 export type DialogContentProps = ComponentProps<"div"> &
 	VariantProps<typeof dialogContentVariants>;
@@ -44,7 +40,10 @@ export function DialogContent({
 			<div
 				data-dialog-overlay
 				data-state={dataState}
-				className={cn(dialogOverlayVariants())}
+				className={cn(
+					"fixed inset-0",
+					"bg-[rgb(var(--color-overlay)/0.5)]"
+				)}
 				aria-hidden="true"
 			/>
 

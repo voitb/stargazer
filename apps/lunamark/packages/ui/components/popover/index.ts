@@ -16,5 +16,3 @@ export type { PopoverContentProps } from "./popover-content";
 export type { PopoverCloseProps } from "./popover-close";
 export type { PopoverContextValue } from "./popover.context";
 export type { UsePopoverOptions, UsePopoverReturn } from "./use-popover";
-
-export { popoverContentVariants, popoverCloseVariants } from "./popover.variants";

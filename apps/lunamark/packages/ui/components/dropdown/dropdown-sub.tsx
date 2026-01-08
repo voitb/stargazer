@@ -19,17 +19,17 @@ import {
 	FloatingFocusManager,
 	safePolygon,
 } from "@floating-ui/react";
-import { cn } from "@ui/utils";
+import { cn, mergeRefs } from "@ui/utils";
 import {
+	DropdownListContext,
 	useDropdownContext,
+	useDropdownListContext,
 	useDropdownSubContext,
 	DropdownSubContext,
 	type DropdownSubContextValue,
 } from "./dropdown.context";
 import {
-	dropdownContentVariants,
 	dropdownItemVariants,
-	dropdownSubTriggerChevronVariants,
 } from "./dropdown.variants";
 import { useControllableState } from "@ui/hooks/state/use-controllable-state";
 import { useExitAnimation } from "@ui/hooks/animation/use-exit-animation";
@@ -194,28 +194,13 @@ function DropdownSubTrigger({
 	disabled = false,
 	className,
 	textValue,
+	ref,
 	...props
 }: DropdownSubTriggerProps) {
-	const parentSubContext = useDropdownSubContext();
-	const parentContext = useDropdownContext("DropdownSubTrigger");
-	const subContext = useDropdownSubContext("DropdownSubTrigger");
-
-	const parentList = parentSubContext
-		? {
-			activeIndex: parentSubContext.activeIndex,
-			listRef: parentSubContext.listRef,
-			labelsRef: parentSubContext.labelsRef,
-			getItemProps: parentSubContext.getSubItemProps,
-		}
-		: {
-			activeIndex: parentContext.activeIndex,
-			listRef: parentContext.listRef,
-			labelsRef: parentContext.labelsRef,
-			getItemProps: parentContext.getItemProps,
-		};
-
-	const { activeIndex, listRef, labelsRef, getItemProps } = parentList;
-	const { refs, getSubTriggerProps, isOpen, contentId } = subContext;
+	const { activeIndex, listRef, labelsRef, getItemProps } =
+		useDropdownListContext("DropdownSubTrigger");
+	const { refs, getSubTriggerProps, isOpen, contentId } =
+		useDropdownSubContext("DropdownSubTrigger");
 
 	const itemRef = useRef<HTMLButtonElement>(null);
 	const index = useRef<number>(-1);
@@ -237,6 +222,7 @@ function DropdownSubTrigger({
 		},
 		[refs, listRef, labelsRef, textValue]
 	);
+	const combinedRef = mergeRefs(refCallback, ref);
 
 	useEffect(() => {
 		return () => {
@@ -251,16 +237,17 @@ function DropdownSubTrigger({
 	}, [listRef, labelsRef]);
 
 	const isHighlighted = activeIndex === index.current;
+	const itemProps = getItemProps({ active: isHighlighted, ...props });
+	const triggerProps = getSubTriggerProps(itemProps);
 
 	return (
 		<button
-			ref={refCallback}
+			ref={combinedRef}
 			type="button"
 			role="menuitem"
 			aria-haspopup="menu"
 			aria-expanded={isOpen}
 			aria-controls={isOpen ? contentId : undefined}
-			tabIndex={isHighlighted ? 0 : -1}
 			disabled={disabled}
 			data-dropdown-sub-trigger
 			data-highlighted={isHighlighted}
@@ -273,12 +260,11 @@ function DropdownSubTrigger({
 				}),
 				className
 			)}
-			{...getItemProps({ active: isHighlighted })}
-			{...getSubTriggerProps()}
-			{...props}
+			{...triggerProps}
+			tabIndex={isHighlighted ? 0 : -1}
 		>
 			{children}
-			<ChevronRightIcon className={cn(dropdownSubTriggerChevronVariants())} />
+			<ChevronRightIcon className="ml-auto h-4 w-4 text-[rgb(var(--color-neutral-foreground-2))]" />
 		</button>
 	);
 }
@@ -289,12 +275,12 @@ export type DropdownSubContentProps = {
 } & Omit<
 	ComponentProps<"div">,
 	"children" | "className" | "style" | "id" | "role"
-> &
-	VariantProps<typeof dropdownContentVariants>;
+>;
 
 function DropdownSubContent({
 	children,
 	className,
+	ref,
 	...props
 }: DropdownSubContentProps) {
 	const subContext = useDropdownSubContext("DropdownSubContent");
@@ -306,10 +292,45 @@ function DropdownSubContent({
 		getSubFloatingProps,
 		contentId,
 		floatingContext,
+		activeIndex,
+		listRef,
+		labelsRef,
+		getSubItemProps,
+		setIsOpen,
+		closeParent,
 	} = subContext;
 
 	const shouldRender = useExitAnimation(isOpen, 150);
 	const dataState = isOpen ? "open" : "closed";
+	const listContextValue = useMemo(
+		() => ({
+			activeIndex,
+			listRef,
+			labelsRef,
+			getItemProps: getSubItemProps,
+			closeMenu: () => {
+				setIsOpen(false);
+				closeParent();
+			},
+		}),
+		[
+			activeIndex,
+			listRef,
+			labelsRef,
+			getSubItemProps,
+			setIsOpen,
+			closeParent,
+		]
+	);
+	const combinedRef = mergeRefs(refs.setFloating, ref);
+	const floatingProps = getSubFloatingProps(props);
+	const contentClassName = cn(
+		"z-50 min-w-[8rem] overflow-hidden rounded-md border p-1 shadow-lg",
+		"bg-[rgb(var(--color-neutral-background-1))]",
+		"text-[rgb(var(--color-neutral-foreground-1))]",
+		"border-[rgb(var(--color-neutral-stroke-1))]",
+		className
+	);
 
 	if (!shouldRender) return null;
 
@@ -320,20 +341,21 @@ function DropdownSubContent({
 				modal={false}
 				initialFocus={-1}
 			>
-				<div
-					id={contentId}
-					ref={refs.setFloating}
-					role="menu"
-					data-floating-content
-					data-dropdown-sub-content
-					data-state={dataState}
-					style={floatingStyles}
-					className={cn(dropdownContentVariants(), className)}
-					{...getSubFloatingProps()}
-					{...props}
-				>
-					{children}
-				</div>
+				<DropdownListContext.Provider value={listContextValue}>
+					<div
+						id={contentId}
+						ref={combinedRef}
+						role="menu"
+						data-floating-content
+						data-dropdown-sub-content
+						data-state={dataState}
+						style={floatingStyles}
+						className={contentClassName}
+						{...floatingProps}
+					>
+						{children}
+					</div>
+				</DropdownListContext.Provider>
 			</FloatingFocusManager>
 		</FloatingPortal>
 	);

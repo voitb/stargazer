@@ -3,8 +3,7 @@
 import { CollisionPriority } from "@dnd-kit/abstract";
 import { useDroppable } from "@dnd-kit/react";
 import type { ComponentProps, ReactNode } from "react";
-import { cn } from "@ui/utils";
-import { mergeRefs } from "@ui/utils";
+import { cn, mergeRefs } from "@ui/utils";
 
 export type DroppableZoneProps = Omit<ComponentProps<"div">, "children"> & {
   id: string;

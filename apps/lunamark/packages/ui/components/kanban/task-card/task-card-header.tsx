@@ -2,7 +2,7 @@
 
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps } from "react";
-import { CardHeader } from "../../card";
+import { CardHeader } from "@ui/components/card";
 import { cn } from "@ui/utils";
 import { taskCardHeaderVariants } from "./task-card.variants";
 

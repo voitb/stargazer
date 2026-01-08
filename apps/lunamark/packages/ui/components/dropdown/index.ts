@@ -13,9 +13,11 @@ export { useDropdown } from "./use-dropdown";
 
 export {
 	useDropdownContext,
+	useDropdownListContext,
 	useDropdownRadioGroupContext,
 	useDropdownSubContext,
 	DropdownContext,
+	DropdownListContext,
 	DropdownRadioGroupContext,
 	DropdownSubContext,
 } from "./dropdown.context";
@@ -42,17 +44,13 @@ export type {
 } from "./dropdown-sub";
 export type {
 	DropdownContextValue,
+	DropdownListContextValue,
 	DropdownRadioGroupContextValue,
 	DropdownSubContextValue,
 } from "./dropdown.context";
 export type { UseDropdownOptions, UseDropdownReturn } from "./use-dropdown";
 
 export {
-	dropdownContentVariants,
 	dropdownItemVariants,
 	dropdownLabelVariants,
-	dropdownSeparatorVariants,
-	dropdownIndicatorVariants,
-	dropdownSubTriggerChevronVariants,
-	dropdownShortcutVariants,
 } from "./dropdown.variants";

@@ -15,7 +15,7 @@ Single-element components with CVA variants.
 ```
 components/button/
 ├── button.tsx           # Component
-├── button.variants.ts   # CVA definitions
+├── button.variants.ts   # CVA definitions (only if variants exist)
 └── index.ts             # Exports
 ```
 
@@ -29,7 +29,7 @@ Multiple sub-components sharing state via Context.
 components/toggle-group/
 ├── toggle-group.tsx         # Main + sub-components
 ├── toggle-group.context.ts  # Context (optional, can be inline)
-├── toggle-group.variants.ts # CVA definitions
+├── toggle-group.variants.ts # CVA definitions (only if variants exist)
 └── index.ts
 ```
 
@@ -47,7 +47,7 @@ components/dialog/
 ├── dialog-footer.tsx
 ├── dialog-close.tsx
 ├── dialog.context.ts       # Context definition
-├── dialog.variants.ts      # CVA definitions
+├── dialog.variants.ts      # CVA definitions (only if variants exist)
 ├── use-dialog.ts           # Unified hook (state + behavior)
 └── index.ts
 ```
@@ -190,6 +190,8 @@ export function useDialogContext(componentName: string): DialogContextValue {
 
 **Key pattern:** Include the component name in the error message for better debugging.
 
+**Provider value stability:** Wrap context values in `useMemo` and use `useCallback` only for functions stored in the provider value or used as effect dependencies or ref callbacks.
+
 ### For Simpler Components
 
 Context can be inline in the main component file:
@@ -215,7 +217,9 @@ function useToggleGroupContext(componentName: string) {
 
 ### CVA Variants File
 
-Always separate CVA definitions into `*.variants.ts`:
+Only create `*.variants.ts` when the component exposes variants. If there are no variants, inline Tailwind classes in the component.
+
+**CVA example:**
 
 ```typescript
 // dialog.variants.ts
@@ -258,6 +262,10 @@ className="bg-[rgb(var(--color-brand-background)/0.8)]"  // with opacity
 className="bg-[var(--color-brand-background)]"  // missing rgb()
 className="bg-blue-600"  // hardcoded - breaks theming
 ```
+
+### data-slot Attributes
+
+Use `data-slot` on public components to provide stable styling and testing hooks.
 
 ### Animation with data-state
 
@@ -305,12 +313,12 @@ function DialogContent({ ref, ...props }: DialogContentProps) {
 
 ### For Simple Components
 - [ ] `[name].tsx` - Component
-- [ ] `[name].variants.ts` - CVA definitions
+- [ ] `[name].variants.ts` - CVA definitions (only if variants exist)
 - [ ] `index.ts` - Exports
 
 ### For Compound Components
 - [ ] `[name].tsx` - Main component + sub-components
-- [ ] `[name].variants.ts` - CVA definitions
+- [ ] `[name].variants.ts` - CVA definitions (only if variants exist)
 - [ ] `[name].context.ts` - Context (optional)
 - [ ] `index.ts` - Exports
 
@@ -319,7 +327,7 @@ function DialogContent({ ref, ...props }: DialogContentProps) {
 - [ ] `[name]-content.tsx` - Portal content
 - [ ] `[name]-*.tsx` - Other sub-components
 - [ ] `[name].context.ts` - Context definition
-- [ ] `[name].variants.ts` - CVA definitions
+- [ ] `[name].variants.ts` - CVA definitions (only if variants exist)
 - [ ] `use-[name].ts` - **Single** hook with all logic
 - [ ] `index.ts` - Exports
 
@@ -349,8 +357,8 @@ export type { DialogProps } from "./dialog";
 export type { DialogContentProps } from "./dialog-content";
 export type { UseDialogOptions, UseDialogReturn } from "./use-dialog";
 
-// Variants (for styling customization)
-export { dialogContentVariants, dialogOverlayVariants } from "./dialog.variants";
+// Variants (for styling customization, only when they exist)
+export { dialogContentVariants } from "./dialog.variants";
 ```
 
 ---
@@ -404,7 +412,7 @@ it("closes on backdrop click when enabled", () => {
 
 1. **Hook separation**: Only extract to `hooks/` if reusable across 3+ components
 2. **Single hook per component**: All component-specific logic in ONE `use-[name].ts` file
-3. **CVA in separate file**: Always use `*.variants.ts` for styling
+3. **CVA in separate file**: Use `*.variants.ts` when the component exposes variants; inline classes when it does not
 4. **Token wrapper**: Always use `rgb(var(--token-name))` for colors
 5. **Context errors**: Include component name in error messages
 6. **Ref merging**: Combine internal + forwarded refs in portal components

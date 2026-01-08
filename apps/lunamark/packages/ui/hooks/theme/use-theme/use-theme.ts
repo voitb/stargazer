@@ -4,16 +4,23 @@ import { useEffect, useSyncExternalStore, useTransition } from "react";
 
 type Theme = "light" | "dark" | "system";
 type ResolvedTheme = "light" | "dark";
+type ThemeSnapshot = {
+	theme: Theme;
+	resolvedTheme: ResolvedTheme;
+};
 
 const STORAGE_KEY = "ui-theme";
 
+function parseStoredTheme(value: string | null): Theme {
+	if (value === "light" || value === "dark" || value === "system") {
+		return value;
+	}
+	return "system";
+}
+
 function getStoredTheme(): Theme {
-  if (typeof window === "undefined") return "system";
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored === "light" || stored === "dark" || stored === "system") {
-    return stored;
-  }
-  return "system";
+	if (typeof window === "undefined") return "system";
+	return parseStoredTheme(localStorage.getItem(STORAGE_KEY));
 }
 
 function getSystemTheme(): ResolvedTheme {
@@ -32,7 +39,11 @@ function applyTheme(theme: ResolvedTheme): void {
   document.documentElement.setAttribute("data-theme", theme);
 }
 
-let currentTheme: Theme = getStoredTheme();
+const storedTheme = getStoredTheme();
+let currentSnapshot: ThemeSnapshot = {
+	theme: storedTheme,
+	resolvedTheme: resolveTheme(storedTheme),
+};
 const listeners = new Set<() => void>();
 
 function subscribe(callback: () => void): () => void {
@@ -41,53 +52,72 @@ function subscribe(callback: () => void): () => void {
 }
 
 function notifyListeners(): void {
-  listeners.forEach((listener) => listener());
+	listeners.forEach((listener) => listener());
 }
 
-function getSnapshot(): Theme {
-  return currentTheme;
+function updateSnapshot(nextTheme: Theme, nextResolvedTheme: ResolvedTheme): void {
+	currentSnapshot = { theme: nextTheme, resolvedTheme: nextResolvedTheme };
+	notifyListeners();
 }
 
-function getServerSnapshot(): Theme {
-  return "system";
+function getSnapshot(): ThemeSnapshot {
+	return currentSnapshot;
+}
+
+function getServerSnapshot(): ThemeSnapshot {
+	return { theme: "system", resolvedTheme: "light" };
 }
 
 export interface UseThemeReturn {
-  theme: Theme;
-  resolvedTheme: ResolvedTheme;
-  setTheme: (theme: Theme) => void;
+	theme: Theme;
+	resolvedTheme: ResolvedTheme;
+	setTheme: (theme: Theme) => void;
 }
 
 export function useTheme(): UseThemeReturn {
-  const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
-  const resolvedTheme = resolveTheme(theme);
-  const [, startTransition] = useTransition();
+	const { theme, resolvedTheme } = useSyncExternalStore(
+		subscribe,
+		getSnapshot,
+		getServerSnapshot
+	);
+	const [, startTransition] = useTransition();
 
-  function setTheme(newTheme: Theme) {
-    startTransition(() => {
-      currentTheme = newTheme;
-      localStorage.setItem(STORAGE_KEY, newTheme);
-      applyTheme(resolveTheme(newTheme));
-      notifyListeners();
-    });
-  }
+	function setTheme(newTheme: Theme) {
+		startTransition(() => {
+			localStorage.setItem(STORAGE_KEY, newTheme);
+			updateSnapshot(newTheme, resolveTheme(newTheme));
+		});
+	}
 
-  useEffect(() => {
-    applyTheme(resolvedTheme);
-  }, [resolvedTheme]);
+	useEffect(() => {
+		applyTheme(resolvedTheme);
+	}, [resolvedTheme]);
 
-  useEffect(() => {
-    if (theme !== "system") return;
+	useEffect(() => {
+		if (theme !== "system") return;
 
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    const handleChange = () => {
-      applyTheme(getSystemTheme());
-      notifyListeners();
-    };
+		const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+		const handleChange = (event: MediaQueryListEvent) => {
+			if (currentSnapshot.theme !== "system") return;
+			const nextResolvedTheme = event.matches ? "dark" : "light";
+			if (currentSnapshot.resolvedTheme === nextResolvedTheme) return;
+			updateSnapshot("system", nextResolvedTheme);
+		};
 
-    mediaQuery.addEventListener("change", handleChange);
-    return () => mediaQuery.removeEventListener("change", handleChange);
-  }, [theme]);
+		mediaQuery.addEventListener("change", handleChange);
+		return () => mediaQuery.removeEventListener("change", handleChange);
+	}, [theme]);
 
-  return { theme, resolvedTheme, setTheme };
+	useEffect(() => {
+		const handleStorage = (event: StorageEvent) => {
+			if (event.key !== STORAGE_KEY) return;
+			const nextTheme = parseStoredTheme(event.newValue);
+			updateSnapshot(nextTheme, resolveTheme(nextTheme));
+		};
+
+		window.addEventListener("storage", handleStorage);
+		return () => window.removeEventListener("storage", handleStorage);
+	}, []);
+
+	return { theme, resolvedTheme, setTheme };
 }

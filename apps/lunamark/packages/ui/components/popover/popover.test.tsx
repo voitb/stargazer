@@ -149,19 +149,19 @@ describe("Popover", () => {
 		render(
 			<Popover trigger="click">
 				<PopoverTrigger>
-					{(props) => (
-						<button data-testid="trigger" {...props}>
-							{props.isOpen ? "Close" : "Open"}
-						</button>
+					{({ isOpen, ...props }) => (
+						<button {...props}>{isOpen ? "Close" : "Open"}</button>
 					)}
 				</PopoverTrigger>
 				<PopoverContent>Content</PopoverContent>
 			</Popover>
 		);
 
-		expect(screen.getByTestId("trigger")).toHaveTextContent("Open");
-		await user.click(screen.getByTestId("trigger"));
-		await waitFor(() => expect(screen.getByTestId("trigger")).toHaveTextContent("Close"));
+		expect(screen.getByRole("button", { name: "Open" })).toBeInTheDocument();
+		await user.click(screen.getByRole("button", { name: "Open" }));
+		await waitFor(() =>
+			expect(screen.getByRole("button", { name: "Close" })).toBeInTheDocument()
+		);
 	});
 
 	it("has correct ARIA attributes", () => {
