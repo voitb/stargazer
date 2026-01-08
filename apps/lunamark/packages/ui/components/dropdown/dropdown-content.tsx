@@ -3,7 +3,7 @@
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps, ReactNode } from "react";
 import { FloatingPortal, FloatingFocusManager } from "@floating-ui/react";
-import { cn } from "../../utils/cn";
+import { cn } from "@ui/utils";
 import { useDropdownContext } from "./dropdown.context";
 import { dropdownContentVariants } from "./dropdown.variants";
 import { useExitAnimation } from "@ui/hooks/animation/use-exit-animation";

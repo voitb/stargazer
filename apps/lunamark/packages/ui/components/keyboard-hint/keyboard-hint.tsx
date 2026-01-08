@@ -1,7 +1,7 @@
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps } from "react";
 import { Fragment } from "react";
-import { cn } from "../../utils/cn";
+import { cn } from "@ui/utils";
 import { keyboardHintVariants } from "./keyboard-hint.variants";
 
 type KeyboardHintProps = Omit<ComponentProps<"span">, "children"> &

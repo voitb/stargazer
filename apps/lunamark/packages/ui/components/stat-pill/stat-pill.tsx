@@ -1,6 +1,6 @@
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps, ComponentType } from "react";
-import { cn } from "../../utils/cn";
+import { cn } from "@ui/utils";
 import { statPillVariants } from "./stat-pill.variants";
 
 const iconSizeClasses = {

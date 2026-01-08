@@ -2,7 +2,7 @@
 
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps, ReactNode } from "react";
-import { cn } from "../../utils/cn";
+import { cn } from "@ui/utils";
 import { CloseIcon } from "../icons";
 import { usePopoverContext } from "./popover.context";
 import { popoverCloseVariants } from "./popover.variants";

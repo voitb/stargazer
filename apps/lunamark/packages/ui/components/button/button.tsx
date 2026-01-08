@@ -1,6 +1,6 @@
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps, ReactNode } from "react";
-import { cn } from "../../utils/cn";
+import { cn } from "@ui/utils";
 import { buttonVariants } from "./button.variants";
 import { Spinner } from "../icons";
 

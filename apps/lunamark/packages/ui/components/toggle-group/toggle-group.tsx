@@ -1,8 +1,8 @@
 "use client";
 
 import { useRef, type ComponentProps, type ReactNode } from "react";
-import { cn } from "../../utils/cn";
-import { mergeRefs } from "../../utils/merge-refs";
+import { cn } from "@ui/utils";
+import { mergeRefs } from "@ui/utils";
 import { ToggleGroupContext } from "./toggle-group.context";
 import { toggleGroupVariants } from "./toggle-group.variants";
 import { useToggleGroup, type UseToggleGroupOptions } from "./use-toggle-group";

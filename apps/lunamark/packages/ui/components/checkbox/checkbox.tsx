@@ -4,8 +4,8 @@ import type { VariantProps } from "class-variance-authority";
 import type { ChangeEvent, ComponentProps } from "react";
 import { useEffect, useRef } from "react";
 import { useControllableState } from "@ui/hooks/state/use-controllable-state";
-import { cn } from "../../utils/cn";
-import { mergeRefs } from "../../utils/merge-refs";
+import { cn } from "@ui/utils";
+import { mergeRefs } from "@ui/utils";
 import { checkboxVariants } from "./checkbox.variants";
 
 type CheckboxProps = Omit<

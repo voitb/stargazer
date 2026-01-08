@@ -3,7 +3,7 @@
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps } from "react";
 import { CardFooter } from "../../card";
-import { cn } from "../../../utils/cn";
+import { cn } from "@ui/utils";
 import { taskCardFooterVariants } from "./task-card.variants";
 
 export type TaskCardFooterProps = ComponentProps<"div"> &

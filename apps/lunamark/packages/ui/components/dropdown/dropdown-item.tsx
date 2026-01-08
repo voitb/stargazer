@@ -3,7 +3,7 @@
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps, ReactNode } from "react";
 import { useCallback, useEffect, useRef } from "react";
-import { cn } from "../../utils/cn";
+import { cn } from "@ui/utils";
 import {
 	useDropdownContext,
 	useDropdownRadioGroupContext,

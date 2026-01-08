@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormFieldContext } from "./form-field.context";
-import { cn } from "../../utils/cn";
+import { cn } from "@ui/utils";
 import type { ComponentProps } from "react";
 
 type FormErrorProps = ComponentProps<"p">;

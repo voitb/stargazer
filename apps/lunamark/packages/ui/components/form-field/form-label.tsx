@@ -1,7 +1,7 @@
 "use client";
 
 import { type ComponentProps } from "react";
-import { cn } from "../../utils/cn";
+import { cn } from "@ui/utils";
 import { Label } from "../label";
 import { useFormFieldContext } from "./form-field.context";
 

@@ -19,7 +19,7 @@ import {
 	FloatingFocusManager,
 	safePolygon,
 } from "@floating-ui/react";
-import { cn } from "../../utils/cn";
+import { cn } from "@ui/utils";
 import {
 	useDropdownContext,
 	useDropdownSubContext,

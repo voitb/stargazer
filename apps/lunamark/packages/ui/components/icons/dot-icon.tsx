@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 import type { VariantProps } from "class-variance-authority";
-import { cn } from "../../utils/cn";
+import { cn } from "@ui/utils";
 import { dotIconVariants } from "./icon.variants";
 
 type DotIconProps = Omit<ComponentProps<"svg">, "children"> &

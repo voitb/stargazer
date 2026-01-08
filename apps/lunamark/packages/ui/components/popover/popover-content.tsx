@@ -3,7 +3,7 @@
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps, ReactNode } from "react";
 import { FloatingPortal, FloatingFocusManager } from "@floating-ui/react";
-import { cn } from "../../utils/cn";
+import { cn } from "@ui/utils";
 import { usePopoverContext } from "./popover.context";
 import { popoverContentVariants } from "./popover.variants";
 

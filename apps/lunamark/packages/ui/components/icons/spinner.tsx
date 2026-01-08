@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 import type { VariantProps } from "class-variance-authority";
-import { cn } from "../../utils/cn";
+import { cn } from "@ui/utils";
 import { spinnerVariants } from "./icon.variants";
 
 type SpinnerProps = Omit<ComponentProps<"svg">, "children"> &

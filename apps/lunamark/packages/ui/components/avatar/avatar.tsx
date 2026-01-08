@@ -9,7 +9,7 @@ import {
   type ReactElement,
   type ReactNode,
 } from "react";
-import { cn } from "../../utils/cn";
+import { cn } from "@ui/utils";
 import { useImageLoadingStatus, type ImageLoadingStatus } from "@ui/hooks/loading/use-image-loading-status";
 import { avatarVariants } from "./avatar.variants";
 import { Button } from "../button";
