@@ -46,7 +46,7 @@ function Avatar({
   return (
     <span
       ref={ref}
-      data-slot="avatar"
+      data-avatar
       className={cn(avatarVariants({ size }), className)}
       {...props}
     >
@@ -88,7 +88,7 @@ function AvatarGroup({
       ref={ref}
       className={cn(
         "flex -space-x-2",
-        "*:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-[rgb(var(--color-neutral-background-1))]",
+        "*:[data-avatar]:ring-2 *:[data-avatar]:ring-[rgb(var(--color-neutral-background-1))]",
         className
       )}
       {...props}
@@ -101,7 +101,7 @@ function AvatarGroup({
       )}
       {overflowCount > 0 && (
         <span
-          data-slot="avatar"
+          data-avatar
           className={cn(
             avatarVariants({ size }),
             "ring-2 ring-[rgb(var(--color-neutral-background-1))] bg-[rgb(var(--color-neutral-background-2))]"
@@ -136,7 +136,7 @@ function SelectableAvatar({
     <Button
       ref={ref}
       variant="ghost"
-      data-slot="avatar"
+      data-avatar
       aria-pressed={isSelected}
       data-state={isSelected ? "on" : "off"}
       className={cn(

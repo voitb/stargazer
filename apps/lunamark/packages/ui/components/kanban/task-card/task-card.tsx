@@ -21,7 +21,7 @@ function TaskCard({
   return (
     <Card
       ref={ref}
-      data-slot="task-card"
+      data-task-card
       onClick={onClick}
       className={cn(
         taskCardVariants({ isDragging, isDragOverlay }),

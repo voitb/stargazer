@@ -3,7 +3,7 @@ import type { ComponentProps } from "react";
 import { cn } from "@ui/utils";
 import { inputVariants } from "./input.variants";
 
-type InputProps = ComponentProps<"input"> &
+type InputProps = Omit<ComponentProps<"input">, "size"> &
   VariantProps<typeof inputVariants>;
 
 function Input({ className, variant, size, ref, ...props }: InputProps) {

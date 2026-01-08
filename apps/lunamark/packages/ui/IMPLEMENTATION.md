@@ -225,6 +225,6 @@ Before committing:
 - [ ] Overlays use `useExitAnimation` hook
 - [ ] ARIA attributes present for interactive components
 - [ ] Context provider values are memoized with `useMemo`
-- [ ] `data-slot` attributes preserved on public components
+- [ ] Semantic data attributes preserved on public components (e.g., `data-card`, `data-dialog-content`)
 - [ ] Light & dark themes render correctly
 - [ ] Types exported from index.ts

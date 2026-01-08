@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { DragDropProvider, DragOverlay } from "@dnd-kit/react";
-import type { Sensor } from "@dnd-kit/dom";
+import type { Sensors } from "@dnd-kit/dom";
 import { ColumnTabs } from "@ui/components/kanban/column-tabs";
 import { SwipeableContainer } from "@ui/components/kanban/swipeable-container";
 import { COLUMN_COLORS } from "@/lib/kanban/constants";
@@ -13,7 +13,7 @@ interface MobileKanbanViewProps {
   columns: Column[];
   taskEditor: ReturnType<typeof useTaskEditor>;
   activeTask: Task | null;
-  sensors: Sensor[];
+  sensors: Sensors;
   onDragStart: (event: any) => void;
   onDragOver: (event: any) => void;
   onDragEnd: (event: any) => void;
@@ -34,7 +34,7 @@ export function MobileKanbanView({
     id: col.id,
     title: col.title,
     count: col.tasks.length,
-    color: COLUMN_COLORS[col.color],
+    color: col.color ? COLUMN_COLORS[col.color] : undefined,
   }));
 
   return (

@@ -241,17 +241,21 @@ Existing components using `ComponentPropsWithoutRef` will be migrated to `Compon
 
 ---
 
-## data-slot Attributes
+## Semantic Data Attributes
 
 ### Decision
 
-Keep `data-slot` attributes on public UI components.
+Use semantic boolean data attributes (e.g., `data-dialog-content`, `data-card`, `data-toggle-group-item`) on public UI components instead of the generic `data-slot="value"` pattern.
 
 ### Rationale
 
-- Enables lightweight styling hooks without introducing new APIs.
-- Provides stable selectors for tests and integrations.
-- Keeps component structure inspectable in consumer apps.
+- **Self-documenting**: `data-dialog-content` immediately tells you what element it is
+- **Cleaner CSS selectors**: `[data-dialog-content]` vs `[data-slot="dialog-content"]`
+- **No string quoting issues**: Boolean attributes are simpler
+- **Consistent with Radix UI**: Similar to their `data-radix-*` pattern
+- Enables lightweight styling hooks without introducing new APIs
+- Provides stable selectors for tests and integrations
+- Keeps component structure inspectable in consumer apps
 
 ## Testing Philosophy
 

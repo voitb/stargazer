@@ -263,9 +263,12 @@ className="bg-[var(--color-brand-background)]"  // missing rgb()
 className="bg-blue-600"  // hardcoded - breaks theming
 ```
 
-### data-slot Attributes
+### Semantic Data Attributes
 
-Use `data-slot` on public components to provide stable styling and testing hooks.
+Use semantic boolean data attributes (e.g., `data-dialog-content`, `data-card`, `data-toggle-group-item`) on public components to provide stable styling and testing hooks. This pattern is:
+- **Self-documenting**: `[data-dialog-content]` is clearer than `[data-slot="dialog-content"]`
+- **Cleaner CSS selectors**: Boolean attributes don't need value matching
+- **Consistent with Radix UI**: Similar to `data-radix-*` pattern
 
 ### Animation with data-state
 

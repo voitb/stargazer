@@ -22,7 +22,7 @@ export function ColumnFooter({
 	return (
 		<div
 			ref={ref}
-			data-slot="column-footer"
+			data-column-footer
 			data-state={state}
 			className={cn(columnFooterVariants({ state }), className)}
 			{...props}

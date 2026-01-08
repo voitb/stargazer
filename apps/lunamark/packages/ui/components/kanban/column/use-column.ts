@@ -17,7 +17,7 @@ export type UseColumnOptions<TItem = unknown> = {
   items?: TItem[];
 };
 
-export type UseColumnReturn<TItem = unknown> = {
+export type UseColumnReturn = {
   droppableRef: (element: HTMLElement | null) => void;
   isDropTarget: boolean;
   isCollapsed: boolean;
@@ -50,7 +50,7 @@ export type UseColumnReturn<TItem = unknown> = {
 
 export function useColumn<TItem = unknown>(
   options: UseColumnOptions<TItem>,
-): UseColumnReturn<TItem> {
+): UseColumnReturn {
   const {
     id,
     type = "column",

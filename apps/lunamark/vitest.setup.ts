@@ -1,28 +1,42 @@
 import "@testing-library/jest-dom/vitest";
 import "vitest-axe/extend-expect";
-import { afterEach, beforeEach } from "vitest";
+import { afterEach, beforeEach, vi } from "vitest";
 
-// Floating UI requires offsetParent for positioning calculations in jsdom.
-// jsdom doesn't implement offsetParent, so we mock it globally for all tests.
-// This enables proper testing of Dropdown, Popover, Tooltip, and other
-// Floating UI-based components in the @ui package.
+Object.defineProperty(window, "matchMedia", {
+  writable: true,
+  value: vi.fn().mockImplementation((query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  })),
+});
+
 let originalOffsetParent: PropertyDescriptor | undefined;
 
 beforeEach(() => {
-	originalOffsetParent = Object.getOwnPropertyDescriptor(
-		HTMLElement.prototype,
-		"offsetParent",
-	);
-	Object.defineProperty(HTMLElement.prototype, "offsetParent", {
-		get() {
-			return document.body;
-		},
-		configurable: true,
-	});
+  originalOffsetParent = Object.getOwnPropertyDescriptor(
+    HTMLElement.prototype,
+    "offsetParent",
+  );
+  Object.defineProperty(HTMLElement.prototype, "offsetParent", {
+    get() {
+      return document.body;
+    },
+    configurable: true,
+  });
 });
 
 afterEach(() => {
-	if (originalOffsetParent) {
-		Object.defineProperty(HTMLElement.prototype, "offsetParent", originalOffsetParent);
-	}
+  if (originalOffsetParent) {
+    Object.defineProperty(
+      HTMLElement.prototype,
+      "offsetParent",
+      originalOffsetParent,
+    );
+  }
 });

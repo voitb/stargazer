@@ -43,13 +43,13 @@ export function ColumnHeader({
 		<div
 			ref={ref}
 			className={cn("p-4 pb-2", className)}
-			data-slot="column-header"
+			data-column-header
 			data-state={dataState}
 			{...props}
 		>
 			<div className={cn(columnHeaderVariants({ size }))}>
 				{dotColor && (
-					<div className="relative" data-slot="column-dot" aria-hidden="true">
+					<div className="relative" data-column-dot aria-hidden="true">
 						<div
 							className={cn(
 								"w-2.5 h-2.5 rounded-full ring-2 ring-[rgb(var(--color-neutral-background-1))] shadow-sm",

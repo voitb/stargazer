@@ -150,7 +150,7 @@ describe("ColumnHeader", () => {
 
 	it("renders dot indicator when dotColor is provided", () => {
 		const { container } = renderWithColumn({ title: "Test", dotColor: "bg-green-500" });
-		expect(container.querySelector('[data-slot="column-dot"]')).toBeInTheDocument();
+		expect(container.querySelector("[data-column-dot]")).toBeInTheDocument();
 	});
 
 	it("toggles collapse on button click", () => {
@@ -184,13 +184,13 @@ describe("ColumnContent", () => {
 		expect(screen.getByText("Child content")).toBeInTheDocument();
 	});
 
-	it("has data-slot attribute", () => {
+	it("has data-column-content attribute", () => {
 		render(
 			<Column id="slot">
 				<ColumnContent data-testid="content">Content</ColumnContent>
 			</Column>
 		);
-		expect(screen.getByTestId("content")).toHaveAttribute("data-slot", "column-content");
+		expect(screen.getByTestId("content")).toHaveAttribute("data-column-content");
 	});
 
 	it("sets aria-hidden when collapsed", () => {
@@ -214,13 +214,13 @@ describe("ColumnFooter", () => {
 		expect(screen.getByText("Footer content")).toBeInTheDocument();
 	});
 
-	it("has data-slot attribute", () => {
+	it("has data-column-footer attribute", () => {
 		render(
 			<Column id="footer-slot">
 				<ColumnContent>Content</ColumnContent>
 				<ColumnFooter data-testid="footer">Footer</ColumnFooter>
 			</Column>
 		);
-		expect(screen.getByTestId("footer")).toHaveAttribute("data-slot", "column-footer");
+		expect(screen.getByTestId("footer")).toHaveAttribute("data-column-footer");
 	});
 });

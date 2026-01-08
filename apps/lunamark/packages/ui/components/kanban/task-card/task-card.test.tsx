@@ -9,9 +9,9 @@ describe("TaskCard", () => {
 		expect(screen.getByText("Card content")).toBeInTheDocument();
 	});
 
-	it("has data-slot='task-card'", () => {
+	it("has data-task-card attribute", () => {
 		render(<TaskCard data-testid="card">Content</TaskCard>);
-		expect(screen.getByTestId("card")).toHaveAttribute("data-slot", "task-card");
+		expect(screen.getByTestId("card")).toHaveAttribute("data-task-card");
 	});
 
 	it("forwards ref", () => {
@@ -43,10 +43,10 @@ describe("TaskCard", () => {
 
 describe("TaskCard Sub-components", () => {
 	it.each([
-		{ Component: TaskCardHeader, slot: "task-card-header" },
-		{ Component: TaskCardContent, slot: "task-card-content" },
-		{ Component: TaskCardFooter, slot: "task-card-footer" },
-	])("$slot renders with correct data-slot and forwards ref", ({ Component, slot }) => {
+		{ Component: TaskCardHeader, dataAttr: "data-task-card-header" },
+		{ Component: TaskCardContent, dataAttr: "data-task-card-content" },
+		{ Component: TaskCardFooter, dataAttr: "data-task-card-footer" },
+	])("$dataAttr renders with correct data attribute and forwards ref", ({ Component, dataAttr }) => {
 		const ref = createRef<HTMLDivElement>();
 		render(
 			<Component ref={ref} data-testid="element" className="custom">
@@ -54,7 +54,7 @@ describe("TaskCard Sub-components", () => {
 			</Component>
 		);
 		const element = screen.getByTestId("element");
-		expect(element).toHaveAttribute("data-slot", slot);
+		expect(element).toHaveAttribute(dataAttr);
 		expect(ref.current).toBeInstanceOf(HTMLDivElement);
 	});
 });

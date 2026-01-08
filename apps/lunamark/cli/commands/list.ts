@@ -1,9 +1,6 @@
 import { Command } from 'commander'
 import * as path from 'node:path'
 import * as fs from 'node:fs'
-import { fileURLToPath } from 'node:url'
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 // ANSI color codes for terminal output
 const colors = {

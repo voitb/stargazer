@@ -7,7 +7,7 @@ function CardTitle({ className, ref, ...props }: CardTitleProps) {
     return (
         <h3
             ref={ref}
-            data-slot="card-title"
+            data-card-title
             className={cn(
                 "text-2xl font-semibold leading-none tracking-tight",
                 className

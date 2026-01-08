@@ -82,8 +82,8 @@ describe("Input", () => {
 	});
 
 	it("accepts all variant and size props without error", () => {
-		const variants = ["default", "error"] as const;
-		const sizes = ["sm", "md", "lg"] as const;
+		const variants: ("default" | "error")[] = ["default", "error"];
+		const sizes: ("sm" | "md" | "lg")[] = ["sm", "md", "lg"];
 
 		variants.forEach((variant) => {
 			sizes.forEach((size) => {

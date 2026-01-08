@@ -11,11 +11,11 @@ import {
 } from "./index";
 
 describe("Card", () => {
-	it("renders as div with expected data-slot", () => {
+	it("renders as div with expected data attribute", () => {
 		render(<Card data-testid="card" />);
 		const card = screen.getByTestId("card");
 		expect(card.tagName).toBe("DIV");
-		expect(card).toHaveAttribute("data-slot", "card");
+		expect(card).toHaveAttribute("data-card");
 	});
 
 	it("forwards ref", () => {
@@ -32,12 +32,12 @@ describe("Card", () => {
 
 describe("Card Sub-components", () => {
 	it.each([
-		{ Component: CardHeader, slot: "card-header", tag: "DIV" },
-		{ Component: CardTitle, slot: "card-title", tag: "H3" },
-		{ Component: CardDescription, slot: "card-description", tag: "P" },
-		{ Component: CardContent, slot: "card-content", tag: "DIV" },
-		{ Component: CardFooter, slot: "card-footer", tag: "DIV" },
-	])("$slot renders with correct structure and forwards ref", ({ Component, slot, tag }) => {
+		{ Component: CardHeader, dataAttr: "data-card-header", tag: "DIV" },
+		{ Component: CardTitle, dataAttr: "data-card-title", tag: "H3" },
+		{ Component: CardDescription, dataAttr: "data-card-description", tag: "P" },
+		{ Component: CardContent, dataAttr: "data-card-content", tag: "DIV" },
+		{ Component: CardFooter, dataAttr: "data-card-footer", tag: "DIV" },
+	])("$dataAttr renders with correct structure and forwards ref", ({ Component, dataAttr, tag }) => {
 		const ref = createRef<HTMLDivElement>();
 		render(
 			<Component ref={ref} data-testid="element" className="custom">
@@ -47,7 +47,7 @@ describe("Card Sub-components", () => {
 
 		const element = screen.getByTestId("element");
 		expect(element.tagName).toBe(tag);
-		expect(element).toHaveAttribute("data-slot", slot);
+		expect(element).toHaveAttribute(dataAttr);
 		expect(ref.current).toBeInstanceOf(HTMLElement);
 	});
 });

@@ -18,7 +18,7 @@ export function TaskCardHeader({
     return (
         <CardHeader
             ref={ref}
-            data-slot="task-card-header"
+            data-task-card-header
             className={cn(taskCardHeaderVariants(), className)}
             {...props}
         >

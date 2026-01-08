@@ -1,7 +1,7 @@
 "use client";
 
 import type { VariantProps } from "class-variance-authority";
-import { useMemo, type ComponentProps, ReactNode } from "react";
+import { useMemo, type ComponentProps, type ReactNode } from "react";
 import { cn, mergeRefs } from "@ui/utils";
 import { ColumnContext, type ColumnContextValue } from "./column.context";
 import { columnVariants } from "./column.variants";
@@ -91,7 +91,7 @@ export function Column({
 			<div
 				ref={combinedRef}
 				role="region"
-				data-slot="column"
+				data-column
 				data-state={dataState}
 				data-drop-target={isDropTarget}
 				className={cn(

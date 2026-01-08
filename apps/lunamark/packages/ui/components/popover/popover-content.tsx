@@ -20,7 +20,6 @@ function PopoverContent({
 	...props
 }: PopoverContentProps) {
 	const {
-		isOpen,
 		refs,
 		floatingStyles,
 		getFloatingProps,
