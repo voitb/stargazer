@@ -2,7 +2,7 @@
 
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps } from "react";
-import { cn } from "../../utils/cn";
+import { cn } from "@ui/utils";
 import { CloseIcon } from "../icons";
 import { useDialogContext } from "./dialog.context";
 import { dialogCloseVariants } from "./dialog.variants";

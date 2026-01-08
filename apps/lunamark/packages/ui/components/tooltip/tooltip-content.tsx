@@ -4,7 +4,7 @@ import type { VariantProps } from "class-variance-authority";
 import type { ReactNode } from "react";
 import { FloatingPortal } from "@floating-ui/react";
 import { useExitAnimation } from "@ui/hooks/animation/use-exit-animation";
-import { cn } from "../../utils/cn";
+import { cn } from "@ui/utils";
 import { useTooltipContext } from "./tooltip.context";
 import { tooltipContentVariants } from "./tooltip.variants";
 

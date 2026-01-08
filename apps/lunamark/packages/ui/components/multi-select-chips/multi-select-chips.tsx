@@ -7,7 +7,7 @@ import {
 } from "@floating-ui/react";
 import { X } from "lucide-react";
 import { useExitAnimation } from "@ui/hooks/animation/use-exit-animation";
-import { cn } from "../../utils/cn";
+import { cn } from "@ui/utils";
 import { chipVariants } from "./multi-select-chips.variants";
 import { SelectedChip } from "./selected-chip";
 import { UnselectedChip } from "./unselected-chip";

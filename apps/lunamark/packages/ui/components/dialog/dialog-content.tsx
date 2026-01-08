@@ -3,8 +3,8 @@
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps } from "react";
 import { createPortal } from "react-dom";
-import { cn } from "../../utils/cn";
-import { mergeRefs } from "../../utils/merge-refs";
+import { cn } from "@ui/utils";
+import { mergeRefs } from "@ui/utils";
 import { DialogClose } from "./dialog-close";
 import { useDialogContext } from "./dialog.context";
 import {

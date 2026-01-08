@@ -2,7 +2,7 @@
 
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps } from "react";
-import { cn } from "../../utils/cn";
+import { cn } from "@ui/utils";
 import { selectVariants } from "./select.variants";
 
 interface SelectProps

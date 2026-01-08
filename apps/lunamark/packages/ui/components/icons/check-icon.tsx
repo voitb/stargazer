@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 import type { VariantProps } from "class-variance-authority";
-import { cn } from "../../utils/cn";
+import { cn } from "@ui/utils";
 import { iconVariants } from "./icon.variants";
 
 type CheckIconProps = Omit<ComponentProps<"svg">, "children"> &

@@ -2,7 +2,7 @@
 
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps, ReactNode } from "react";
-import { cn } from "../../utils/cn";
+import { cn } from "@ui/utils";
 import { dropdownShortcutVariants } from "./dropdown.variants";
 
 export type DropdownShortcutProps = {

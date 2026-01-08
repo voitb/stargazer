@@ -3,7 +3,7 @@
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps, ReactNode } from "react";
 import { ChevronDown } from "lucide-react";
-import { cn } from "../../../utils/cn";
+import { cn } from "@ui/utils";
 import { useColumnContext } from "./column.context";
 import { columnHeaderVariants, countBadgeVariants } from "./column.variants";
 

@@ -2,7 +2,7 @@
 
 import type { ComponentProps, ReactNode } from "react";
 import { useMemo } from "react";
-import { cn } from "../../utils/cn";
+import { cn } from "@ui/utils";
 import { DropdownRadioGroupContext } from "./dropdown.context";
 import { useControllableState } from "@ui/hooks/state/use-controllable-state";
 

@@ -2,7 +2,7 @@
 
 import type { VariantProps } from "class-variance-authority";
 import { useId, useMemo, type ComponentProps } from "react";
-import { cn } from "../../utils/cn";
+import { cn } from "@ui/utils";
 import { formFieldVariants } from "./form-field.variants";
 import { FormFieldContext } from "./form-field.context";
 
