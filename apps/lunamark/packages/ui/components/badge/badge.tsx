@@ -28,7 +28,7 @@ function Badge({
   }
 
   return (
-    <span ref={ref} className={badgeClassName} data-slot="badge" {...props}>
+    <span ref={ref} className={badgeClassName} data-badge {...props}>
       {children}
     </span>
   );

@@ -41,6 +41,7 @@ function Button({
 
   return (
     <button
+      data-button
       ref={ref}
       type="button"
       className={computedClassName}

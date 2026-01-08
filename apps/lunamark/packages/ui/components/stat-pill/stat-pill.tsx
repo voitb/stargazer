@@ -29,6 +29,7 @@ function StatPill({
 }: StatPillProps) {
   return (
     <div
+      data-stat-pill
       ref={ref}
       className={cn(statPillVariants({ variant, size, className }))}
       {...props}

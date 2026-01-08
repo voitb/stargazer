@@ -5,12 +5,11 @@ import type { ComponentProps } from "react";
 import { cn } from "@ui/utils";
 import { selectVariants } from "./select.variants";
 
-interface SelectProps
-  extends Omit<ComponentProps<"select">, "onChange" | "size">,
-    VariantProps<typeof selectVariants> {
-  onValueChange?: (value: string) => void;
-  placeholder?: string;
-}
+type SelectProps = Omit<ComponentProps<"select">, "onChange" | "size"> &
+  VariantProps<typeof selectVariants> & {
+    onValueChange?: (value: string) => void;
+    placeholder?: string;
+  };
 
 function Select({
   className,
@@ -25,6 +24,7 @@ function Select({
 }: SelectProps) {
   return (
     <select
+      data-select
       ref={ref}
       value={value}
       onChange={(e) => onValueChange?.(e.target.value)}
@@ -42,7 +42,7 @@ function Select({
   );
 }
 
-interface SelectGroupProps extends ComponentProps<"optgroup"> {}
+type SelectGroupProps = ComponentProps<"optgroup">;
 
 function SelectGroup({ children, ref, ...props }: SelectGroupProps) {
   return (

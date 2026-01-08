@@ -29,6 +29,7 @@ function FilterGroup({
 
 	return (
 		<div
+			data-filter-group
 			ref={ref}
 			role="group"
 			aria-labelledby={labelId}
