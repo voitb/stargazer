@@ -58,7 +58,7 @@ function Checkbox({
       type="checkbox"
       checked={isChecked}
       data-state={dataState}
-      className={cn(checkboxVariants({ size }), className)}
+      className={cn(checkboxVariants({ size, className }))}
       onChange={handleChange}
       {...props}
     />

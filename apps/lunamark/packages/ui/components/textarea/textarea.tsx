@@ -9,6 +9,7 @@ type TextareaProps = ComponentProps<"textarea"> &
 function Textarea({ className, variant, size, ref, ...props }: TextareaProps) {
   return (
     <textarea
+      data-textarea
       ref={ref}
       className={cn(textareaVariants({ variant, size, className }))}
       {...props}

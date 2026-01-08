@@ -21,6 +21,7 @@ function KeyboardHint({
 
 	return (
 		<span
+			data-keyboard-hint
 			ref={ref}
 			className={cn("inline-flex items-center gap-0.5", className)}
 			{...props}

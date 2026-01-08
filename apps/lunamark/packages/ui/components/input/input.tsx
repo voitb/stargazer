@@ -9,6 +9,7 @@ type InputProps = Omit<ComponentProps<"input">, "size"> &
 function Input({ className, variant, size, ref, ...props }: InputProps) {
   return (
     <input
+      data-input
       ref={ref}
       className={cn(inputVariants({ variant, size, className }))}
       {...props}

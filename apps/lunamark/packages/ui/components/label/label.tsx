@@ -19,6 +19,7 @@ function Label({
 }: LabelProps) {
 	return (
 		<label
+			data-label
 			ref={ref}
 			className={cn(labelVariants({ variant, size }), className)}
 			{...props}
