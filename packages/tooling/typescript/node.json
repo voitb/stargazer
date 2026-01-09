@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Node.js Configuration",
+  "extends": "./base.json",
+  "compilerOptions": {
+    "lib": ["ES2022"],
+    "module": "ESNext",
+    "target": "ES2022",
+    "moduleResolution": "bundler",
+
+    "outDir": "dist",
+    "rootDir": "src"
+  }
+}

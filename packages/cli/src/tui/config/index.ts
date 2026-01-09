@@ -1,3 +1,4 @@
+// Defaults
 export {
   type Provider,
   DEFAULT_TIMEOUT,
@@ -6,3 +7,25 @@ export {
   getDefaultModel,
   getSecondaryModel,
 } from './defaults.js';
+
+// Icons (shared with output formatters)
+export {
+  SEVERITY_EMOJI,
+  DECISION_ICONS,
+  MISC_ICONS,
+} from './icons.js';
+
+// Models
+export {
+  GEMINI_MODELS,
+  GLM_MODELS,
+  getModelsForProvider,
+  type ModelOption,
+} from './models.js';
+
+// Settings
+export {
+  TIMEOUT_OPTIONS,
+  getTimeoutLabel,
+  type TimeoutOption,
+} from './settings.js';

@@ -3,7 +3,7 @@
  * Centralized configuration for model selection screens.
  */
 
-import { type Provider } from '../config/defaults.js';
+import { type Provider } from './defaults.js';
 
 export type { Provider };
 
