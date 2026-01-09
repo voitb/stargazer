@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { Box, useApp } from 'ink';
 import { basename } from 'node:path';
 import { StatusBar, Header, TUIErrorBoundary } from './components/index.js';
@@ -110,18 +110,24 @@ function AppContent({ projectPath }: AppContentProps) {
     ? `AI review in progress... (${review.elapsedTime}s) • ESC to cancel`
     : 'Press ESC or B to go back';
 
+  // Memoize review props to prevent unnecessary re-renders of ScreenRouter
+  const reviewProps = useMemo(
+    () => ({
+      result: review.result,
+      phase: review.phase,
+      completedPhases: review.completedPhases,
+      elapsedTime: review.elapsedTime,
+    }),
+    [review.result, review.phase, review.completedPhases, review.elapsedTime]
+  );
+
   return (
     <Box flexDirection="column" minHeight={10}>
       <Header projectName={projectName} />
       <Box flexDirection="column" flexGrow={1}>
         <ScreenRouter
           screen={screen}
-          review={{
-            result: review.result,
-            phase: review.phase,
-            completedPhases: review.completedPhases,
-            elapsedTime: review.elapsedTime,
-          }}
+          review={reviewProps}
           error={error}
           onMenuSelect={handleMenuSelect}
         />

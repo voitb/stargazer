@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useCallback, useMemo, type ReactNode } from 'react';
+import { createContext, useContext, useReducer, useCallback, useMemo, type ReactNode } from 'react';
 
 export type Screen =
   | 'home'
@@ -22,6 +22,50 @@ export interface NavigationContextValue {
   history: readonly Screen[];
 }
 
+// Maximum history size to prevent unbounded growth
+const MAX_HISTORY_SIZE = 50;
+
+// State and action types for the reducer
+type NavigationState = {
+  screen: Screen;
+  history: Screen[];
+};
+
+type NavigationAction =
+  | { type: 'NAVIGATE'; payload: Screen }
+  | { type: 'GO_BACK' };
+
+/**
+ * Pure reducer function for navigation state.
+ * Handles both screen and history atomically to prevent sync issues.
+ */
+function navigationReducer(state: NavigationState, action: NavigationAction): NavigationState {
+  switch (action.type) {
+    case 'NAVIGATE': {
+      const newHistory = [...state.history, action.payload];
+      return {
+        screen: action.payload,
+        // Limit history size to prevent memory issues in long-running sessions
+        history: newHistory.length > MAX_HISTORY_SIZE
+          ? newHistory.slice(-MAX_HISTORY_SIZE)
+          : newHistory,
+      };
+    }
+    case 'GO_BACK': {
+      if (state.history.length <= 1) {
+        return state;
+      }
+      const newHistory = state.history.slice(0, -1);
+      return {
+        screen: newHistory[newHistory.length - 1] ?? 'home',
+        history: newHistory,
+      };
+    }
+    default:
+      return state;
+  }
+}
+
 const NavigationContext = createContext<NavigationContextValue | null>(null);
 
 interface NavigationProviderProps {
@@ -33,29 +77,22 @@ export function NavigationProvider({
   children,
   initialScreen = 'home',
 }: NavigationProviderProps) {
-  const [screen, setScreen] = useState<Screen>(initialScreen);
-  const [history, setHistory] = useState<Screen[]>([initialScreen]);
+  const [state, dispatch] = useReducer(navigationReducer, {
+    screen: initialScreen,
+    history: [initialScreen],
+  });
 
   const navigate = useCallback((newScreen: Screen) => {
-    setHistory(prev => [...prev, newScreen]);
-    setScreen(newScreen);
+    dispatch({ type: 'NAVIGATE', payload: newScreen });
   }, []);
 
   const goBack = useCallback(() => {
-    setHistory(prev => {
-      if (prev.length <= 1) {
-        return prev;
-      }
-      const newHistory = prev.slice(0, -1);
-      const previousScreen = newHistory[newHistory.length - 1] ?? 'home';
-      setScreen(previousScreen);
-      return newHistory;
-    });
+    dispatch({ type: 'GO_BACK' });
   }, []);
 
   const value = useMemo(
-    () => ({ screen, navigate, goBack, history }),
-    [screen, navigate, goBack, history]
+    () => ({ screen: state.screen, navigate, goBack, history: state.history }),
+    [state.screen, state.history, navigate, goBack]
   );
 
   return (
