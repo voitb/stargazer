@@ -5,8 +5,8 @@ import { createGeminiClient } from '@stargazer/core/gemini/client';
 import { discoverConventions } from '@stargazer/core/conventions/discovery';
 import { saveConventions } from '@stargazer/core/conventions/cache';
 import chalk from 'chalk';
-import { exitWithError } from '../exit-codes';
-import { logger } from '../logger';
+import { exitWithError } from '../exit-codes.js';
+import { logger } from '../logger.js';
 import ora from 'ora';
 
 export function createDiscoverCommand(): Command {
@@ -97,7 +97,7 @@ export function createDiscoverCommand(): Command {
           logger.info(chalk.gray('\nConventions saved to .stargazer/conventions.json'));
         }
 
-        process.exit(0);
+        // Command completed successfully - Commander handles exit
       } catch (error) {
         spinner.fail('Discovery failed');
         exitWithError(`Discovery failed: ${error instanceof Error ? error.message : String(error)}`);

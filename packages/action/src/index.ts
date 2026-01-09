@@ -4,12 +4,28 @@ import { createStargazer } from '@stargazer/core';
 import { createGitHubClient } from './github/client';
 import { formatReviewAsMarkdown } from './format';
 
+const VALID_SEVERITIES = ['critical', 'high', 'medium', 'low'] as const;
+type Severity = (typeof VALID_SEVERITIES)[number];
+
+function isValidSeverity(value: string): value is Severity {
+  return (VALID_SEVERITIES as readonly string[]).includes(value);
+}
+
 async function run(): Promise<void> {
   try {
     const apiKey = core.getInput('gemini-api-key', { required: true });
     const githubToken = core.getInput('github-token');
-    const minSeverity = core.getInput('min-severity') || 'low';
+    const rawSeverity = core.getInput('min-severity') || 'low';
     const maxIssues = parseInt(core.getInput('max-issues') || '20', 10);
+
+    // Validate severity input
+    if (!isValidSeverity(rawSeverity)) {
+      core.setFailed(
+        `Invalid min-severity "${rawSeverity}". Valid values: ${VALID_SEVERITIES.join(', ')}`
+      );
+      return;
+    }
+    const minSeverity = rawSeverity;
 
     const context = github.context;
     if (!context.payload.pull_request) {
@@ -33,7 +49,7 @@ async function run(): Promise<void> {
     const stargazerResult = createStargazer({
       apiKey,
       config: {
-        minSeverity: minSeverity as 'critical' | 'high' | 'medium' | 'low',
+        minSeverity,
         maxIssues,
       },
     });

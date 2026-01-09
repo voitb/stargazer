@@ -1,6 +1,7 @@
 import { Box, Text } from 'ink';
 import { Select } from '@inkjs/ui';
 import { useAppContext } from '../state/app-context.js';
+import { saveProvider, type Provider } from '../storage/api-key-store.js';
 
 const providerOptions = [
   { label: '🔮 Google Gemini (Recommended)', value: 'gemini' },
@@ -8,9 +9,15 @@ const providerOptions = [
 ];
 
 export function ProviderSelectScreen() {
-  const { navigate } = useAppContext();
+  const { navigate, setError } = useAppContext();
 
-  const handleSelect = (_value: string) => {
+  const handleSelect = async (value: string) => {
+    // Save the selected provider to config
+    const result = await saveProvider(value as Provider);
+    if (!result.ok) {
+      setError(`Failed to save provider: ${result.error.message}`);
+      return;
+    }
     navigate('apiKeySetup');
   };
 

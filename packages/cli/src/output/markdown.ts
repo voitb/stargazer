@@ -1,16 +1,10 @@
 import type { ReviewResult, Issue, Severity, Decision } from '@stargazer/core';
-
-const SEVERITY_EMOJI: Record<Severity, string> = {
-  critical: '🔴',
-  high: '🟠',
-  medium: '🟡',
-  low: '🔵',
-};
+import { SEVERITY_EMOJI, DECISION_ICONS, MISC_ICONS } from '../tui/constants/icons.js';
 
 const DECISION_TEXT: Record<Decision, string> = {
-  approve: '✅ Approved',
-  request_changes: '❌ Changes Requested',
-  comment: '💬 Comment',
+  approve: `${DECISION_ICONS.approve} Approved`,
+  request_changes: `${MISC_ICONS.crossmark} Changes Requested`,
+  comment: `${DECISION_ICONS.comment} Comment`,
 };
 
 export function formatReview(review: ReviewResult): string {
@@ -66,12 +60,12 @@ function formatIssue(issue: Issue): string {
 
   if (issue.suggestion) {
     lines.push('');
-    lines.push(`> 💡 **Suggestion:** ${issue.suggestion}`);
+    lines.push(`> ${MISC_ICONS.lightbulb} **Suggestion:** ${issue.suggestion}`);
   }
 
   if (issue.conventionRef) {
     lines.push('');
-    lines.push(`> 📋 **Convention:** ${issue.conventionRef}`);
+    lines.push(`> ${MISC_ICONS.clipboard} **Convention:** ${issue.conventionRef}`);
   }
 
   return lines.join('\n');

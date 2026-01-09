@@ -3,10 +3,10 @@ import { stat } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { createGeminiClient } from '@stargazer/core/gemini/client';
 import { reviewDiff } from '@stargazer/core/review/reviewer';
-import { formatReview as formatTerminal } from '../output/terminal';
-import { formatReview as formatMarkdown } from '../output/markdown';
-import { exitWithError, exitWithResult } from '../exit-codes';
-import { logger } from '../logger';
+import { formatReview as formatTerminal } from '../output/terminal.js';
+import { formatReview as formatMarkdown } from '../output/markdown.js';
+import { exitWithError, exitWithResult } from '../exit-codes.js';
+import { logger } from '../logger.js';
 import ora from 'ora';
 import type { ReviewResult } from '@stargazer/core';
 
@@ -18,7 +18,8 @@ const formatters: Record<OutputFormat, (review: ReviewResult) => string> = {
   markdown: formatMarkdown,
 };
 
-export const reviewCommand = new Command('review')
+export function createReviewCommand(): Command {
+  return new Command('review')
   .description('Review staged changes using AI')
   .option('--unstaged', 'Review unstaged changes instead of staged')
   .option('--staged', 'Review staged changes (default)')
@@ -90,6 +91,7 @@ Examples:
       exitWithResult(result.data.issues.length);
     } catch (error) {
       spinner.fail('Review failed');
-      exitWithError(`Unexpected error: ${error}`);
+      exitWithError(`Unexpected error: ${error instanceof Error ? error.message : String(error)}`);
     }
   });
+}

@@ -1,22 +1,16 @@
 import { Box, Text } from 'ink';
-import type { ReviewResult, Issue } from '@stargazer/core';
+import type { ReviewResult, Issue, Severity } from '@stargazer/core';
+import { DECISION_ICONS, MISC_ICONS } from '../constants/icons.js';
 
 interface ReviewViewProps {
   result: ReviewResult;
-  onBack: () => void;
 }
 
-const SEVERITY_COLORS: Record<string, string> = {
+const SEVERITY_COLORS: Record<Severity, string> = {
   critical: 'red',
   high: 'red',
   medium: 'yellow',
   low: 'blue',
-};
-
-const DECISION_ICONS: Record<string, string> = {
-  approve: '✅',
-  request_changes: '🔴',
-  comment: '💬',
 };
 
 function IssueItem({ issue, index }: { issue: Issue; index: number }) {
@@ -34,19 +28,19 @@ function IssueItem({ issue, index }: { issue: Issue; index: number }) {
       </Box>
       {issue.suggestion && (
         <Box marginLeft={3}>
-          <Text dimColor>💡 {issue.suggestion}</Text>
+          <Text dimColor>{MISC_ICONS.lightbulb} {issue.suggestion}</Text>
         </Box>
       )}
     </Box>
   );
 }
 
-export function ReviewView({ result, onBack }: ReviewViewProps) {
+export function ReviewView({ result }: ReviewViewProps) {
   const decisionIcon = DECISION_ICONS[result.decision] || '❓';
 
   return (
     <Box flexDirection="column" padding={1}>
-      <Text bold color="cyan">📝 Code Review Results</Text>
+      <Text bold color="cyan">{MISC_ICONS.pencil} Code Review Results</Text>
 
       <Box marginTop={1}>
         <Text>Decision: {decisionIcon} </Text>
@@ -59,7 +53,7 @@ export function ReviewView({ result, onBack }: ReviewViewProps) {
 
       <Box marginTop={1} flexDirection="column">
         {result.issues.length === 0 ? (
-          <Text color="green">✓ No issues found!</Text>
+          <Text color="green">{MISC_ICONS.checkmark} No issues found!</Text>
         ) : (
           <>
             <Text bold>Found {result.issues.length} issue(s):</Text>

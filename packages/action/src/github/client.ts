@@ -17,8 +17,15 @@ export function createGitHubClient(token: string) {
         pull_number: ctx.prNumber,
         mediaType: { format: 'diff' },
       });
+
       // Octokit returns raw diff string when mediaType.format is 'diff'
-      return data as unknown as string;
+      // but TypeScript types it as the PR object, so we validate at runtime
+      if (typeof data !== 'string') {
+        throw new Error(
+          `Expected diff string from GitHub API, got ${typeof data}`
+        );
+      }
+      return data;
     },
 
     async postComment(ctx: GitHubContext, body: string): Promise<void> {

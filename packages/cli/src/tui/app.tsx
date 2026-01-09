@@ -1,107 +1,16 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Box, Text, useApp, useInput } from 'ink';
-import { Spinner } from '@inkjs/ui';
 import { basename } from 'node:path';
 import { StatusBar } from './components/status-bar.js';
 import { MainMenu } from './components/main-menu.js';
 import { Header } from './components/header.js';
 import { ReviewView } from './components/review-view.js';
+import { ProgressPhases } from './components/progress-phases.js';
 import { AppProvider, useAppContext } from './state/app-context.js';
 import { hasApiKey } from './storage/api-key-store.js';
 import { HomeScreen, ChatScreen, HistoryScreen, HelpScreen, ProviderSelectScreen, SettingsScreen, ApiKeySetupScreen, ModelSelectScreen } from './screens/index.js';
-import { useReview, PHASE_ORDER, type ReviewPhase } from './hooks/use-review.js';
-
-function getPhaseLabel(phase: ReviewPhase): string {
-  switch (phase) {
-    case 'preparing': return 'Preparing review...';
-    case 'fetching-diff': return 'Fetching git diff...';
-    case 'analyzing': return 'Analyzing with AI...';
-    case 'parsing': return 'Parsing response...';
-  }
-}
-
-interface ProgressPhasesProps {
-  currentPhase: ReviewPhase | null;
-  completedPhases: ReviewPhase[];
-}
-
-function ProgressPhases({ currentPhase, completedPhases }: ProgressPhasesProps) {
-  return (
-    <Box flexDirection="column">
-      {PHASE_ORDER.map(phase => {
-        const isCompleted = completedPhases.includes(phase);
-        const isCurrent = phase === currentPhase;
-        const isPending = !isCompleted && !isCurrent;
-
-        return (
-          <Box key={phase}>
-            {isCompleted && <Text color="green">✓ </Text>}
-            {isCurrent && <><Spinner /><Text> </Text></>}
-            {isPending && <Text dimColor>○ </Text>}
-            <Text
-              color={isCompleted ? 'green' : isCurrent ? 'yellow' : undefined}
-              dimColor={isPending}
-            >
-              {getPhaseLabel(phase)}
-            </Text>
-          </Box>
-        );
-      })}
-    </Box>
-  );
-}
-
-function getUserFriendlyError(errorMsg: string): { title: string; message: string; suggestion: string } {
-  const lower = errorMsg.toLowerCase();
-
-  if (lower.includes('timed out') || lower.includes('timeout')) {
-    return {
-      title: 'Request Timed Out',
-      message: 'The AI review took too long to complete.',
-      suggestion: 'Try reviewing fewer files, or increase timeout in Settings.',
-    };
-  }
-  if (lower.includes('401') || lower.includes('unauthorized') || lower.includes('invalid api key')) {
-    return {
-      title: 'Authentication Failed',
-      message: 'Your API key appears to be invalid.',
-      suggestion: 'Go to Settings to update your API key.',
-    };
-  }
-  if (lower.includes('429') || lower.includes('rate limit')) {
-    return {
-      title: 'Rate Limited',
-      message: 'Too many requests to the Gemini API.',
-      suggestion: 'Wait a moment and try again.',
-    };
-  }
-  if (lower.includes('no changes') || lower.includes('empty') || lower.includes('no diff')) {
-    return {
-      title: 'No Changes Found',
-      message: 'No staged/unstaged changes detected.',
-      suggestion: 'Make sure you have changes to review.',
-    };
-  }
-  if (lower.includes('cancelled') || lower.includes('aborted')) {
-    return {
-      title: 'Review Cancelled',
-      message: 'The review was cancelled.',
-      suggestion: 'Press ESC to go back to the menu.',
-    };
-  }
-  if (lower.includes('connection') || lower.includes('econnrefused') || lower.includes('etimedout') || lower.includes('fetch failed') || lower.includes('network')) {
-    return {
-      title: 'Connection Failed',
-      message: 'Could not connect to the AI service.',
-      suggestion: 'Check your internet connection and try again.',
-    };
-  }
-  return {
-    title: 'Error',
-    message: errorMsg,
-    suggestion: 'Press ESC to go back and try again.',
-  };
-}
+import { useReview } from './hooks/use-review.js';
+import { getUserFriendlyError } from './utils/error-messages.js';
 
 interface AppContentProps {
   projectPath: string;
@@ -267,9 +176,7 @@ function AppContent({ projectPath }: AppContentProps) {
         );
 
       case 'review':
-        return reviewResult ? (
-          <ReviewView result={reviewResult} onBack={goToMenu} />
-        ) : null;
+        return reviewResult ? <ReviewView result={reviewResult} /> : null;
 
       case 'history':
         return <HistoryScreen />;
