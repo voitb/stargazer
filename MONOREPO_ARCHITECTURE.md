@@ -80,10 +80,13 @@ stargazer-monorepo/
 │   │   ├── package.json
 │   │   └── tsconfig.json
 │   │
-│   └── tooling/                    # @repo/tooling - Shared configurations
-│       ├── typescript/             # TypeScript base configs
-│       ├── eslint/                 # ESLint shared configs (future)
-│       └── package.json
+│   └── tooling/                    # Shared configurations (internal)
+│       └── typescript/             # @repo/typescript - TypeScript configs
+│           ├── base.json           # Base config (all packages extend)
+│           ├── node.json           # Node.js packages
+│           ├── react.json          # React web applications
+│           ├── cli.json            # CLI/Ink TUI applications
+│           └── package.json
 │
 ├── docs/                           # Documentation
 │   ├── en/
@@ -145,7 +148,7 @@ Reusable libraries shared across apps. **May be published** to npm.
 | `core` | `@stargazer/core` | Core business logic, API clients, utilities | Yes |
 | `cli` | `@stargazer/cli` | Interactive TUI with Ink | Yes |
 | `action` | `@stargazer/action` | GitHub Action entrypoint | No (bundled) |
-| `tooling` | `@repo/tooling` | Shared configs (TS, ESLint) | No (internal) |
+| `tooling/typescript` | `@repo/typescript` | Shared TypeScript configs | No (internal) |
 
 **Characteristics:**
 - Standalone with own `package.json`, `tsconfig.json`
@@ -164,7 +167,8 @@ Packages that are never published, used only within the monorepo.
 
 | Package | Purpose |
 |---------|---------|
-| `@repo/tooling` | Shared TypeScript, ESLint, Biome configs |
+| `@repo/typescript` | Shared TypeScript configurations |
+| `@repo/eslint` | Shared ESLint configurations (future) |
 | `@repo/types` | Shared type definitions (future) |
 
 **Naming convention:**
@@ -192,7 +196,7 @@ Packages that are never published, used only within the monorepo.
                             ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │                    @repo/* (internal)                            │
-│               @repo/tooling, @repo/types (future)               │
+│             @repo/typescript, @repo/types (future)              │
 │              Configuration and type packages                     │
 └───────────────────────────┬─────────────────────────────────────┘
                             │ imports from

@@ -1,0 +1,12 @@
+{
+  "name": "@repo/typescript",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Shared TypeScript configurations for the monorepo",
+  "exports": {
+    "./base": "./base.json",
+    "./node": "./node.json",
+    "./react": "./react.json",
+    "./cli": "./cli.json"
+  }
+}

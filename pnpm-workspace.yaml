@@ -7,3 +7,6 @@ packages:
 
   # Publishable packages (@stargazer/core, @stargazer/cli, @stargazer/action)
   - "packages/*"
+
+  # Internal tooling packages (@repo/typescript, @repo/eslint, etc.)
+  - "packages/tooling/*"
