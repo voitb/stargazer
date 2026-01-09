@@ -17,21 +17,9 @@
 import { Text, type TextProps } from 'ink';
 import type { ReactNode } from 'react';
 import { gradientLine } from '../gradient.js';
-import { STAR_ICONS, STELLAR } from '../palettes.js';
-import { textColors, statusColors } from '../tokens/colors.js';
-
-// ═══════════════════════════════════════════════════════════════
-// COLOR CONSTANTS (centralized for consistency)
-// ═══════════════════════════════════════════════════════════════
-
-/** Fallback color for screen titles (when gradient disabled) */
-const TITLE_FALLBACK_COLOR = STELLAR.colors[2]; // #7dd3fc
-
-/** Secondary/label text color */
-const LABEL_COLOR = textColors.dark.secondary; // #94a3b8
-
-/** Code/file path color */
-const CODE_COLOR = statusColors.info.text; // #38bdf8
+import { STAR_ICONS } from '../palettes.js';
+import { useTheme } from '../primitives/theme-provider.js';
+import { brandColors } from '../tokens/colors.js';
 
 // ═══════════════════════════════════════════════════════════════
 // SCREEN & SECTION TITLES
@@ -49,7 +37,7 @@ export interface ScreenTitleProps {
 
 /**
  * Main screen title - replaces `<Text bold color="cyan">`
- * Uses stellar gradient for premium look
+ * Uses stellar/daylight gradient for premium look (theme-aware)
  */
 export function ScreenTitle({
   children,
@@ -57,15 +45,22 @@ export function ScreenTitle({
   gradient = true,
   palette = 'stellar',
 }: ScreenTitleProps) {
+  const { theme, colors } = useTheme();
   const prefix = withStar ? `${STAR_ICONS.filled} ` : '';
   const content = `${prefix}${children}`;
 
+  // Use theme-aware palette for gradient
+  const themePalette = palette === 'stellar'
+    ? (theme === 'dark' ? 'stellar' : 'daylight')
+    : palette;
+
   if (gradient) {
-    return <Text bold>{gradientLine(content, { palette })}</Text>;
+    return <Text bold>{gradientLine(content, { palette: themePalette })}</Text>;
   }
 
+  // Theme-aware fallback color using brand tokens
   return (
-    <Text bold color={TITLE_FALLBACK_COLOR}>
+    <Text bold color={colors.brand.primary}>
       {content}
     </Text>
   );
@@ -78,12 +73,15 @@ export interface SectionTitleProps {
 }
 
 /**
- * Section header within a screen - uses moonlight palette
+ * Section header within a screen - uses moonlight/dusk palette (theme-aware)
  */
 export function SectionTitle({ children, withStar = false }: SectionTitleProps) {
+  const { theme } = useTheme();
   const prefix = withStar ? `${STAR_ICONS.outline} ` : '';
+  // Use theme-aware palette: moonlight for dark, dusk for light
+  const themePalette = theme === 'dark' ? 'moonlight' : 'dusk';
   return (
-    <Text bold>{gradientLine(`${prefix}${children}`, { palette: 'moonlight' })}</Text>
+    <Text bold>{gradientLine(`${prefix}${children}`, { palette: themePalette })}</Text>
   );
 }
 
@@ -145,12 +143,13 @@ export interface LabelTextProps {
 }
 
 /**
- * Secondary/label text - uses moonlight colors
+ * Secondary/label text - uses theme-aware secondary color
  */
 export function LabelText({ children, withStar = false }: LabelTextProps) {
+  const { colors } = useTheme();
   const prefix = withStar ? `${STAR_ICONS.outline} ` : '';
   return (
-    <Text color={LABEL_COLOR}>
+    <Text color={colors.text.secondary}>
       {prefix}
       {children}
     </Text>
@@ -165,10 +164,11 @@ export function HintText({ children }: { children: ReactNode }) {
 }
 
 /**
- * File path or code reference - uses info color
+ * File path or code reference - uses theme-aware border focus color (info style)
  */
 export function CodeText({ children }: { children: ReactNode }) {
-  return <Text color={CODE_COLOR}>{children}</Text>;
+  const { colors } = useTheme();
+  return <Text color={colors.border.focus}>{children}</Text>;
 }
 
 // ═══════════════════════════════════════════════════════════════

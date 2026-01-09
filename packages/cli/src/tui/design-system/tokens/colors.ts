@@ -19,11 +19,55 @@ export {
   THEMES,
   DEFAULT_PALETTE,
   STAR_ICONS,
+  STELLAR,
+  MOONLIGHT,
+  DAYLIGHT,
+  DUSK,
   type Palette,
   type PaletteName,
   type ThemeName,
   type RGB,
 } from '../palettes.js';
+
+// Import for internal use (brand color definitions)
+import { STELLAR, MOONLIGHT, DAYLIGHT, DUSK } from '../palettes.js';
+
+/**
+ * Brand colors - semantic tokens for primary branding
+ *
+ * These replace brittle array index access like `STELLAR.colors[2]`
+ * with meaningful names that are theme-aware.
+ *
+ * @example
+ * ```typescript
+ * import { brandColors, getThemeColors } from './colors.js';
+ *
+ * // Direct access:
+ * const color = brandColors.dark.primary; // '#7dd3fc'
+ *
+ * // Via theme context (preferred):
+ * const { colors } = useTheme();
+ * <Text color={colors.brand.primary}>Stargazer</Text>
+ * ```
+ */
+export const brandColors = {
+  dark: {
+    /** Primary brand color - stellar cyan */
+    primary: STELLAR.colors[2],     // #7dd3fc - cool cyan
+    /** Light brand color - stellar white-blue */
+    light: STELLAR.colors[0],       // #f0f9ff - white hot
+    /** Secondary brand - moonlight slate */
+    secondary: MOONLIGHT.colors[0], // #94a3b8 - slate
+  },
+  light: {
+    /** Primary brand color - daylight blue */
+    primary: DAYLIGHT.colors[2],    // #3b82f6 - bright blue
+    /** Light brand color - daylight navy */
+    light: DAYLIGHT.colors[0],      // #1e3a5f - deep navy
+    /** Secondary brand - dusk slate */
+    secondary: DUSK.colors[0],      // #475569 - dark slate
+  },
+} as const;
 
 /**
  * Surface colors for backgrounds and containers
@@ -172,6 +216,7 @@ export interface ThemeColors {
   surface: (typeof surfaceColors)['dark'] | (typeof surfaceColors)['light'];
   text: (typeof textColors)['dark'] | (typeof textColors)['light'];
   border: (typeof borderColorsMap)['dark'] | (typeof borderColorsMap)['light'];
+  brand: (typeof brandColors)['dark'] | (typeof brandColors)['light'];
   status: typeof statusColors;
 }
 
@@ -180,6 +225,7 @@ export function getThemeColors(theme: 'dark' | 'light'): ThemeColors {
     surface: surfaceColors[theme],
     text: textColors[theme],
     border: borderColorsMap[theme],
+    brand: brandColors[theme],
     status: statusColors,
   };
 }

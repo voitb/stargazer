@@ -885,17 +885,36 @@ All colors must come from the design system tokens. **NEVER use hardcoded hex co
 ### Usage Guidelines
 
 ```typescript
-// ✅ CORRECT: Import from design system
-import { statusColors, ROLE_COLORS, useTheme } from '../design-system/index.js';
+// ✅ CORRECT: Use theme-aware colors from useTheme hook
+import { useTheme } from '../design-system/index.js';
 
 function MyComponent() {
-  const { theme, colors } = useTheme();
-  return <Text color={statusColors.info.text}>Info</Text>;
+  const { colors } = useTheme();
+  // Theme-aware: adapts to dark/light mode automatically
+  return <Text color={colors.border.focus}>Info</Text>;
 }
 
-// ❌ WRONG: Hardcoded colors
+// ✅ ALSO CORRECT: Use semantic text components (preferred)
+import { StatusText, CodeText } from '../design-system/index.js';
+
+function BetterComponent() {
+  return (
+    <>
+      <StatusText variant="info">Info message</StatusText>
+      <CodeText>src/index.ts:42</CodeText>
+    </>
+  );
+}
+
+// ❌ WRONG: Hardcoded colors (not theme-aware)
 function BadComponent() {
   return <Text color="#38bdf8">Info</Text>;
+}
+
+// ❌ WRONG: Static statusColors (not theme-aware)
+import { statusColors } from '../design-system/index.js';
+function AlsoBadComponent() {
+  return <Text color={statusColors.info.text}>Info</Text>;
 }
 ```
 
