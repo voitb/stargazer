@@ -31,8 +31,8 @@ describe('reviewCommand', () => {
 
   it('exits with code 2 when GEMINI_API_KEY is missing', async () => {
     delete process.env['GEMINI_API_KEY'];
-    const { reviewCommand } = await import('./review');
-    await reviewCommand.parseAsync(['review'], { from: 'user' });
+    const { createReviewCommand } = await import('./review.js');
+    await createReviewCommand().parseAsync(['review'], { from: 'user' });
 
     expect(mockConsoleError).toHaveBeenCalledWith('Error: GEMINI_API_KEY environment variable is required\nSet it with: export GEMINI_API_KEY=your-key');
     expect(mockExit).toHaveBeenCalledWith(2);
@@ -40,7 +40,8 @@ describe('reviewCommand', () => {
 
   it('exits with code 0 when review passes', async () => {
     mockReviewDiff.mockResolvedValue({ ok: true, data: { issues: [], summary: '', decision: 'approve' } });
-    const { reviewCommand } = await import('./review');
+    const { createReviewCommand } = await import('./review.js');
+    const reviewCommand = createReviewCommand();
     await reviewCommand.parseAsync(['review'], { from: 'user' });
 
     expect(mockExit).toHaveBeenCalledWith(0);
@@ -51,7 +52,8 @@ describe('reviewCommand', () => {
       ok: true,
       data: { issues: [{ file: 'x.ts', line: 1, severity: 'high', message: 'Bug', category: 'bug', confidence: 0.9 }], summary: '', decision: 'request_changes' },
     });
-    const { reviewCommand } = await import('./review');
+    const { createReviewCommand } = await import('./review.js');
+    const reviewCommand = createReviewCommand();
     await reviewCommand.parseAsync(['review'], { from: 'user' });
 
     expect(mockExit).toHaveBeenCalledWith(1);
@@ -59,7 +61,8 @@ describe('reviewCommand', () => {
 
   it('exits with code 2 on API error', async () => {
     mockReviewDiff.mockResolvedValue({ ok: false, error: { code: 'API_ERROR', message: 'Failed' } });
-    const { reviewCommand } = await import('./review');
+    const { createReviewCommand } = await import('./review.js');
+    const reviewCommand = createReviewCommand();
     await reviewCommand.parseAsync(['review'], { from: 'user' });
 
     expect(mockConsoleError).toHaveBeenCalledWith('Error: Failed');
@@ -69,7 +72,8 @@ describe('reviewCommand', () => {
   it('outputs JSON when --json flag is used', async () => {
     const data = { issues: [], summary: 'Clean', decision: 'approve' as const };
     mockReviewDiff.mockResolvedValue({ ok: true, data });
-    const { reviewCommand } = await import('./review');
+    const { createReviewCommand } = await import('./review.js');
+    const reviewCommand = createReviewCommand();
     await reviewCommand.parseAsync(['review', '--format', 'json'], { from: 'user' });
 
     expect(mockConsoleLog).toHaveBeenCalledWith(JSON.stringify(data, null, 2));
@@ -77,7 +81,8 @@ describe('reviewCommand', () => {
 
   it('passes projectPath to reviewDiff', async () => {
     mockReviewDiff.mockResolvedValue({ ok: true, data: { issues: [], summary: '', decision: 'approve' as const } });
-    const { reviewCommand } = await import('./review');
+    const { createReviewCommand } = await import('./review.js');
+    const reviewCommand = createReviewCommand();
     await reviewCommand.parseAsync(['review'], { from: 'user' });
 
     expect(mockReviewDiff).toHaveBeenCalledWith(
@@ -90,7 +95,8 @@ describe('reviewCommand', () => {
 
   it('uses current working directory as projectPath', async () => {
     mockReviewDiff.mockResolvedValue({ ok: true, data: { issues: [], summary: '', decision: 'approve' as const } });
-    const { reviewCommand } = await import('./review');
+    const { createReviewCommand } = await import('./review.js');
+    const reviewCommand = createReviewCommand();
     await reviewCommand.parseAsync(['review'], { from: 'user' });
 
     const callArgs = mockReviewDiff.mock.calls[0]?.[1];
@@ -100,7 +106,8 @@ describe('reviewCommand', () => {
 
   it('passes staged: true by default', async () => {
     mockReviewDiff.mockResolvedValue({ ok: true, data: { issues: [], summary: '', decision: 'approve' as const } });
-    const { reviewCommand } = await import('./review');
+    const { createReviewCommand } = await import('./review.js');
+    const reviewCommand = createReviewCommand();
     await reviewCommand.parseAsync(['review'], { from: 'user' });
 
     const callArgs = mockReviewDiff.mock.calls[0]?.[1];
@@ -110,7 +117,8 @@ describe('reviewCommand', () => {
 
   it('passes staged: false when --unstaged is provided', async () => {
     mockReviewDiff.mockResolvedValue({ ok: true, data: { issues: [], summary: '', decision: 'approve' as const } });
-    const { reviewCommand } = await import('./review');
+    const { createReviewCommand } = await import('./review.js');
+    const reviewCommand = createReviewCommand();
     await reviewCommand.parseAsync(['review', '--unstaged'], { from: 'user' });
 
     const callArgs = mockReviewDiff.mock.calls[0]?.[1];

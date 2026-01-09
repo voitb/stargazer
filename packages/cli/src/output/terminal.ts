@@ -1,5 +1,6 @@
 import chalk from 'chalk';
-import type { ReviewResult, Issue, Severity, Decision } from '@stargazer/core';
+import type { ReviewResult, Issue, Severity } from '@stargazer/core';
+import { DECISION_ICONS, MISC_ICONS } from '../tui/constants/icons.js';
 
 const SEVERITY_COLORS: Record<Severity, (text: string) => string> = {
   critical: chalk.red.bold,
@@ -8,16 +9,10 @@ const SEVERITY_COLORS: Record<Severity, (text: string) => string> = {
   low: chalk.blue,
 };
 
-const DECISION_ICONS: Record<Decision, string> = {
-  approve: '✅',
-  request_changes: '🔴',
-  comment: '💬',
-};
-
 export function formatReview(review: ReviewResult): string {
   const lines: string[] = [];
 
-  lines.push(chalk.bold('\n📝 Code Review Results\n'));
+  lines.push(chalk.bold(`\n${MISC_ICONS.pencil} Code Review Results\n`));
 
   const decisionIcon = DECISION_ICONS[review.decision];
   lines.push(`Decision: ${decisionIcon} ${chalk.bold(review.decision)}`);
@@ -25,7 +20,7 @@ export function formatReview(review: ReviewResult): string {
   lines.push(`\n${review.summary}\n`);
 
   if (review.issues.length === 0) {
-    lines.push(chalk.green('✓ No issues found!'));
+    lines.push(chalk.green(`${MISC_ICONS.checkmark} No issues found!`));
   } else {
     lines.push(chalk.bold(`Found ${review.issues.length} issue(s):\n`));
 
@@ -48,11 +43,11 @@ function formatIssue(issue: Issue, num: number): string {
   output += `   ${issue.message}`;
 
   if (issue.suggestion) {
-    output += `\n   ${chalk.dim('💡')} ${chalk.dim(issue.suggestion)}`;
+    output += `\n   ${chalk.dim(MISC_ICONS.lightbulb)} ${chalk.dim(issue.suggestion)}`;
   }
 
   if (issue.conventionRef) {
-    output += `\n   ${chalk.dim('📋 Convention:')} ${chalk.dim(issue.conventionRef)}`;
+    output += `\n   ${chalk.dim(`${MISC_ICONS.clipboard} Convention:`)} ${chalk.dim(issue.conventionRef)}`;
   }
 
   output += '\n';

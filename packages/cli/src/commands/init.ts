@@ -2,7 +2,8 @@ import { Command } from 'commander';
 import { writeFile, access } from 'node:fs/promises';
 import { join } from 'node:path';
 import chalk from 'chalk';
-import { EXIT_CODES } from '../exit-codes';
+import { logger } from '../logger.js';
+import { exitWithError } from '../exit-codes.js';
 
 const CONFIG_TEMPLATE = `import { defineConfig, ignorePathsPlugin } from '@stargazer/core';
 
@@ -18,40 +19,50 @@ export default defineConfig({
 });
 `;
 
-export const initCommand = new Command('init')
-  .description('Initialize Stargazer configuration file')
-  .option('--force', 'Overwrite existing config file')
-  .action(async (options) => {
-    const configPath = join(process.cwd(), 'stargazer.config.ts');
+export function createInitCommand(): Command {
+  return new Command('init')
+    .description('Initialize Stargazer configuration file')
+    .option('--force', 'Overwrite existing config file')
+    .addHelpText(
+      'after',
+      `
+Examples:
+  $ stargazer init                Create config file
+  $ stargazer init --force        Overwrite existing config
+`
+    )
+    .action(async (options) => {
+      const configPath = join(process.cwd(), 'stargazer.config.ts');
 
-    if (!options.force) {
-      try {
-        await access(configPath);
-        console.error(chalk.yellow('Config file already exists: stargazer.config.ts'));
-        console.error(chalk.dim('Use --force to overwrite'));
-        process.exit(EXIT_CODES.ERROR);
-      } catch {
+      if (!options.force) {
+        try {
+          await access(configPath);
+          logger.warn('Config file already exists: stargazer.config.ts');
+          logger.info(chalk.dim('Use --force to overwrite'));
+          exitWithError('Config file already exists');
+        } catch {
+          // File doesn't exist, continue with creation
+        }
       }
-    }
 
-    try {
-      await writeFile(configPath, CONFIG_TEMPLATE, 'utf-8');
+      try {
+        await writeFile(configPath, CONFIG_TEMPLATE, 'utf-8');
 
-      console.log(chalk.green('✓ Created stargazer.config.ts'));
-      console.log('');
-      console.log(chalk.bold('Next steps:'));
-      console.log('');
-      console.log('  1. Set your API key:');
-      console.log(chalk.cyan('     export GEMINI_API_KEY=your-key'));
-      console.log('');
-      console.log('  2. Discover project conventions:');
-      console.log(chalk.cyan('     stargazer discover'));
-      console.log('');
-      console.log('  3. Review your code:');
-      console.log(chalk.cyan('     git add . && stargazer review'));
-      console.log('');
-    } catch (error) {
-      console.error(chalk.red('Failed to create config file:'), error);
-      process.exit(EXIT_CODES.ERROR);
-    }
-  });
+        logger.success('✓ Created stargazer.config.ts');
+        logger.info('');
+        logger.info(chalk.bold('Next steps:'));
+        logger.info('');
+        logger.info('  1. Set your API key:');
+        logger.info(chalk.cyan('     export GEMINI_API_KEY=your-key'));
+        logger.info('');
+        logger.info('  2. Discover project conventions:');
+        logger.info(chalk.cyan('     stargazer discover'));
+        logger.info('');
+        logger.info('  3. Review your code:');
+        logger.info(chalk.cyan('     git add . && stargazer review'));
+        logger.info('');
+      } catch (error) {
+        exitWithError(`Failed to create config file: ${error}`);
+      }
+    });
+}

@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
-import { reviewCommand } from './commands/review.js';
+import { createReviewCommand } from './commands/review.js';
 import { createDiscoverCommand } from './commands/discover.js';
+import { createInitCommand } from './commands/init.js';
 import { logger } from './logger.js';
 
 const program = new Command();
@@ -15,8 +16,9 @@ program
   .option('-q, --quiet', 'Suppress non-essential output')
   .option('-v, --verbose', 'Enable verbose output');
 
-program.addCommand(reviewCommand);
+program.addCommand(createReviewCommand());
 program.addCommand(createDiscoverCommand());
+program.addCommand(createInitCommand());
 
 function shouldLaunchTUI(): boolean {
   const args = process.argv.slice(2);

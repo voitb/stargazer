@@ -1,8 +1,10 @@
 import { readFile, writeFile, chmod } from 'node:fs/promises';
 import { ok, err, type Result } from '@stargazer/core';
 import { getConfigPath, ensureStorageStructure } from './paths.js';
+import { type Provider, DEFAULT_TIMEOUT, getDefaultModel, getSecondaryModel } from '../config/defaults.js';
 
-export type Provider = 'gemini' | 'glm';
+export type { Provider };
+export { getDefaultModel, getSecondaryModel };
 
 interface StoredConfig {
   apiKey?: string;
@@ -12,9 +14,27 @@ interface StoredConfig {
   selectedModel?: string;
 }
 
-const DEFAULT_TIMEOUT = 60000;
-const DEFAULT_GEMINI_MODEL = 'gemini-3-flash-preview';
-const DEFAULT_GLM_MODEL = 'glm-4-flash';
+// ═══════════════════════════════════════════════════════════════════════════
+// Config Reading Helper
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Read a single field from the config file with a default value.
+ * Reduces code duplication across getter functions.
+ */
+async function readConfigField<K extends keyof StoredConfig>(
+  field: K,
+  defaultValue: StoredConfig[K],
+): Promise<StoredConfig[K]> {
+  try {
+    const configPath = getConfigPath();
+    const content = await readFile(configPath, 'utf-8');
+    const config: StoredConfig = JSON.parse(content);
+    return config[field] ?? defaultValue;
+  } catch {
+    return defaultValue;
+  }
+}
 
 export async function getApiKey(): Promise<string | null> {
   const envKey = process.env['GEMINI_API_KEY'] || process.env['GOOGLE_API_KEY'];
@@ -29,7 +49,8 @@ export async function getApiKey(): Promise<string | null> {
     if (e instanceof Error && 'code' in e && (e as NodeJS.ErrnoException).code === 'ENOENT') {
       return null;
     }
-    console.error('Error reading API key config:', e);
+    // Silent fail - unexpected config read errors should not spam output
+    // The null return signals the error condition to callers
     return null;
   }
 }
@@ -89,14 +110,8 @@ export function maskApiKey(key: string): string {
 }
 
 export async function getTimeout(): Promise<number> {
-  try {
-    const configPath = getConfigPath();
-    const content = await readFile(configPath, 'utf-8');
-    const config: StoredConfig = JSON.parse(content);
-    return config.timeout ?? DEFAULT_TIMEOUT;
-  } catch {
-    return DEFAULT_TIMEOUT;
-  }
+  // DEFAULT_TIMEOUT guarantees non-undefined return
+  return (await readConfigField('timeout', DEFAULT_TIMEOUT)) ?? DEFAULT_TIMEOUT;
 }
 
 export async function saveTimeout(timeout: number): Promise<Result<void>> {
@@ -108,14 +123,7 @@ export async function saveTimeout(timeout: number): Promise<Result<void>> {
 // ═══════════════════════════════════════════════════════════════════════════
 
 export async function getProvider(): Promise<Provider | undefined> {
-  try {
-    const configPath = getConfigPath();
-    const content = await readFile(configPath, 'utf-8');
-    const config: StoredConfig = JSON.parse(content);
-    return config.provider;
-  } catch {
-    return undefined;
-  }
+  return readConfigField('provider', undefined);
 }
 
 export async function saveProvider(provider: Provider): Promise<Result<void>> {
@@ -123,26 +131,11 @@ export async function saveProvider(provider: Provider): Promise<Result<void>> {
 }
 
 export async function getSelectedModel(): Promise<string | undefined> {
-  try {
-    const configPath = getConfigPath();
-    const content = await readFile(configPath, 'utf-8');
-    const config: StoredConfig = JSON.parse(content);
-    return config.selectedModel;
-  } catch {
-    return undefined;
-  }
+  return readConfigField('selectedModel', undefined);
 }
 
 export async function saveSelectedModel(model: string): Promise<Result<void>> {
   return saveConfigField('selectedModel', model);
-}
-
-export function getDefaultModel(provider: Provider): string {
-  return provider === 'gemini' ? DEFAULT_GEMINI_MODEL : DEFAULT_GLM_MODEL;
-}
-
-export function getSecondaryModel(provider: Provider): string {
-  return provider === 'gemini' ? 'gemini-2.5-flash' : 'glm-4.5-flash';
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
