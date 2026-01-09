@@ -4,6 +4,7 @@ import {
   Divider,
   KeyHintBar,
   gradientLine,
+  SectionTitle,
 } from '../design-system/index.js';
 
 export function HelpScreen() {
@@ -24,7 +25,7 @@ export function HelpScreen() {
       <Divider variant="star" palette="stellar" />
 
       <Box flexDirection="column" marginTop={1}>
-        <Text bold color="cyan">Keyboard Shortcuts</Text>
+        <SectionTitle withStar>Keyboard Shortcuts</SectionTitle>
         <Box marginTop={1}>
           <KeyHintBar
             hints={[
@@ -47,7 +48,7 @@ export function HelpScreen() {
       <Divider variant="dots" />
 
       <Box flexDirection="column" marginTop={1}>
-        <Text bold color="cyan">Menu Options</Text>
+        <SectionTitle withStar>Menu Options</SectionTitle>
         <Box flexDirection="column" marginTop={1} paddingLeft={2}>
           <Text>✦ <Text color="white">Review staged</Text>      <Text dimColor>Analyze staged git changes</Text></Text>
           <Text>✦ <Text color="white">Review unstaged</Text>    <Text dimColor>Analyze unstaged git changes</Text></Text>

@@ -3,6 +3,7 @@ import { Box, Text, useInput } from 'ink';
 import { TextInput } from '@inkjs/ui';
 import { saveApiKey } from '../../storage/api-key-store.js';
 import { useAppContext } from '../../state/app-context.js';
+import { ScreenTitle, StatusText, HintText, MENU_ICONS } from '../../design-system/index.js';
 
 export function ApiKeySetupScreen() {
   const { navigate, setError } = useAppContext();
@@ -33,17 +34,17 @@ export function ApiKeySetupScreen() {
 
   return (
     <Box flexDirection="column" padding={1}>
-      <Text bold color="cyan">Gemini API Key Setup</Text>
+      <ScreenTitle>API Key Setup</ScreenTitle>
 
       <Box marginTop={1} flexDirection="column">
-        <Text>Enter your Gemini API key to enable AI code review.</Text>
-        <Text dimColor>Get your key at: https://aistudio.google.com/apikey</Text>
+        <Text>Enter your API key to enable AI code review.</Text>
+        <HintText>Get your key at: https://aistudio.google.com/apikey</HintText>
       </Box>
 
       <Box marginTop={2} flexDirection="column">
         <Text>API Key:</Text>
         <Box>
-          <Text color="cyan">&gt; </Text>
+          <Text color="#38bdf8">{MENU_ICONS.discover} </Text>
           <TextInput
             key={key}
             onSubmit={handleSubmit}
@@ -53,8 +54,8 @@ export function ApiKeySetupScreen() {
       </Box>
 
       <Box marginTop={2}>
-        <Text dimColor>Press Enter to save | ESC to cancel</Text>
-        {isSaving && <Text color="yellow"> Saving...</Text>}
+        <HintText>Press Enter to save | ESC to cancel</HintText>
+        {isSaving && <StatusText variant="warning"> Saving...</StatusText>}
       </Box>
     </Box>
   );

@@ -202,6 +202,34 @@ export {
   type NotificationProps,
 } from './components/toast.js';
 
+export {
+  // Screen & Section titles
+  ScreenTitle,
+  SectionTitle,
+  type ScreenTitleProps,
+  type SectionTitleProps,
+  // Status text
+  StatusText,
+  type StatusTextProps,
+  type StatusVariant,
+  // Label & hint text
+  LabelText,
+  HintText,
+  CodeText,
+  type LabelTextProps,
+  // Severity display
+  SeverityText,
+  type SeverityTextProps,
+  type SeverityLevel,
+  // Decision display
+  DecisionText,
+  type DecisionTextProps,
+  type DecisionType,
+  DECISION_DISPLAY,
+  // Menu icons
+  MENU_ICONS,
+} from './components/text.js';
+
 // ═══════════════════════════════════════════════════════════════
 // UTILITIES (new)
 // ═══════════════════════════════════════════════════════════════

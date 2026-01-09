@@ -3,6 +3,12 @@ import { Select, ConfirmInput } from '@inkjs/ui';
 import { useAppContext } from '../../state/app-context.js';
 import { useSettings } from './use-settings.js';
 import { TIMEOUT_OPTIONS } from '../../config/settings.js';
+import {
+  ScreenTitle,
+  StatusText,
+  HintText,
+  MENU_ICONS,
+} from '../../design-system/index.js';
 
 // Convert timeout options to Select format (string values)
 const timeoutSelectOptions = [
@@ -10,7 +16,7 @@ const timeoutSelectOptions = [
     label: opt.label,
     value: String(opt.value),
   })),
-  { label: '← Cancel', value: 'cancel' },
+  { label: `${MENU_ICONS.back} Cancel`, value: 'cancel' },
 ];
 
 export function SettingsScreen() {
@@ -28,15 +34,15 @@ export function SettingsScreen() {
     handleConfirmClear,
   } = useSettings();
 
-  // Build dynamic settings options based on current state
+  // Build dynamic settings options based on current state (star-themed icons)
   const settingsOptions = [
-    { label: `🔮 Provider: ${providerDisplayName}`, value: 'change-provider' },
-    { label: `🤖 Model: ${modelDisplayName}`, value: 'change-model' },
-    { label: '🔑 Update API Key', value: 'update-key' },
-    { label: `⏱️  Timeout: ${timeoutValue / 1000}s`, value: 'change-timeout' },
-    { label: '🗑️  Clear API Key & Provider', value: 'clear-key' },
-    { label: '📂 Clear All Sessions', value: 'clear-sessions' },
-    { label: '← Back to Menu', value: 'back' },
+    { label: `${MENU_ICONS.provider} Provider: ${providerDisplayName}`, value: 'change-provider' },
+    { label: `${MENU_ICONS.model} Model: ${modelDisplayName}`, value: 'change-model' },
+    { label: `${MENU_ICONS.apiKey} Update API Key`, value: 'update-key' },
+    { label: `${MENU_ICONS.timeout} Timeout: ${timeoutValue / 1000}s`, value: 'change-timeout' },
+    { label: `${MENU_ICONS.clear} Clear API Key & Provider`, value: 'clear-key' },
+    { label: `${MENU_ICONS.sessions} Clear All Sessions`, value: 'clear-sessions' },
+    { label: `${MENU_ICONS.back} Back to Menu`, value: 'back' },
   ];
 
   const handleSelect = (value: string) => {
@@ -86,17 +92,15 @@ export function SettingsScreen() {
   if (modal === 'timeout') {
     return (
       <Box flexDirection="column" padding={1}>
-        <Text bold color="cyan">
-          ⏱️ Select Timeout
-        </Text>
+        <ScreenTitle>Select Timeout</ScreenTitle>
         <Box marginTop={1}>
-          <Text dimColor>Current: {timeoutValue / 1000} seconds</Text>
+          <HintText>Current: {timeoutValue / 1000} seconds</HintText>
         </Box>
         <Box marginTop={2}>
           <Select options={timeoutSelectOptions} onChange={handleTimeoutSelect} />
         </Box>
         <Box marginTop={2}>
-          <Text dimColor>Press ESC to cancel</Text>
+          <HintText>Press ESC to cancel</HintText>
         </Box>
       </Box>
     );
@@ -106,9 +110,9 @@ export function SettingsScreen() {
   if (modal === 'confirm-clear') {
     return (
       <Box flexDirection="column" padding={1}>
-        <Text bold color="yellow">
+        <StatusText variant="warning" bold withIcon>
           Clear API Key?
-        </Text>
+        </StatusText>
         <Box marginTop={1}>
           <Text>This will remove your API key and you'll need to set it up again.</Text>
         </Box>
@@ -121,16 +125,16 @@ export function SettingsScreen() {
   }
 
   // Main settings screen
+  const hasKey = !keyStatus.includes('Not');
+
   return (
     <Box flexDirection="column" padding={1}>
-      <Text bold color="cyan">
-        Settings
-      </Text>
+      <ScreenTitle>Settings</ScreenTitle>
 
       <Box marginTop={1} flexDirection="column">
         <Box>
           <Text>API Key: </Text>
-          <Text color={keyStatus.includes('Not') ? 'red' : 'green'}>{keyStatus}</Text>
+          <StatusText variant={hasKey ? 'success' : 'error'}>{keyStatus}</StatusText>
         </Box>
       </Box>
 
@@ -139,7 +143,7 @@ export function SettingsScreen() {
       </Box>
 
       <Box marginTop={2}>
-        <Text dimColor>Press ESC to go back</Text>
+        <HintText>Press ESC to go back</HintText>
       </Box>
     </Box>
   );

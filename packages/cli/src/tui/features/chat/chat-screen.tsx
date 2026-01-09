@@ -1,11 +1,12 @@
 import { useCallback } from 'react';
-import { Box, Text, useInput } from 'ink';
+import { Box, useInput } from 'ink';
 import { Spinner } from '@inkjs/ui';
 import type { ReviewResult } from '@stargazer/core';
 import { ChatView } from './components/chat-view.js';
 import { ChatInput } from './components/chat-input.js';
 import { useAppContext } from '../../state/app-context.js';
 import { useReview } from '../review/index.js';
+import { StatusText } from '../../design-system/index.js';
 
 export function ChatScreen() {
   const { activeSession, addMessage, closeSession, projectPath } = useAppContext();
@@ -94,7 +95,7 @@ export function ChatScreen() {
   if (!activeSession) {
     return (
       <Box padding={1}>
-        <Text color="red">No active session. Press ESC to go back.</Text>
+        <StatusText variant="error" withIcon>No active session. Press ESC to go back.</StatusText>
       </Box>
     );
   }
