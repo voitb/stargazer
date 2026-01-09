@@ -11,3 +11,6 @@ export * from "./alias";
 
 // Theme configurations
 export * from "./themes";
+
+// Token types (for compile-time validation)
+export type * from "./types";
