@@ -1,7 +1,7 @@
 import { Box, Text } from 'ink';
 import { Select } from '@inkjs/ui';
-import { useAppContext } from '../state/app-context.js';
-import { saveProvider, type Provider } from '../storage/api-key-store.js';
+import { useAppContext } from '../../state/app-context.js';
+import { saveProvider, type Provider } from '../../storage/api-key-store.js';
 
 const providerOptions = [
   { label: '🔮 Google Gemini (Recommended)', value: 'gemini' },

@@ -1,7 +1,7 @@
 import { Box, Text } from 'ink';
 import { Select } from '@inkjs/ui';
 import { formatDistanceToNow } from 'date-fns';
-import type { SessionIndexEntry } from '../storage/types.js';
+import type { SessionIndexEntry } from '../../../storage/types.js';
 
 interface SessionListProps {
   sessions: readonly SessionIndexEntry[];

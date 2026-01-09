@@ -1,8 +1,9 @@
 export { HomeScreen } from './home-screen.js';
-export { ChatScreen } from './chat-screen.js';
-export { HistoryScreen } from './history-screen.js';
+export { ChatScreen } from '../features/chat/chat-screen.js';
+export { HistoryScreen } from '../features/sessions/history-screen.js';
 export { HelpScreen } from './help-screen.js';
-export { ProviderSelectScreen } from './provider-select-screen.js';
-export { ApiKeySetupScreen } from './api-key-setup-screen.js';
-export { SettingsScreen } from './settings-screen.js';
-export { ModelSelectScreen } from './model-select-screen.js';
+export { ProviderSelectScreen } from '../features/auth/provider-select-screen.js';
+export { ApiKeySetupScreen } from '../features/auth/api-key-setup-screen.js';
+export { SettingsScreen } from '../features/settings/settings-screen.js';
+export { ModelSelectScreen } from '../features/auth/model-select-screen.js';
+export { ScreenRouter } from './screen-router.js';

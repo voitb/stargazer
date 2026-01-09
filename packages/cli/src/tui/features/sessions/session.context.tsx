@@ -8,13 +8,13 @@ import {
   useMemo,
   type ReactNode,
 } from 'react';
-import type { SessionData, SessionIndexEntry } from '../storage/types.js';
+import type { SessionData, SessionIndexEntry } from '../../storage/types.js';
 import {
   createSession,
   loadSession,
   listAllSessions,
-} from '../storage/session-store.js';
-import { useNavigation } from './navigation-context.js';
+} from '../../storage/session-store.js';
+import { useNavigation } from '../../state/navigation-context.js';
 
 export interface SessionContextValue {
   projectPath: string;

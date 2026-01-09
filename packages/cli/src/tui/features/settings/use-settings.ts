@@ -8,7 +8,7 @@ import {
   getProvider,
   getSelectedModel,
   type Provider,
-} from '../storage/api-key-store.js';
+} from '../../storage/api-key-store.js';
 
 export type SettingsModal = 'none' | 'timeout' | 'confirm-clear';
 

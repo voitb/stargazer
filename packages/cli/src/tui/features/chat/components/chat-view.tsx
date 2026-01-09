@@ -1,6 +1,6 @@
 import { Box, Text } from 'ink';
 import { ChatMessage as ChatMessageComponent } from './chat-message.js';
-import type { ChatMessage } from '../storage/types.js';
+import type { ChatMessage } from '../../../storage/types.js';
 
 interface ChatViewProps {
   messages: readonly ChatMessage[];

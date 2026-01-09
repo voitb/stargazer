@@ -1,6 +1,6 @@
 import { Box, Text } from 'ink';
 import type { ReviewResult, Issue, Severity } from '@stargazer/core';
-import { DECISION_ICONS, MISC_ICONS } from '../constants/icons.js';
+import { DECISION_ICONS, MISC_ICONS } from '../../../config/icons.js';
 
 interface ReviewViewProps {
   result: ReviewResult;

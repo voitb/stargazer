@@ -1,5 +1,5 @@
 import type { ReviewResult, Issue, Severity, Decision } from '@stargazer/core';
-import { SEVERITY_EMOJI, DECISION_ICONS, MISC_ICONS } from '../tui/constants/icons.js';
+import { SEVERITY_EMOJI, DECISION_ICONS, MISC_ICONS } from '../tui/config/icons.js';
 
 const DECISION_TEXT: Record<Decision, string> = {
   approve: `${DECISION_ICONS.approve} Approved`,

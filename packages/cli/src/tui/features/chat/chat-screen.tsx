@@ -2,10 +2,10 @@ import { useCallback } from 'react';
 import { Box, Text, useInput } from 'ink';
 import { Spinner } from '@inkjs/ui';
 import type { ReviewResult } from '@stargazer/core';
-import { ChatView } from '../components/chat-view.js';
-import { ChatInput } from '../components/chat-input.js';
-import { useAppContext } from '../state/app-context.js';
-import { useReview } from '../hooks/use-review.js';
+import { ChatView } from './components/chat-view.js';
+import { ChatInput } from './components/chat-input.js';
+import { useAppContext } from '../../state/app-context.js';
+import { useReview } from '../review/index.js';
 
 export function ChatScreen() {
   const { activeSession, addMessage, closeSession, projectPath } = useAppContext();

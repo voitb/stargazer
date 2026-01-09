@@ -1,26 +1,31 @@
-// Backwards-compatible combined exports
-export {
-  AppProvider,
-  useAppContext,
-  type Screen,
-  type AppContextValue,
-} from './app-context.js';
-
-// Individual context exports (preferred for new code)
+// Global state - used by all screens
 export {
   NavigationProvider,
   useNavigation,
   type NavigationContextValue,
+  type Screen,
 } from './navigation-context.js';
 
+// Backwards-compatible combined exports
+export {
+  AppProvider,
+  useAppContext,
+  type AppContextValue,
+} from './app-context.js';
+
+// Feature contexts are now exported from their features:
+// import { useChat } from '../features/chat';
+// import { useSession } from '../features/sessions';
+
+// Re-exports for backwards compatibility (deprecated - use feature imports)
 export {
   SessionProvider,
   useSession,
   type SessionContextValue,
-} from './session-context.js';
+} from '../features/sessions/session.context.js';
 
 export {
   ChatProvider,
   useChat,
   type ChatContextValue,
-} from './chat-context.js';
+} from '../features/chat/chat.context.js';

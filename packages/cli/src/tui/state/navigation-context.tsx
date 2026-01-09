@@ -18,6 +18,8 @@ export type Screen =
 export interface NavigationContextValue {
   screen: Screen;
   navigate: (screen: Screen) => void;
+  goBack: () => void;
+  history: readonly Screen[];
 }
 
 const NavigationContext = createContext<NavigationContextValue | null>(null);
@@ -32,14 +34,28 @@ export function NavigationProvider({
   initialScreen = 'home',
 }: NavigationProviderProps) {
   const [screen, setScreen] = useState<Screen>(initialScreen);
+  const [history, setHistory] = useState<Screen[]>([initialScreen]);
 
   const navigate = useCallback((newScreen: Screen) => {
+    setHistory(prev => [...prev, newScreen]);
     setScreen(newScreen);
   }, []);
 
+  const goBack = useCallback(() => {
+    setHistory(prev => {
+      if (prev.length <= 1) {
+        return prev;
+      }
+      const newHistory = prev.slice(0, -1);
+      const previousScreen = newHistory[newHistory.length - 1] ?? 'home';
+      setScreen(previousScreen);
+      return newHistory;
+    });
+  }, []);
+
   const value = useMemo(
-    () => ({ screen, navigate }),
-    [screen, navigate]
+    () => ({ screen, navigate, goBack, history }),
+    [screen, navigate, goBack, history]
   );
 
   return (
