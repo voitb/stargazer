@@ -1,24 +1,16 @@
 /**
  * Stargazer CLI Design System - Badge Component
  *
- * Status indicator badges with star iconography.
- *
- * @example
- * ```typescript
- * import { Badge } from './badge.js';
- *
- * <Badge variant="success">Complete</Badge>
- * <Badge variant="warning">In Progress</Badge>
- * <Badge variant="error">Failed</Badge>
- * ```
+ * Status indicator badges with star iconography and theme-aware colors.
  */
 
 import { Text } from 'ink';
 import { type ReactNode } from 'react';
 import { gradientLine } from '../gradient.js';
 import { STAR_ICONS, type PaletteName } from '../palettes.js';
+import { statusColors } from '../tokens/colors.js';
 
-export type BadgeVariant = 'default' | 'success' | 'warning' | 'error' | 'info';
+export type BadgeVariant = 'default' | 'success' | 'warning' | 'error' | 'info' | 'brand';
 
 export interface BadgeProps {
   /** Badge variant/status */
@@ -40,17 +32,19 @@ const variantIcons: Record<BadgeVariant, string> = {
   warning: STAR_ICONS.outline,
   error: STAR_ICONS.circle,
   info: STAR_ICONS.diamond,
+  brand: STAR_ICONS.filled,
 };
 
 /**
- * Map variant to color
+ * Map variant to theme-aware hex color
  */
 const variantColors: Record<BadgeVariant, string> = {
-  default: 'white',
-  success: 'green',
-  warning: 'yellow',
-  error: 'red',
-  info: 'cyan',
+  default: '#f8fafc',
+  success: statusColors.success.text,
+  warning: statusColors.warning.text,
+  error: statusColors.error.text,
+  info: statusColors.info.text,
+  brand: '#7dd3fc', // stellar cyan - brand color
 };
 
 /**
@@ -62,6 +56,7 @@ const variantPalettes: Record<BadgeVariant, PaletteName> = {
   warning: 'warning',
   error: 'error',
   info: 'stellar',
+  brand: 'stellar',
 };
 
 /**
@@ -109,6 +104,10 @@ export function ErrorBadge({ children, ...props }: Omit<BadgeProps, 'variant'>) 
 
 export function InfoBadge({ children, ...props }: Omit<BadgeProps, 'variant'>) {
   return <Badge variant="info" {...props}>{children}</Badge>;
+}
+
+export function BrandBadge({ children, ...props }: Omit<BadgeProps, 'variant'>) {
+  return <Badge variant="brand" {...props}>{children}</Badge>;
 }
 
 /**

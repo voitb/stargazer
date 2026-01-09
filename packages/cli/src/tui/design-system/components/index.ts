@@ -25,6 +25,7 @@ export {
   WarningBadge,
   ErrorBadge,
   InfoBadge,
+  BrandBadge,
   CountBadge,
   PillBadge,
   type BadgeProps,
@@ -53,6 +54,10 @@ export {
   type ToastData,
   type NotificationProps,
 } from './toast.js';
+
+export * from './progress-bar.js';
+export * from './usage-display.js';
+export * from './input-field.js';
 
 export {
   // Screen & Section titles

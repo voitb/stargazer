@@ -41,7 +41,7 @@ export function StatusBar({ message, sessionCount, hasApiKey }: StatusBarProps) 
           </Badge>
         )}
         {sessionCount !== undefined && (
-          <CountBadge count={sessionCount} variant="info" label="sessions" />
+          <CountBadge count={sessionCount} variant="brand" label="sessions" />
         )}
       </Box>
     </Box>

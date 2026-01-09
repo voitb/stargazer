@@ -19,7 +19,6 @@ import type { ReactNode } from 'react';
 import { gradientLine } from '../gradient.js';
 import { STAR_ICONS } from '../palettes.js';
 import { useTheme } from '../primitives/theme-provider.js';
-import { brandColors } from '../tokens/colors.js';
 
 // ═══════════════════════════════════════════════════════════════
 // SCREEN & SECTION TITLES
@@ -91,13 +90,20 @@ export function SectionTitle({ children, withStar = false }: SectionTitleProps) 
 
 export type StatusVariant = 'success' | 'warning' | 'error' | 'info' | 'muted';
 
-const STATUS_COLORS: Record<StatusVariant, string> = {
-  success: '#4ade80', // green-400
-  warning: '#fbbf24', // amber-400
-  error: '#f87171', // red-400
-  info: '#38bdf8', // sky-400
-  muted: '#64748b', // slate-500
-};
+/**
+ * Theme-aware status colors hook
+ * Returns colors that adapt to dark/light theme
+ */
+function useStatusColors() {
+  const { theme } = useTheme();
+  return {
+    success: theme === 'dark' ? '#4ade80' : '#22c55e',
+    warning: theme === 'dark' ? '#fbbf24' : '#f59e0b',
+    error: theme === 'dark' ? '#f87171' : '#ef4444',
+    info: theme === 'dark' ? '#38bdf8' : '#0ea5e9',
+    muted: theme === 'dark' ? '#64748b' : '#94a3b8',
+  };
+}
 
 const STATUS_ICONS: Record<StatusVariant, string> = {
   success: STAR_ICONS.filled, // ✦
@@ -123,9 +129,10 @@ export function StatusText({
   withIcon = false,
   ...textProps
 }: StatusTextProps) {
+  const statusColors = useStatusColors();
   const icon = withIcon ? `${STATUS_ICONS[variant]} ` : '';
   return (
-    <Text color={STATUS_COLORS[variant]} {...textProps}>
+    <Text color={statusColors[variant]} {...textProps}>
       {icon}
       {children}
     </Text>
@@ -177,12 +184,15 @@ export function CodeText({ children }: { children: ReactNode }) {
 
 export type SeverityLevel = 'critical' | 'high' | 'medium' | 'low';
 
-const SEVERITY_COLORS: Record<SeverityLevel, string> = {
-  critical: '#ef4444', // red-500
-  high: '#f87171', // red-400
-  medium: '#fbbf24', // amber-400
-  low: '#38bdf8', // sky-400
-};
+function useSeverityColors() {
+  const { theme } = useTheme();
+  return {
+    critical: theme === 'dark' ? '#ef4444' : '#dc2626',
+    high: theme === 'dark' ? '#f87171' : '#ef4444',
+    medium: theme === 'dark' ? '#fbbf24' : '#f59e0b',
+    low: theme === 'dark' ? '#38bdf8' : '#0ea5e9',
+  };
+}
 
 const SEVERITY_ICONS: Record<SeverityLevel, string> = {
   critical: STAR_ICONS.filled, // ✦ (most prominent)
@@ -195,16 +205,32 @@ export interface SeverityTextProps {
   severity: SeverityLevel;
   /** Show full label or just icon */
   showLabel?: boolean;
+  /** Use gradient styling */
+  gradient?: boolean;
 }
 
 /**
  * Severity indicator for code review issues
  * Replaces the hardcoded SEVERITY_COLORS map in review-view.tsx
  */
-export function SeverityText({ severity, showLabel = true }: SeverityTextProps) {
+export function SeverityText({
+  severity,
+  showLabel = true,
+  gradient = false,
+}: SeverityTextProps) {
   const icon = SEVERITY_ICONS[severity];
-  const color = SEVERITY_COLORS[severity];
+  const severityColors = useSeverityColors();
+  const color = severityColors[severity];
   const label = showLabel ? ` ${severity.toUpperCase()}` : '';
+
+  if (gradient) {
+    const palette = severity === 'critical' || severity === 'high'
+      ? 'error'
+      : severity === 'medium'
+        ? 'warning'
+        : 'stellar';
+    return <Text bold>{gradientLine(`${icon}${label}`, { palette })}</Text>;
+  }
 
   return (
     <Text color={color} bold>

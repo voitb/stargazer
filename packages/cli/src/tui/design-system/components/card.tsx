@@ -19,6 +19,7 @@ import { Box, Text, type BoxProps } from 'ink';
 import { type ReactNode, createContext } from 'react';
 import { spacing } from '../tokens/spacing.js';
 import { borderStyles, type BorderStyle } from '../tokens/borders.js';
+import { useTheme } from '../primitives/theme-provider.js';
 
 export type CardVariant = 'default' | 'elevated';
 
@@ -49,18 +50,21 @@ const CardContext = createContext<{ variant: CardVariant }>({ variant: 'default'
 export function Card({
   variant = 'default',
   borderStyle = 'round',
-  borderColor = 'gray',
+  borderColor,
   padding = spacing.md,
   children,
   width,
   flexGrow,
 }: CardProps) {
+  const { colors } = useTheme();
+  const resolvedBorderColor = borderColor ?? colors.border.subtle;
+
   return (
     <CardContext.Provider value={{ variant }}>
       <Box
         flexDirection="column"
         borderStyle={borderStyles[borderStyle]}
-        borderColor={borderColor}
+        borderColor={resolvedBorderColor}
         padding={padding}
         width={width}
         flexGrow={flexGrow}
@@ -83,6 +87,8 @@ export interface CardHeaderProps {
 }
 
 function CardHeader({ children, bordered = false }: CardHeaderProps) {
+  const { colors } = useTheme();
+
   return (
     <Box
       flexDirection="column"
@@ -92,7 +98,7 @@ function CardHeader({ children, bordered = false }: CardHeaderProps) {
       borderTop={false}
       borderLeft={false}
       borderRight={false}
-      borderColor="gray"
+      borderColor={colors.border.subtle}
     >
       <Text bold>{children}</Text>
     </Box>
@@ -128,6 +134,8 @@ export interface CardFooterProps {
 }
 
 function CardFooter({ children, bordered = false }: CardFooterProps) {
+  const { colors } = useTheme();
+
   return (
     <Box
       flexDirection="row"
@@ -138,7 +146,7 @@ function CardFooter({ children, bordered = false }: CardFooterProps) {
       borderBottom={false}
       borderLeft={false}
       borderRight={false}
-      borderColor="gray"
+      borderColor={colors.border.subtle}
     >
       {children}
     </Box>

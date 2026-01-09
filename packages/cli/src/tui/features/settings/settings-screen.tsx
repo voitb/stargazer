@@ -8,6 +8,8 @@ import {
   StatusText,
   HintText,
   MENU_ICONS,
+  Divider,
+  SectionTitle,
 } from '../../design-system/index.js';
 
 // Convert timeout options to Select format (string values)
@@ -137,7 +139,12 @@ export function SettingsScreen() {
         </Box>
       </Box>
 
-      <Box marginTop={2}>
+      <Box marginY={1}>
+        <Divider variant="star" width={40} />
+      </Box>
+      <SectionTitle withStar>Options</SectionTitle>
+
+      <Box marginTop={1}>
         <Select options={settingsOptions} onChange={handleSelect} />
       </Box>
 

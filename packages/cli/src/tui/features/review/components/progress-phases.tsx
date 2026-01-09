@@ -1,5 +1,5 @@
 import { Box, Text } from 'ink';
-import { gradientLine, StarSpinner, Badge, StatusText } from '../../../design-system/index.js';
+import { gradientLine, StarSpinner, Badge, StatusText, useTheme } from '../../../design-system/index.js';
 import { PHASE_ORDER, type ReviewPhase } from '../types.js';
 
 /**
@@ -43,6 +43,8 @@ export interface ProgressPhasesProps {
  * Following CLI_ARCHITECTURE.md component guidelines.
  */
 export function ProgressPhases({ currentPhase, completedPhases }: ProgressPhasesProps) {
+  const { primaryPalette } = useTheme();
+
   return (
     <Box flexDirection="column" gap={0}>
       {PHASE_ORDER.map((phase) => {
@@ -60,7 +62,7 @@ export function ProgressPhases({ currentPhase, completedPhases }: ProgressPhases
             )}
             {isCurrent && (
               <Box gap={1}>
-                <StarSpinner palette="stellar" />
+                <StarSpinner palette={primaryPalette} />
                 <StatusText variant="info" bold>
                   {label}...
                 </StatusText>
@@ -83,6 +85,7 @@ export function CompactProgress({
   currentPhase,
   completedPhases,
 }: ProgressPhasesProps) {
+  const { primaryPalette } = useTheme();
   const completed = completedPhases.length;
   const total = PHASE_ORDER.length;
   const progress = `${completed}/${total}`;
@@ -92,10 +95,10 @@ export function CompactProgress({
   return (
     <Box gap={1}>
       <Text>
-        {gradientLine(`✦ ${progress}`, { palette: 'stellar' })}
+        {gradientLine(`✦ ${progress}`, { palette: primaryPalette })}
       </Text>
       <Text dimColor>│</Text>
-      <StarSpinner palette="stellar" />
+      <StarSpinner palette={primaryPalette} />
       <StatusText variant="info"> {currentLabel}...</StatusText>
     </Box>
   );
