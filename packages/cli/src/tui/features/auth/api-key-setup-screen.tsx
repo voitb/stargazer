@@ -3,10 +3,11 @@ import { Box, Text, useInput } from 'ink';
 import { TextInput } from '@inkjs/ui';
 import { saveApiKey } from '../../storage/api-key-store.js';
 import { useAppContext } from '../../state/app-context.js';
-import { ScreenTitle, StatusText, HintText, MENU_ICONS, statusColors } from '../../design-system/index.js';
+import { ScreenTitle, StatusText, HintText, MENU_ICONS, useTheme } from '../../design-system/index.js';
 
 export function ApiKeySetupScreen() {
   const { navigate, setError } = useAppContext();
+  const { colors } = useTheme();
   const [isSaving, setIsSaving] = useState(false);
   const [key, setKey] = useState(0);
 
@@ -44,7 +45,7 @@ export function ApiKeySetupScreen() {
       <Box marginTop={2} flexDirection="column">
         <Text>API Key:</Text>
         <Box>
-          <Text color={statusColors.info.text}>{MENU_ICONS.discover} </Text>
+          <Text color={colors.border.focus}>{MENU_ICONS.discover} </Text>
           <TextInput
             key={key}
             onSubmit={handleSubmit}

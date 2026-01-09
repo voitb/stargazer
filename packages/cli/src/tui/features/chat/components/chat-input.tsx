@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { Box, Text } from 'ink';
 import { TextInput } from '@inkjs/ui';
-import { MENU_ICONS, statusColors } from '../../../design-system/index.js';
+import { MENU_ICONS, useTheme } from '../../../design-system/index.js';
 
 interface ChatInputProps {
   onSubmit: (input: string) => void;
@@ -9,6 +9,7 @@ interface ChatInputProps {
 }
 
 export function ChatInput({ onSubmit, placeholder = 'Type a command...' }: ChatInputProps) {
+  const { colors } = useTheme();
   const [key, setKey] = useState(0);
 
   const handleSubmit = useCallback((input: string) => {
@@ -21,7 +22,7 @@ export function ChatInput({ onSubmit, placeholder = 'Type a command...' }: ChatI
 
   return (
     <Box flexDirection="row" paddingX={1} borderStyle="single" borderTop>
-      <Text color={statusColors.info.text} bold>
+      <Text color={colors.border.focus} bold>
         {MENU_ICONS.discover}{' '}
       </Text>
       <TextInput

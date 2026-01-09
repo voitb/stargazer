@@ -55,19 +55,23 @@ describe('formatReview', () => {
     expect(output).toContain('Use camelCase');
   });
 
-  it('shows decision icons', () => {
+  it('shows decision icons (star-themed)', () => {
     const makeReview = (decision: 'approve' | 'request_changes' | 'comment'): ReviewResult => ({
       issues: [],
       summary: 'Test',
       decision,
     });
 
-    expect(formatReview(makeReview('approve'))).toContain('✅');
-    expect(formatReview(makeReview('request_changes'))).toContain('🔴');
-    expect(formatReview(makeReview('comment'))).toContain('💬');
+    // Star-themed decision icons:
+    // approve: ✦ (filled star - success)
+    // request_changes: ○ (circle - error/change needed)
+    // comment: ◇ (diamond - info/neutral)
+    expect(formatReview(makeReview('approve'))).toContain('✦');
+    expect(formatReview(makeReview('request_changes'))).toContain('○');
+    expect(formatReview(makeReview('comment'))).toContain('◇');
   });
 
-  it('omits lightbulb when no suggestion', () => {
+  it('omits suggestion icon when no suggestion', () => {
     const review: ReviewResult = {
       issues: [
         { file: 'test.ts', line: 1, severity: 'high', category: 'bug', message: 'Bug found', confidence: 0.9 },
@@ -76,6 +80,12 @@ describe('formatReview', () => {
       decision: 'request_changes',
     };
 
-    expect(formatReview(review)).not.toContain('💡');
+    // The suggestion icon is ✧ (outline star) in the new star-themed design
+    // It should only appear when a suggestion is provided
+    const output = formatReview(review);
+    const lines = output.split('\n');
+    // Make sure no line starts with the suggestion icon pattern
+    const hasSuggestionLine = lines.some(line => line.includes('   ✧') && !line.includes('Code Review'));
+    expect(hasSuggestionLine).toBe(false);
   });
 });

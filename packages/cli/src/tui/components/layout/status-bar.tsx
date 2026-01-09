@@ -1,5 +1,5 @@
 import { Box, Text } from 'ink';
-import { Badge, CountBadge } from '../../design-system/index.js';
+import { Badge, CountBadge, STAR_ICONS, useTheme } from '../../design-system/index.js';
 
 interface StatusBarProps {
   message: string;
@@ -12,12 +12,15 @@ interface StatusBarProps {
  *
  * Features:
  * - Badge components for status indicators
+ * - Theme-aware border colors
  * - KeyHint styling for navigation hints
  * - Clean, minimal layout
  *
  * Following CLI_ARCHITECTURE.md layout component guidelines.
  */
 export function StatusBar({ message, sessionCount, hasApiKey }: StatusBarProps) {
+  const { colors } = useTheme();
+
   return (
     <Box
       flexDirection="row"
@@ -28,9 +31,9 @@ export function StatusBar({ message, sessionCount, hasApiKey }: StatusBarProps) 
       borderBottom={false}
       borderLeft={false}
       borderRight={false}
-      borderColor="gray"
+      borderColor={colors.border.subtle}
     >
-      <Text dimColor>✧ {message}</Text>
+      <Text dimColor>{STAR_ICONS.outline} {message}</Text>
       <Box gap={2}>
         {hasApiKey !== undefined && (
           <Badge variant={hasApiKey ? 'success' : 'error'} gradient>
@@ -51,7 +54,7 @@ export function StatusBar({ message, sessionCount, hasApiKey }: StatusBarProps) 
 export function MinimalStatusBar({ message }: { message: string }) {
   return (
     <Box paddingX={1}>
-      <Text dimColor>✧ {message}</Text>
+      <Text dimColor>{STAR_ICONS.outline} {message}</Text>
     </Box>
   );
 }

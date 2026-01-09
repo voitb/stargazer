@@ -1,20 +1,6 @@
 import { Box, Text } from 'ink';
 import { Select } from '@inkjs/ui';
-import { gradientLine, Divider } from '../../design-system/index.js';
-
-/**
- * Star-themed menu icons
- * Using Unicode stars and celestial symbols for consistency
- */
-const MENU_ICONS = {
-  review: '✦',
-  discover: '✧',
-  continue: '☆',
-  history: '◇',
-  settings: '◈',
-  help: '○',
-  exit: '◌',
-} as const;
+import { gradientLine, Divider, MENU_ICONS, useTheme } from '../../design-system/index.js';
 
 interface MenuOption {
   label: string;
@@ -43,16 +29,19 @@ interface MainMenuProps {
  * Main menu with star-themed styling
  *
  * Features:
- * - Gradient header text
+ * - Theme-aware gradient header text
  * - Star dividers
- * - Star/celestial icons
+ * - Star/celestial icons (from design system)
  * - Clean, minimalist layout
  *
  * Following CLI_ARCHITECTURE.md navigation component guidelines.
  */
 export function MainMenu({ onSelect }: MainMenuProps) {
+  const { theme } = useTheme();
+  // Use theme-aware palette: moonlight for dark, dusk for light
+  const headerPalette = theme === 'dark' ? 'moonlight' : 'dusk';
   const headerText = gradientLine('What would you like to do?', {
-    palette: 'moonlight',
+    palette: headerPalette,
   });
 
   return (

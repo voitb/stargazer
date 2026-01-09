@@ -1,5 +1,5 @@
 import { Box } from 'ink';
-import { Logo, Divider } from '../../design-system/index.js';
+import { Logo, Divider, useTheme } from '../../design-system/index.js';
 
 interface HeaderProps {
   projectName: string;
@@ -10,16 +10,18 @@ interface HeaderProps {
  *
  * Uses the responsive Logo component from the design system which
  * automatically selects the appropriate logo variant based on terminal width.
- * Uses the "stellar" palette for a cool, bright starlight effect.
+ * Theme-aware: uses stellar/daylight palette based on terminal theme.
  *
  * Following CLI_ARCHITECTURE.md layout component guidelines.
  */
 export function Header({ projectName }: HeaderProps) {
+  const { primaryPalette } = useTheme();
+
   return (
     <Box flexDirection="column" paddingX={1} paddingY={1}>
-      <Logo palette="stellar" />
+      <Logo palette={primaryPalette} />
       <Box marginTop={1}>
-        <Divider variant="star" label={projectName} palette="stellar" />
+        <Divider variant="star" label={projectName} palette={primaryPalette} />
       </Box>
     </Box>
   );
@@ -30,11 +32,13 @@ export function Header({ projectName }: HeaderProps) {
  * For screens where space is limited
  */
 export function CompactHeader({ projectName }: HeaderProps) {
+  const { primaryPalette, secondaryPalette } = useTheme();
+
   return (
     <Box flexDirection="row" gap={1} paddingX={1} alignItems="center">
-      <Logo variant="compact" palette="stellar" centered={false} />
+      <Logo variant="compact" palette={primaryPalette} centered={false} />
       <Divider variant="dots" width={3} dimmed />
-      <Divider variant="star" label={projectName} palette="moonlight" width={30} />
+      <Divider variant="star" label={projectName} palette={secondaryPalette} width={30} />
     </Box>
   );
 }
@@ -44,5 +48,6 @@ export function CompactHeader({ projectName }: HeaderProps) {
  * For very constrained displays
  */
 export function MinimalHeader() {
-  return <Logo variant="minimal" palette="stellar" centered={false} />;
+  const { primaryPalette } = useTheme();
+  return <Logo variant="minimal" palette={primaryPalette} centered={false} />;
 }
