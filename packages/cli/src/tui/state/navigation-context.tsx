@@ -1,5 +1,3 @@
-'use client';
-
 import { createContext, useContext, useReducer, useCallback, useMemo, type ReactNode } from 'react';
 
 export type Screen =
@@ -61,8 +59,11 @@ function navigationReducer(state: NavigationState, action: NavigationAction): Na
         history: newHistory,
       };
     }
-    default:
-      return state;
+    default: {
+      // Exhaustive check - TypeScript will error if a new action type is added but not handled
+      const _exhaustiveCheck: never = action;
+      return _exhaustiveCheck;
+    }
   }
 }
 
@@ -105,7 +106,10 @@ export function NavigationProvider({
 export function useNavigation(): NavigationContextValue {
   const context = useContext(NavigationContext);
   if (!context) {
-    throw new Error('useNavigation must be used within a NavigationProvider');
+    throw new Error(
+      'useNavigation must be used within a NavigationProvider. ' +
+        'Wrap your app in <NavigationProvider> at the root level.'
+    );
   }
   return context;
 }
