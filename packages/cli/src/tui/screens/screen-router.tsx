@@ -12,6 +12,7 @@ import {
 import { ReviewView, ProgressPhases } from '../features/review/index.js';
 import { MainMenu } from '../components/index.js';
 import { getUserFriendlyError } from '../utils/error-messages.js';
+import { StatusText, HintText, MENU_ICONS } from '../design-system/index.js';
 import type { Screen } from '../state/navigation-context.js';
 import type { ReviewResult } from '@stargazer/core';
 import type { ReviewPhase } from '../features/review/types.js';
@@ -81,17 +82,17 @@ export function ScreenRouter({
       const errorInfo = getUserFriendlyError(error || 'Unknown error');
       return (
         <Box padding={1} flexDirection="column">
-          <Text color="red" bold>
+          <StatusText variant="error" bold withIcon>
             {errorInfo.title}
-          </Text>
+          </StatusText>
           <Box marginTop={1}>
-            <Text color="red">{errorInfo.message}</Text>
+            <StatusText variant="error">{errorInfo.message}</StatusText>
           </Box>
           <Box marginTop={1}>
-            <Text color="yellow">💡 {errorInfo.suggestion}</Text>
+            <StatusText variant="info" withIcon>{errorInfo.suggestion}</StatusText>
           </Box>
           <Box marginTop={2}>
-            <Text dimColor>Press ESC or B to go back</Text>
+            <HintText>Press ESC or B to go back</HintText>
           </Box>
         </Box>
       );

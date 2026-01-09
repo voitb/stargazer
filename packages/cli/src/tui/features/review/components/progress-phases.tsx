@@ -1,5 +1,5 @@
 import { Box, Text } from 'ink';
-import { gradientLine, StarSpinner, Badge } from '../../../design-system/index.js';
+import { gradientLine, StarSpinner, Badge, StatusText } from '../../../design-system/index.js';
 import { PHASE_ORDER, type ReviewPhase } from '../types.js';
 
 /**
@@ -61,9 +61,9 @@ export function ProgressPhases({ currentPhase, completedPhases }: ProgressPhases
             {isCurrent && (
               <Box gap={1}>
                 <StarSpinner palette="stellar" />
-                <Text color="cyan" bold>
+                <StatusText variant="info" bold>
                   {label}...
-                </Text>
+                </StatusText>
               </Box>
             )}
             {isPending && (
@@ -96,7 +96,7 @@ export function CompactProgress({
       </Text>
       <Text dimColor>│</Text>
       <StarSpinner palette="stellar" />
-      <Text color="cyan"> {currentLabel}...</Text>
+      <StatusText variant="info"> {currentLabel}...</StatusText>
     </Box>
   );
 }

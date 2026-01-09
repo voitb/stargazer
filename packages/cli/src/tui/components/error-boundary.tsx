@@ -9,6 +9,9 @@ interface ErrorBoundaryProps {
   children: ReactNode;
 }
 
+// Using hex colors from design system tokens
+const ERROR_COLOR = '#f87171'; // red-400
+
 /**
  * Error boundary for the TUI application.
  * Catches JavaScript errors during rendering and displays a fallback UI.
@@ -29,8 +32,8 @@ export class TUIErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundar
     if (this.state.error) {
       return (
         <Box flexDirection="column" padding={1}>
-          <Text color="red" bold>
-            Something went wrong
+          <Text color={ERROR_COLOR} bold>
+            ○ Something went wrong
           </Text>
           <Text dimColor>{this.state.error.message}</Text>
           <Text>Press Ctrl+C to exit, or check logs for details.</Text>

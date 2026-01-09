@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Box, Text, useInput } from 'ink';
+import { Box, useInput } from 'ink';
 import { Select } from '@inkjs/ui';
 import { useAppContext } from '../../state/app-context.js';
 import { saveSelectedModel, getDefaultModel, getProvider } from '../../storage/api-key-store.js';
 import { getModelsForProvider, type Provider } from '../../config/models.js';
+import { ScreenTitle, LabelText, HintText } from '../../design-system/index.js';
 
 export function ModelSelectScreen() {
   const { navigate } = useAppContext();
@@ -35,11 +36,11 @@ export function ModelSelectScreen() {
 
   return (
     <Box flexDirection="column" padding={1}>
-      <Text bold>Select AI Model</Text>
-      <Text dimColor>
+      <ScreenTitle>Select AI Model</ScreenTitle>
+      <LabelText>
         Provider: {provider === 'gemini' ? 'Google Gemini' : 'ZhipuAI GLM'}
-      </Text>
-      <Text dimColor>Press ESC to use default ({defaultModel})</Text>
+      </LabelText>
+      <HintText>Press ESC to use default ({defaultModel})</HintText>
       <Box marginTop={1}>
         <Select options={[...models]} onChange={handleSelect} />
       </Box>

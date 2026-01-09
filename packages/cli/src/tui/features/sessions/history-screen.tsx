@@ -1,6 +1,7 @@
-import { Box, Text, useInput } from 'ink';
+import { Box, useInput } from 'ink';
 import { SessionList } from './components/session-list.js';
 import { useAppContext } from '../../state/app-context.js';
+import { ScreenTitle } from '../../design-system/index.js';
 
 export function HistoryScreen() {
   const { sessions, resumeSession, navigate } = useAppContext();
@@ -19,7 +20,7 @@ export function HistoryScreen() {
 
   return (
     <Box flexDirection="column" padding={1}>
-      <Text bold color="cyan">Session History</Text>
+      <ScreenTitle>Session History</ScreenTitle>
       <Box marginTop={1}>
         <SessionList
           sessions={sessions}
