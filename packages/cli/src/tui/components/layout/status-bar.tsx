@@ -1,10 +1,15 @@
 import { Box, Text } from 'ink';
-import { Badge, CountBadge, STAR_ICONS, useTheme } from '../../design-system/index.js';
+import { Badge, CountBadge, STAR_ICONS, useTheme, UsageDisplay } from '../../design-system/index.js';
 
 interface StatusBarProps {
   message: string;
   sessionCount?: number;
   hasApiKey?: boolean;
+  /** Token usage tracking */
+  tokenUsage?: {
+    current: number;
+    limit: number;
+  };
 }
 
 /**
@@ -18,7 +23,7 @@ interface StatusBarProps {
  *
  * Following CLI_ARCHITECTURE.md layout component guidelines.
  */
-export function StatusBar({ message, sessionCount, hasApiKey }: StatusBarProps) {
+export function StatusBar({ message, sessionCount, hasApiKey, tokenUsage }: StatusBarProps) {
   const { colors } = useTheme();
 
   return (
@@ -35,6 +40,15 @@ export function StatusBar({ message, sessionCount, hasApiKey }: StatusBarProps) 
     >
       <Text dimColor>{STAR_ICONS.outline} {message}</Text>
       <Box gap={2}>
+        {tokenUsage && (
+          <UsageDisplay
+            current={tokenUsage.current}
+            limit={tokenUsage.limit}
+            label="tokens"
+            showProgress={false}
+            compact
+          />
+        )}
         {hasApiKey !== undefined && (
           <Badge variant={hasApiKey ? 'success' : 'error'} gradient>
             API

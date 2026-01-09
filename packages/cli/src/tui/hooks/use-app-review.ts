@@ -16,6 +16,7 @@ export interface UseAppReviewReturn {
   phase: ReviewPhase | null;
   completedPhases: readonly ReviewPhase[];
   elapsedTime: number;
+  timeout: number;
   // Actions
   reviewStaged: () => Promise<ReviewResult | null>;
   reviewUnstaged: () => Promise<ReviewResult | null>;
@@ -63,6 +64,7 @@ export function useAppReview({ projectPath }: UseAppReviewOptions): UseAppReview
     phase: review.phase,
     completedPhases: review.completedPhases,
     elapsedTime,
+    timeout: review.timeout,
     // Actions
     reviewStaged: review.reviewStaged,
     reviewUnstaged: review.reviewUnstaged,

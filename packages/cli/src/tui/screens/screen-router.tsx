@@ -9,10 +9,10 @@ import {
   ModelSelectScreen,
   ApiKeySetupScreen,
 } from '../features/auth/index.js';
-import { ReviewView, ProgressPhases } from '../features/review/index.js';
+import { ReviewView, ProgressPhases, PHASE_ORDER } from '../features/review/index.js';
 import { MainMenu } from '../components/index.js';
 import { getUserFriendlyError } from '../utils/error-messages.js';
-import { StatusText, HintText, MENU_ICONS } from '../design-system/index.js';
+import { StatusText, HintText, ProgressBar, UsageDisplay } from '../design-system/index.js';
 import type { Screen } from '../state/navigation-context.js';
 import type { ReviewResult } from '@stargazer/core';
 import type { ReviewPhase } from '../features/review/types.js';
@@ -24,6 +24,7 @@ interface ScreenRouterProps {
     phase: ReviewPhase | null;
     completedPhases: readonly ReviewPhase[];
     elapsedTime: number;
+    timeout: number;
   };
   error: string | null;
   onMenuSelect: (value: string) => void;
@@ -42,7 +43,10 @@ export function ScreenRouter({
     case 'chat':
       return <ChatScreen />;
 
-    case 'loading':
+    case 'loading': {
+      const completedCount = review.completedPhases.length;
+      const totalPhases = PHASE_ORDER.length;
+
       return (
         <Box padding={1} flexDirection="column">
           <ProgressPhases
@@ -50,12 +54,28 @@ export function ScreenRouter({
             completedPhases={review.completedPhases}
           />
           <Box marginTop={1}>
-            <Text dimColor>
-              Elapsed: {review.elapsedTime}s | Press ESC to cancel
-            </Text>
+            <ProgressBar
+              current={completedCount}
+              total={totalPhases}
+              width={24}
+              showLabel
+              showPercentage
+            />
+          </Box>
+          <Box marginTop={1}>
+            <UsageDisplay
+              current={review.elapsedTime}
+              limit={review.timeout}
+              label="sec"
+              showProgress={false}
+            />
+          </Box>
+          <Box marginTop={1}>
+            <Text dimColor>Press ESC to cancel</Text>
           </Box>
         </Box>
       );
+    }
 
     case 'review':
       return review.result ? <ReviewView result={review.result} /> : null;
