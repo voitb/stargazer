@@ -1,5 +1,6 @@
 import { Box, Text } from 'ink';
 import { Component, type ReactNode } from 'react';
+import { statusColors, STAR_ICONS } from '../design-system/index.js';
 
 interface ErrorBoundaryState {
   error: Error | null;
@@ -8,9 +9,6 @@ interface ErrorBoundaryState {
 interface ErrorBoundaryProps {
   children: ReactNode;
 }
-
-// Using hex colors from design system tokens
-const ERROR_COLOR = '#f87171'; // red-400
 
 /**
  * Error boundary for the TUI application.
@@ -32,8 +30,8 @@ export class TUIErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundar
     if (this.state.error) {
       return (
         <Box flexDirection="column" padding={1}>
-          <Text color={ERROR_COLOR} bold>
-            ○ Something went wrong
+          <Text color={statusColors.error.text} bold>
+            {STAR_ICONS.circle} Something went wrong
           </Text>
           <Text dimColor>{this.state.error.message}</Text>
           <Text>Press Ctrl+C to exit, or check logs for details.</Text>

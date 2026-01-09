@@ -862,6 +862,81 @@ import { logger } from './logger.js';
 
 ---
 
+## Design System
+
+The CLI uses a comprehensive design system for consistent styling across all screens. See [CLI_DESIGN_SYSTEM.md](./CLI_DESIGN_SYSTEM.md) for full documentation.
+
+### Color Token Usage
+
+All colors must come from the design system tokens. **NEVER use hardcoded hex colors in components.**
+
+| Component Type | Dark Theme | Light Theme | Token Path |
+|----------------|------------|-------------|------------|
+| Brand/Primary  | stellar    | daylight    | `primaryPalette` |
+| Secondary      | moonlight  | dusk        | `secondaryPalette` |
+| Success        | #4ade80    | #22c55e     | `statusColors.success` |
+| Error          | #f87171    | #ef4444     | `statusColors.error` |
+| Warning        | #fbbf24    | #f59e0b     | `statusColors.warning` |
+| Info           | #38bdf8    | #0ea5e9     | `statusColors.info` |
+| Role: User     | #38bdf8    | #0ea5e9     | `ROLE_COLORS.user` |
+| Role: Assistant| #4ade80    | #22c55e     | `ROLE_COLORS.assistant` |
+| Role: System   | #fbbf24    | #f59e0b     | `ROLE_COLORS.system` |
+
+### Usage Guidelines
+
+```typescript
+// ✅ CORRECT: Import from design system
+import { statusColors, ROLE_COLORS, useTheme } from '../design-system/index.js';
+
+function MyComponent() {
+  const { theme, colors } = useTheme();
+  return <Text color={statusColors.info.text}>Info</Text>;
+}
+
+// ❌ WRONG: Hardcoded colors
+function BadComponent() {
+  return <Text color="#38bdf8">Info</Text>;
+}
+```
+
+### Semantic Text Components
+
+Use semantic text components instead of raw `<Text>` with colors:
+
+| Component | Use Case | Example |
+|-----------|----------|---------|
+| `ScreenTitle` | Main screen headers | `<ScreenTitle>Settings</ScreenTitle>` |
+| `SectionTitle` | Section headers | `<SectionTitle>Options</SectionTitle>` |
+| `StatusText` | Status indicators | `<StatusText variant="success">Done</StatusText>` |
+| `SeverityText` | Issue severity | `<SeverityText severity="high" />` |
+| `HintText` | Muted hints | `<HintText>Press ESC to exit</HintText>` |
+| `CodeText` | File paths/code | `<CodeText>src/index.ts:42</CodeText>` |
+
+### Badges with Gradients
+
+For premium visual effects, use gradient badges:
+
+```typescript
+import { Badge } from '../design-system/index.js';
+
+<Badge variant="success" gradient>Approved</Badge>
+<Badge variant="error" gradient>Changes Requested</Badge>
+```
+
+### Design System Location
+
+```
+packages/cli/src/tui/design-system/
+├── tokens/          # Design values (colors, spacing, motion)
+├── primitives/      # Theme provider
+├── components/      # UI components (Badge, Card, Toast)
+├── animations/      # Motion components
+├── logo/            # Responsive branding
+└── index.ts         # Main exports
+```
+
+---
+
 ## References
 
 - [Ink Documentation](https://github.com/vadimdemedes/ink)

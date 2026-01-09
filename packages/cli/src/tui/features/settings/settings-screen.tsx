@@ -23,6 +23,7 @@ export function SettingsScreen() {
   const { navigate } = useAppContext();
   const {
     keyStatus,
+    hasApiKey,
     timeoutValue,
     providerDisplayName,
     modelDisplayName,
@@ -125,8 +126,6 @@ export function SettingsScreen() {
   }
 
   // Main settings screen
-  const hasKey = !keyStatus.includes('Not');
-
   return (
     <Box flexDirection="column" padding={1}>
       <ScreenTitle>Settings</ScreenTitle>
@@ -134,7 +133,7 @@ export function SettingsScreen() {
       <Box marginTop={1} flexDirection="column">
         <Box>
           <Text>API Key: </Text>
-          <StatusText variant={hasKey ? 'success' : 'error'}>{keyStatus}</StatusText>
+          <StatusText variant={hasApiKey ? 'success' : 'error'}>{keyStatus}</StatusText>
         </Box>
       </Box>
 

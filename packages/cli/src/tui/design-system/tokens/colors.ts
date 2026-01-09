@@ -122,6 +122,40 @@ export const statusColors = {
 export type StatusType = keyof typeof statusColors;
 
 /**
+ * Role colors for chat messages
+ * Maps message roles to their semantic colors (theme-aware)
+ *
+ * @example
+ * ```typescript
+ * import { ROLE_COLORS } from './colors.js';
+ * const color = ROLE_COLORS.user.dark; // '#38bdf8'
+ * ```
+ */
+export const ROLE_COLORS = {
+  user: {
+    dark: '#38bdf8', // sky-400 - info/stellar brand
+    light: '#0ea5e9', // sky-500
+  },
+  assistant: {
+    dark: '#4ade80', // green-400 - success
+    light: '#22c55e', // green-500
+  },
+  system: {
+    dark: '#fbbf24', // amber-400 - warning
+    light: '#f59e0b', // amber-500
+  },
+} as const;
+
+export type MessageRole = keyof typeof ROLE_COLORS;
+
+/**
+ * Get role color for current theme
+ */
+export function getRoleColor(role: MessageRole, theme: 'dark' | 'light'): string {
+  return ROLE_COLORS[role][theme];
+}
+
+/**
  * Combined colors object
  */
 export const colors = {

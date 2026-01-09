@@ -17,7 +17,21 @@
 import { Text, type TextProps } from 'ink';
 import type { ReactNode } from 'react';
 import { gradientLine } from '../gradient.js';
-import { STAR_ICONS } from '../palettes.js';
+import { STAR_ICONS, STELLAR } from '../palettes.js';
+import { textColors, statusColors } from '../tokens/colors.js';
+
+// ═══════════════════════════════════════════════════════════════
+// COLOR CONSTANTS (centralized for consistency)
+// ═══════════════════════════════════════════════════════════════
+
+/** Fallback color for screen titles (when gradient disabled) */
+const TITLE_FALLBACK_COLOR = STELLAR.colors[2]; // #7dd3fc
+
+/** Secondary/label text color */
+const LABEL_COLOR = textColors.dark.secondary; // #94a3b8
+
+/** Code/file path color */
+const CODE_COLOR = statusColors.info.text; // #38bdf8
 
 // ═══════════════════════════════════════════════════════════════
 // SCREEN & SECTION TITLES
@@ -51,7 +65,7 @@ export function ScreenTitle({
   }
 
   return (
-    <Text bold color="#7dd3fc">
+    <Text bold color={TITLE_FALLBACK_COLOR}>
       {content}
     </Text>
   );
@@ -136,7 +150,7 @@ export interface LabelTextProps {
 export function LabelText({ children, withStar = false }: LabelTextProps) {
   const prefix = withStar ? `${STAR_ICONS.outline} ` : '';
   return (
-    <Text color="#94a3b8">
+    <Text color={LABEL_COLOR}>
       {prefix}
       {children}
     </Text>
@@ -154,7 +168,7 @@ export function HintText({ children }: { children: ReactNode }) {
  * File path or code reference - uses info color
  */
 export function CodeText({ children }: { children: ReactNode }) {
-  return <Text color="#38bdf8">{children}</Text>;
+  return <Text color={CODE_COLOR}>{children}</Text>;
 }
 
 // ═══════════════════════════════════════════════════════════════
