@@ -806,6 +806,62 @@ Is it used across ALL screens?
 
 ---
 
+## Import Extensions: Why We Use `.js`
+
+### The Pattern
+
+Throughout this CLI package, you'll see imports like:
+
+```typescript
+import { startTUI } from './tui/index.js';
+import { logger } from './logger.js';
+```
+
+**This is intentional and correct** for ESM TypeScript in 2025/2026.
+
+### Why `.js` Extensions Are Required
+
+1. **ECMAScript Specification**: ES modules require explicit file extensions. This is a spec requirement, not a Node.js quirk.
+
+2. **TypeScript Resolution**: When you write `'./logger.js'` in TypeScript, the compiler understands you're referring to `./logger.ts` during compilation. The `.js` refers to the **output** file.
+
+3. **Portability**: Code with `.js` extensions works:
+   - With bundlers (tsup, esbuild, webpack)
+   - In Node.js directly (if needed)
+   - With future native TypeScript support
+
+### Configuration Context
+
+```json
+// tsconfig.json
+{
+  "moduleResolution": "bundler"  // Allows .js extensions
+}
+
+// package.json
+{
+  "type": "module"  // ESM mode
+}
+```
+
+### Alternatives Considered
+
+| Approach | Pros | Cons |
+|----------|------|------|
+| **`.js` extensions** (current) | Portable, spec-compliant | Feels unusual |
+| Extensionless | Cleaner imports | Only works with bundler |
+| Single-file bundle | Extensions irrelevant | Loses code splitting |
+
+**Decision**: We use `.js` for maximum portability and spec compliance.
+
+### References
+
+- [TypeScript: Choosing Compiler Options](https://www.typescriptlang.org/docs/handbook/modules/guides/choosing-compiler-options.html)
+- [2ality: TypeScript ESM Packages](https://2ality.com/2025/02/typescript-esm-packages.html)
+- [BEST_PRACTICES_2025.md](/BEST_PRACTICES_2025.md) - Full module system guide
+
+---
+
 ## References
 
 - [Ink Documentation](https://github.com/vadimdemedes/ink)
