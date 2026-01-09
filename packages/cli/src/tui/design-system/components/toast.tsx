@@ -18,6 +18,7 @@
 import { useState, useEffect, useCallback, type ReactNode } from 'react';
 import { Box, Text } from 'ink';
 import { STAR_ICONS } from '../palettes.js';
+import { statusColors } from '../tokens/colors.js';
 
 export type ToastVariant = 'info' | 'success' | 'warning' | 'error';
 
@@ -42,10 +43,10 @@ const variantIcons: Record<ToastVariant, string> = {
 };
 
 const variantColors: Record<ToastVariant, string> = {
-  info: 'cyan',
-  success: 'green',
-  warning: 'yellow',
-  error: 'red',
+  info: statusColors.info.text,
+  success: statusColors.success.text,
+  warning: statusColors.warning.text,
+  error: statusColors.error.text,
 };
 
 /**

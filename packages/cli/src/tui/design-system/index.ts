@@ -173,6 +173,7 @@ export {
   WarningBadge,
   ErrorBadge,
   InfoBadge,
+  BrandBadge,
   CountBadge,
   PillBadge,
   type BadgeProps,
@@ -201,6 +202,25 @@ export {
   type ToastData,
   type NotificationProps,
 } from './components/toast.js';
+
+export {
+  ProgressBar,
+  CompactProgressBar,
+  ProgressPercent,
+  type ProgressBarProps,
+} from './components/progress-bar.js';
+
+export {
+  UsageDisplay,
+  TokenBadge,
+  type UsageDisplayProps,
+} from './components/usage-display.js';
+
+export {
+  InputField,
+  InlineInput,
+  type InputFieldProps,
+} from './components/input-field.js';
 
 export {
   // Screen & Section titles

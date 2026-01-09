@@ -1,3 +1,4 @@
+import React from 'react';
 import { Box, Text } from 'ink';
 import type { ReviewResult, Issue, Decision } from '@stargazer/core';
 import { MISC_ICONS } from '../../../config/icons.js';
@@ -8,6 +9,7 @@ import {
   StatusText,
   HintText,
   Badge,
+  Divider,
   type SeverityLevel,
 } from '../../../design-system/index.js';
 
@@ -79,7 +81,12 @@ export function ReviewView({ result }: ReviewViewProps) {
             <Text bold>Found {result.issues.length} issue(s):</Text>
             <Box marginTop={1} flexDirection="column">
               {result.issues.map((issue, i) => (
-                <IssueItem key={i} issue={issue} index={i} />
+                <React.Fragment key={i}>
+                  <IssueItem issue={issue} index={i} />
+                  {i < result.issues.length - 1 && (
+                    <Divider variant="dots" width={40} dimmed />
+                  )}
+                </React.Fragment>
               ))}
             </Box>
           </>
