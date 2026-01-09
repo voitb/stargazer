@@ -1,8 +1,8 @@
 import { useState, useCallback } from 'react';
 import { Box, Text, useInput } from 'ink';
 import { TextInput } from '@inkjs/ui';
-import { saveApiKey } from '../storage/api-key-store.js';
-import { useAppContext } from '../state/app-context.js';
+import { saveApiKey } from '../../storage/api-key-store.js';
+import { useAppContext } from '../../state/app-context.js';
 
 export function ApiKeySetupScreen() {
   const { navigate, setError } = useAppContext();

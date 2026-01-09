@@ -2,14 +2,14 @@ import { useReducer, useCallback, useRef, useEffect } from 'react';
 import { createGeminiClient } from '@stargazer/core/gemini/client';
 import { reviewDiff } from '@stargazer/core/review/reviewer';
 import type { ReviewResult } from '@stargazer/core';
-import { getApiKey, getTimeout, getSelectedModel } from '../storage/api-key-store.js';
+import { getApiKey, getTimeout, getSelectedModel } from '../../storage/api-key-store.js';
 import {
   reviewReducer,
   initialReviewState,
   type ReviewState,
   type ReviewPhase,
   PHASE_ORDER,
-} from '../types/review.js';
+} from './types.js';
 
 // Re-export for consumers
 export { type ReviewPhase, PHASE_ORDER };

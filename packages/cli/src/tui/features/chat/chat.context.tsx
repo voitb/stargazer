@@ -7,9 +7,9 @@ import {
   useMemo,
   type ReactNode,
 } from 'react';
-import type { ChatMessage } from '../storage/types.js';
-import { addMessageToSession, loadSession } from '../storage/session-store.js';
-import { useSession } from './session-context.js';
+import type { ChatMessage } from '../../storage/types.js';
+import { addMessageToSession, loadSession } from '../../storage/session-store.js';
+import { useSession } from '../sessions/session.context.js';
 
 export interface ChatContextValue {
   messages: readonly ChatMessage[];

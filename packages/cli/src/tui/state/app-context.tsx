@@ -6,8 +6,8 @@ import {
   useNavigation,
   type Screen,
 } from './navigation-context.js';
-import { SessionProvider, useSession } from './session-context.js';
-import { ChatProvider, useChat } from './chat-context.js';
+import { SessionProvider, useSession } from '../features/sessions/session.context.js';
+import { ChatProvider, useChat } from '../features/chat/chat.context.js';
 import type { SessionData, SessionIndexEntry, ChatMessage } from '../storage/types.js';
 
 // Re-export types for backwards compatibility
@@ -24,6 +24,8 @@ export interface AppContextValue {
   // Navigation
   screen: Screen;
   navigate: (screen: Screen) => void;
+  goBack: () => void;
+  history: readonly Screen[];
   // Session
   activeSession: SessionData | null;
   sessions: readonly SessionIndexEntry[];
@@ -75,6 +77,8 @@ export function useAppContext(): AppContextValue {
     // Navigation
     screen: navigation.screen,
     navigate: navigation.navigate,
+    goBack: navigation.goBack,
+    history: navigation.history,
     // Session
     activeSession: session.activeSession,
     sessions: session.sessions,

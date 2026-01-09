@@ -1,6 +1,6 @@
 import { Box, Text } from 'ink';
 import { Spinner } from '@inkjs/ui';
-import { PHASE_ORDER, type ReviewPhase } from '../hooks/use-review.js';
+import { PHASE_ORDER, type ReviewPhase } from '../types.js';
 
 /**
  * Maps review phases to human-readable labels.

@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Box, Text, useInput } from 'ink';
 import { Select } from '@inkjs/ui';
-import { useAppContext } from '../state/app-context.js';
-import { saveSelectedModel, getDefaultModel, getProvider } from '../storage/api-key-store.js';
-import { getModelsForProvider, type Provider } from '../constants/models.js';
+import { useAppContext } from '../../state/app-context.js';
+import { saveSelectedModel, getDefaultModel, getProvider } from '../../storage/api-key-store.js';
+import { getModelsForProvider, type Provider } from '../../config/models.js';
 
 export function ModelSelectScreen() {
   const { navigate } = useAppContext();

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Box } from 'ink';
-import { MainMenu } from '../components/main-menu.js';
+import { MainMenu } from '../components/index.js';
 import { useAppContext } from '../state/app-context.js';
 
 interface HomeScreenProps {

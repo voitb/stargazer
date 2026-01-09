@@ -1,8 +1,8 @@
 import { Box, Text, useInput } from 'ink';
 import { Select, ConfirmInput } from '@inkjs/ui';
-import { useAppContext } from '../state/app-context.js';
-import { useSettings } from '../hooks/use-settings.js';
-import { TIMEOUT_OPTIONS } from '../constants/settings.js';
+import { useAppContext } from '../../state/app-context.js';
+import { useSettings } from './use-settings.js';
+import { TIMEOUT_OPTIONS } from '../../config/settings.js';
 
 // Convert timeout options to Select format (string values)
 const timeoutSelectOptions = [

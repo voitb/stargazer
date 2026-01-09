@@ -1,6 +1,6 @@
 import { Box, Text, useInput } from 'ink';
-import { SessionList } from '../components/session-list.js';
-import { useAppContext } from '../state/app-context.js';
+import { SessionList } from './components/session-list.js';
+import { useAppContext } from '../../state/app-context.js';
 
 export function HistoryScreen() {
   const { sessions, resumeSession, navigate } = useAppContext();

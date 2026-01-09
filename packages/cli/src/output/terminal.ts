@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import type { ReviewResult, Issue, Severity } from '@stargazer/core';
-import { DECISION_ICONS, MISC_ICONS } from '../tui/constants/icons.js';
+import { DECISION_ICONS, MISC_ICONS } from '../tui/config/icons.js';
 
 const SEVERITY_COLORS: Record<Severity, (text: string) => string> = {
   critical: chalk.red.bold,
