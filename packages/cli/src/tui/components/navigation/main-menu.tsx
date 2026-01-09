@@ -1,33 +1,86 @@
 import { Box, Text } from 'ink';
 import { Select } from '@inkjs/ui';
+import { gradientLine, Divider } from '../../design-system/index.js';
+
+/**
+ * Star-themed menu icons
+ * Using Unicode stars and celestial symbols for consistency
+ */
+const MENU_ICONS = {
+  review: '✦',
+  discover: '✧',
+  continue: '☆',
+  history: '◇',
+  settings: '◈',
+  help: '○',
+  exit: '◌',
+} as const;
 
 interface MenuOption {
   label: string;
   value: string;
 }
 
+/**
+ * Menu options with star-themed icons
+ */
 const menuOptions: MenuOption[] = [
-  { label: '🔍 Review staged changes', value: 'review-staged' },
-  { label: '📝 Review unstaged changes', value: 'review-unstaged' },
-  { label: '📚 Discover conventions', value: 'discover' },
-  { label: '💬 Continue previous session', value: 'continue' },
-  { label: '📂 Browse history', value: 'history' },
-  { label: '⚙️  Settings', value: 'settings' },
-  { label: '❓ Help', value: 'help' },
-  { label: '🚪 Exit', value: 'exit' },
+  { label: `${MENU_ICONS.review} Review staged changes`, value: 'review-staged' },
+  { label: `${MENU_ICONS.review} Review unstaged changes`, value: 'review-unstaged' },
+  { label: `${MENU_ICONS.discover} Discover conventions`, value: 'discover' },
+  { label: `${MENU_ICONS.continue} Continue previous session`, value: 'continue' },
+  { label: `${MENU_ICONS.history} Browse history`, value: 'history' },
+  { label: `${MENU_ICONS.settings} Settings`, value: 'settings' },
+  { label: `${MENU_ICONS.help} Help`, value: 'help' },
+  { label: `${MENU_ICONS.exit} Exit`, value: 'exit' },
 ];
 
 interface MainMenuProps {
   onSelect: (value: string) => void;
 }
 
+/**
+ * Main menu with star-themed styling
+ *
+ * Features:
+ * - Gradient header text
+ * - Star dividers
+ * - Star/celestial icons
+ * - Clean, minimalist layout
+ *
+ * Following CLI_ARCHITECTURE.md navigation component guidelines.
+ */
 export function MainMenu({ onSelect }: MainMenuProps) {
+  const headerText = gradientLine('What would you like to do?', {
+    palette: 'moonlight',
+  });
+
   return (
     <Box flexDirection="column" padding={1}>
-      <Text bold>What would you like to do?</Text>
-      <Box marginTop={1}>
-        <Select options={menuOptions} onChange={onSelect} />
+      <Text>{headerText}</Text>
+      <Box marginY={1}>
+        <Divider variant="dots" dimmed />
       </Box>
+      <Select options={menuOptions} onChange={onSelect} />
+    </Box>
+  );
+}
+
+/**
+ * Compact menu for constrained displays
+ */
+export function CompactMenu({ onSelect }: MainMenuProps) {
+  const compactOptions: MenuOption[] = [
+    { label: '✦ Review', value: 'review-staged' },
+    { label: '✧ Discover', value: 'discover' },
+    { label: '◇ History', value: 'history' },
+    { label: '◈ Settings', value: 'settings' },
+    { label: '◌ Exit', value: 'exit' },
+  ];
+
+  return (
+    <Box flexDirection="column" paddingX={1}>
+      <Select options={compactOptions} onChange={onSelect} />
     </Box>
   );
 }

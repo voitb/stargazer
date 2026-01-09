@@ -1,1 +1,1 @@
-export { MainMenu } from './main-menu.js';
+export { MainMenu, CompactMenu } from './main-menu.js';

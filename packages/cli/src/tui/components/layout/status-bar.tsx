@@ -1,4 +1,5 @@
 import { Box, Text } from 'ink';
+import { Badge, CountBadge } from '../../design-system/index.js';
 
 interface StatusBarProps {
   message: string;
@@ -6,6 +7,16 @@ interface StatusBarProps {
   hasApiKey?: boolean;
 }
 
+/**
+ * Status bar with star-themed styling
+ *
+ * Features:
+ * - Badge components for status indicators
+ * - KeyHint styling for navigation hints
+ * - Clean, minimal layout
+ *
+ * Following CLI_ARCHITECTURE.md layout component guidelines.
+ */
 export function StatusBar({ message, sessionCount, hasApiKey }: StatusBarProps) {
   return (
     <Box
@@ -17,18 +28,30 @@ export function StatusBar({ message, sessionCount, hasApiKey }: StatusBarProps) 
       borderBottom={false}
       borderLeft={false}
       borderRight={false}
+      borderColor="gray"
     >
-      <Text dimColor>{message}</Text>
-      <Box>
+      <Text dimColor>✧ {message}</Text>
+      <Box gap={2}>
         {hasApiKey !== undefined && (
-          <Text color={hasApiKey ? 'green' : 'red'}>
-            {hasApiKey ? 'API: OK' : 'API: Missing'}
-          </Text>
+          <Badge variant={hasApiKey ? 'success' : 'error'} gradient>
+            API
+          </Badge>
         )}
         {sessionCount !== undefined && (
-          <Text dimColor> | Sessions: {sessionCount}</Text>
+          <CountBadge count={sessionCount} variant="info" label="sessions" />
         )}
       </Box>
+    </Box>
+  );
+}
+
+/**
+ * Minimal status bar - just the message
+ */
+export function MinimalStatusBar({ message }: { message: string }) {
+  return (
+    <Box paddingX={1}>
+      <Text dimColor>✧ {message}</Text>
     </Box>
   );
 }

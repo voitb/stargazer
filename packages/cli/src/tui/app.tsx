@@ -7,6 +7,7 @@ import { hasApiKey } from './storage/api-key-store.js';
 import { ScreenRouter } from './screens/screen-router.js';
 import { useAppReview } from './hooks/use-app-review.js';
 import { useAppKeyboard } from './hooks/use-app-keyboard.js';
+import { ThemeProvider } from './design-system/index.js';
 
 interface AppContentProps {
   projectPath: string;
@@ -138,9 +139,11 @@ interface AppProps {
 export function App({ projectPath }: AppProps) {
   return (
     <TUIErrorBoundary>
-      <AppProvider projectPath={projectPath}>
-        <AppContent projectPath={projectPath} />
-      </AppProvider>
+      <ThemeProvider>
+        <AppProvider projectPath={projectPath}>
+          <AppContent projectPath={projectPath} />
+        </AppProvider>
+      </ThemeProvider>
     </TUIErrorBoundary>
   );
 }
