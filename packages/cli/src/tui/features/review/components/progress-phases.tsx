@@ -1,20 +1,29 @@
 import { Box, Text } from 'ink';
-import { Spinner } from '@inkjs/ui';
+import { gradientLine, StarSpinner, Badge } from '../../../design-system/index.js';
 import { PHASE_ORDER, type ReviewPhase } from '../types.js';
 
 /**
- * Maps review phases to human-readable labels.
+ * Star-themed phase icons
+ */
+const PHASE_ICONS = {
+  completed: '✦',
+  current: '✧',
+  pending: '○',
+} as const;
+
+/**
+ * Maps review phases to human-readable labels with star styling.
  */
 function getPhaseLabel(phase: ReviewPhase): string {
   switch (phase) {
     case 'preparing':
-      return 'Preparing review...';
+      return 'Preparing review';
     case 'fetching-diff':
-      return 'Fetching git diff...';
+      return 'Fetching git diff';
     case 'analyzing':
-      return 'Analyzing with AI...';
+      return 'Analyzing with AI';
     case 'parsing':
-      return 'Parsing response...';
+      return 'Parsing response';
   }
 }
 
@@ -24,36 +33,70 @@ export interface ProgressPhasesProps {
 }
 
 /**
- * Displays review progress with phase indicators.
- * Shows completed (✓), current (spinner), and pending (○) states.
+ * Displays review progress with star-themed phase indicators.
+ *
+ * States:
+ * - Completed: ✦ (stellar gradient)
+ * - Current: ✧ + spinner (cosmic gradient)
+ * - Pending: ○ (dimmed)
+ *
+ * Following CLI_ARCHITECTURE.md component guidelines.
  */
 export function ProgressPhases({ currentPhase, completedPhases }: ProgressPhasesProps) {
   return (
-    <Box flexDirection="column">
+    <Box flexDirection="column" gap={0}>
       {PHASE_ORDER.map((phase) => {
         const isCompleted = completedPhases.includes(phase);
         const isCurrent = phase === currentPhase;
         const isPending = !isCompleted && !isCurrent;
+        const label = getPhaseLabel(phase);
 
         return (
-          <Box key={phase}>
-            {isCompleted && <Text color="green">✓ </Text>}
-            {isCurrent && (
-              <>
-                <Spinner />
-                <Text> </Text>
-              </>
+          <Box key={phase} gap={1}>
+            {isCompleted && (
+              <Badge variant="success" showIcon={true} gradient>
+                {label}
+              </Badge>
             )}
-            {isPending && <Text dimColor>○ </Text>}
-            <Text
-              color={isCompleted ? 'green' : isCurrent ? 'yellow' : undefined}
-              dimColor={isPending}
-            >
-              {getPhaseLabel(phase)}
-            </Text>
+            {isCurrent && (
+              <Box gap={1}>
+                <StarSpinner palette="stellar" />
+                <Text color="cyan" bold>
+                  {label}...
+                </Text>
+              </Box>
+            )}
+            {isPending && (
+              <Text dimColor>{PHASE_ICONS.pending} {label}</Text>
+            )}
           </Box>
         );
       })}
+    </Box>
+  );
+}
+
+/**
+ * Compact progress indicator - single line
+ */
+export function CompactProgress({
+  currentPhase,
+  completedPhases,
+}: ProgressPhasesProps) {
+  const completed = completedPhases.length;
+  const total = PHASE_ORDER.length;
+  const progress = `${completed}/${total}`;
+
+  const currentLabel = currentPhase ? getPhaseLabel(currentPhase) : 'Done';
+
+  return (
+    <Box gap={1}>
+      <Text>
+        {gradientLine(`✦ ${progress}`, { palette: 'stellar' })}
+      </Text>
+      <Text dimColor>│</Text>
+      <StarSpinner palette="stellar" />
+      <Text color="cyan"> {currentLabel}...</Text>
     </Box>
   );
 }

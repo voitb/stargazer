@@ -1,2 +1,2 @@
-export { Header } from './header.js';
-export { StatusBar } from './status-bar.js';
+export { Header, CompactHeader, MinimalHeader } from './header.js';
+export { StatusBar, MinimalStatusBar } from './status-bar.js';
