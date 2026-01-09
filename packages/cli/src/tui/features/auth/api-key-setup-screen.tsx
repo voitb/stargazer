@@ -1,15 +1,19 @@
 import { useState, useCallback } from 'react';
 import { Box, Text, useInput } from 'ink';
-import { TextInput } from '@inkjs/ui';
 import { saveApiKey } from '../../storage/api-key-store.js';
 import { useAppContext } from '../../state/app-context.js';
-import { ScreenTitle, StatusText, HintText, MENU_ICONS, useTheme } from '../../design-system/index.js';
+import {
+  ScreenTitle,
+  StatusText,
+  HintText,
+  Divider,
+  InputField,
+} from '../../design-system/index.js';
 
 export function ApiKeySetupScreen() {
   const { navigate, setError } = useAppContext();
-  const { colors } = useTheme();
   const [isSaving, setIsSaving] = useState(false);
-  const [key, setKey] = useState(0);
+  const [value, setValue] = useState('');
 
   const handleSubmit = useCallback(async (value: string) => {
     const trimmed = value.trim();
@@ -42,17 +46,20 @@ export function ApiKeySetupScreen() {
         <HintText>Get your key at: https://aistudio.google.com/apikey</HintText>
       </Box>
 
-      <Box marginTop={2} flexDirection="column">
-        <Text>API Key:</Text>
-        <Box>
-          <Text color={colors.border.focus}>{MENU_ICONS.discover} </Text>
-          <TextInput
-            key={key}
-            onSubmit={handleSubmit}
-            placeholder="Enter your API key..."
-          />
-        </Box>
+      <Box marginY={1}>
+        <Divider variant="star" width={40} />
       </Box>
+
+      <InputField
+        label="API Key"
+        value={value}
+        onChange={setValue}
+        onSubmit={(input) => {
+          handleSubmit(input);
+          setValue('');
+        }}
+        placeholder="Enter your API key..."
+      />
 
       <Box marginTop={2}>
         <HintText>Press Enter to save | ESC to cancel</HintText>

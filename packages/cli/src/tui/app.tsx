@@ -122,6 +122,7 @@ function AppContent({ projectPath }: AppContentProps) {
             phase: review.phase,
             completedPhases: review.completedPhases,
             elapsedTime: review.elapsedTime,
+            timeout: review.timeout,
           }}
           error={error}
           onMenuSelect={handleMenuSelect}

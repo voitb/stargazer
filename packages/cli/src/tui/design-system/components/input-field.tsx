@@ -16,6 +16,8 @@ export interface InputFieldProps {
   value: string;
   /** Change handler */
   onChange: (value: string) => void;
+  /** Submit handler */
+  onSubmit?: (value: string) => void;
   /** Placeholder text */
   placeholder?: string;
   /** Mask input (for passwords) */
@@ -45,6 +47,7 @@ export function InputField({
   label,
   value,
   onChange,
+  onSubmit,
   placeholder,
   isPassword = false,
   showIcon = true,
@@ -68,6 +71,7 @@ export function InputField({
         <TextInput
           value={value}
           onChange={onChange}
+          onSubmit={onSubmit}
           placeholder={placeholder}
           mask={isPassword ? '*' : undefined}
         />
@@ -82,8 +86,9 @@ export function InputField({
 export function InlineInput({
   value,
   onChange,
+  onSubmit,
   placeholder,
-}: Pick<InputFieldProps, 'value' | 'onChange' | 'placeholder'>) {
+}: Pick<InputFieldProps, 'value' | 'onChange' | 'onSubmit' | 'placeholder'>) {
   const { colors } = useTheme();
 
   return (
@@ -92,6 +97,7 @@ export function InlineInput({
       <TextInput
         value={value}
         onChange={onChange}
+        onSubmit={onSubmit}
         placeholder={placeholder}
       />
     </Box>
