@@ -94,8 +94,11 @@ export {
   borderColorsMap,
   statusColors,
   getThemeColors,
+  ROLE_COLORS,
+  getRoleColor,
   type ThemeColors,
   type StatusType,
+  type MessageRole,
   // Re-exports from palettes
   PALETTES,
   THEMES,
@@ -116,7 +119,7 @@ import { typography } from './typography.js';
 import { borderStyles, borderColors } from './borders.js';
 import { layers } from './layers.js';
 import { motion } from './motion.js';
-import { colors, PALETTES, STAR_ICONS } from './colors.js';
+import { colors, PALETTES, STAR_ICONS, ROLE_COLORS } from './colors.js';
 
 /**
  * Combined tokens object for convenient access
@@ -131,6 +134,7 @@ export const tokens = {
   layers,
   motion,
   colors,
+  roleColors: ROLE_COLORS,
   palettes: PALETTES,
   icons: STAR_ICONS,
 } as const;

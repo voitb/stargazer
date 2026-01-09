@@ -15,6 +15,7 @@ export type SettingsModal = 'none' | 'timeout' | 'confirm-clear';
 export interface UseSettingsReturn {
   // State
   keyStatus: string;
+  hasApiKey: boolean;
   timeoutValue: number;
   currentProvider: Provider | undefined;
   currentModel: string | undefined;
@@ -54,6 +55,7 @@ function formatModelName(model: string | undefined): string {
  */
 export function useSettings(): UseSettingsReturn {
   const [keyStatus, setKeyStatus] = useState<string>('Checking...');
+  const [hasApiKey, setHasApiKey] = useState<boolean>(false);
   const [timeoutValue, setTimeoutValue] = useState<number>(60000);
   const [currentProvider, setCurrentProvider] = useState<Provider | undefined>(undefined);
   const [currentModel, setCurrentModel] = useState<string | undefined>(undefined);
@@ -63,12 +65,16 @@ export function useSettings(): UseSettingsReturn {
   useEffect(() => {
     Promise.all([getApiKey(), getTimeout(), getProvider(), getSelectedModel()])
       .then(([key, timeout, provider, model]) => {
+        setHasApiKey(Boolean(key));
         setKeyStatus(key ? `Configured (${maskApiKey(key)})` : 'Not configured');
         setTimeoutValue(timeout);
         setCurrentProvider(provider);
         setCurrentModel(model);
       })
-      .catch(() => setKeyStatus('Error loading settings'));
+      .catch(() => {
+        setHasApiKey(false);
+        setKeyStatus('Error loading settings');
+      });
   }, []);
 
   const showTimeoutModal = useCallback(() => setModal('timeout'), []);
@@ -98,6 +104,7 @@ export function useSettings(): UseSettingsReturn {
   return {
     // State
     keyStatus,
+    hasApiKey,
     timeoutValue,
     currentProvider,
     currentModel,

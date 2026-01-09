@@ -1,12 +1,13 @@
 import { Box, Text } from 'ink';
-import type { ReviewResult, Issue, Severity } from '@stargazer/core';
-import { DECISION_ICONS, MISC_ICONS } from '../../../config/icons.js';
+import type { ReviewResult, Issue, Decision } from '@stargazer/core';
+import { MISC_ICONS } from '../../../config/icons.js';
 import {
   ScreenTitle,
   SeverityText,
   CodeText,
   StatusText,
   HintText,
+  Badge,
   type SeverityLevel,
 } from '../../../design-system/index.js';
 
@@ -35,16 +36,35 @@ function IssueItem({ issue, index }: { issue: Issue; index: number }) {
   );
 }
 
+/**
+ * Map decision to badge variant for proper coloring
+ */
+const DECISION_VARIANTS: Record<Decision, 'success' | 'error' | 'info'> = {
+  approve: 'success',
+  request_changes: 'error',
+  comment: 'info',
+};
+
+/**
+ * Map decision to display label
+ */
+const DECISION_LABELS: Record<Decision, string> = {
+  approve: 'Approved',
+  request_changes: 'Changes Requested',
+  comment: 'Comment',
+};
+
 export function ReviewView({ result }: ReviewViewProps) {
-  const decisionIcon = DECISION_ICONS[result.decision] || '◇';
+  const variant = DECISION_VARIANTS[result.decision] ?? 'info';
+  const label = DECISION_LABELS[result.decision] ?? result.decision;
 
   return (
     <Box flexDirection="column" padding={1}>
       <ScreenTitle>{MISC_ICONS.pencil} Code Review Results</ScreenTitle>
 
       <Box marginTop={1}>
-        <Text>Decision: {decisionIcon} </Text>
-        <Text bold>{result.decision}</Text>
+        <Text>Decision: </Text>
+        <Badge variant={variant} gradient>{label}</Badge>
       </Box>
 
       <Box marginTop={1}>

@@ -5,10 +5,12 @@ import {
   KeyHintBar,
   gradientLine,
   SectionTitle,
+  useTheme,
 } from '../design-system/index.js';
 
 export function HelpScreen() {
   const { navigate } = useAppContext();
+  const { colors } = useTheme();
 
   useInput((input, key) => {
     if (key.escape || input === 'q') {
@@ -50,11 +52,11 @@ export function HelpScreen() {
       <Box flexDirection="column" marginTop={1}>
         <SectionTitle withStar>Menu Options</SectionTitle>
         <Box flexDirection="column" marginTop={1} paddingLeft={2}>
-          <Text>✦ <Text color="white">Review staged</Text>      <Text dimColor>Analyze staged git changes</Text></Text>
-          <Text>✦ <Text color="white">Review unstaged</Text>    <Text dimColor>Analyze unstaged git changes</Text></Text>
-          <Text>✧ <Text color="white">Discover</Text>           <Text dimColor>Discover project conventions</Text></Text>
-          <Text>◇ <Text color="white">Browse history</Text>     <Text dimColor>View previous sessions</Text></Text>
-          <Text>◈ <Text color="white">Settings</Text>           <Text dimColor>Configure API key</Text></Text>
+          <Text>✦ <Text color={colors.text.primary}>Review staged</Text>      <Text dimColor>Analyze staged git changes</Text></Text>
+          <Text>✦ <Text color={colors.text.primary}>Review unstaged</Text>    <Text dimColor>Analyze unstaged git changes</Text></Text>
+          <Text>✧ <Text color={colors.text.primary}>Discover</Text>           <Text dimColor>Discover project conventions</Text></Text>
+          <Text>◇ <Text color={colors.text.primary}>Browse history</Text>     <Text dimColor>View previous sessions</Text></Text>
+          <Text>◈ <Text color={colors.text.primary}>Settings</Text>           <Text dimColor>Configure API key</Text></Text>
         </Box>
       </Box>
 

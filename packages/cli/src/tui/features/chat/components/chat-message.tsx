@@ -1,8 +1,11 @@
 import { Box, Text } from 'ink';
 import { formatDistanceToNow } from 'date-fns';
-import { STAR_ICONS } from '../../../design-system/palettes.js';
-
-type MessageRole = 'user' | 'assistant' | 'system';
+import {
+  STAR_ICONS,
+  ROLE_COLORS,
+  type MessageRole,
+} from '../../../design-system/tokens/index.js';
+import { useTheme } from '../../../design-system/primitives/theme-provider.js';
 
 interface ChatMessageData {
   id: string;
@@ -15,27 +18,26 @@ interface ChatMessageProps {
   message: ChatMessageData;
 }
 
-// Star-themed role display with design system colors
-const ROLE_DISPLAY: Record<MessageRole, { label: string; color: string; icon: string }> = {
+// Star-themed role display with design system icons
+const ROLE_LABELS: Record<MessageRole, { label: string; icon: string }> = {
   user: {
     label: 'You',
-    color: '#38bdf8', // info/sky-400
     icon: STAR_ICONS.filled, // ✦
   },
   assistant: {
     label: 'Stargazer',
-    color: '#4ade80', // success/green-400
     icon: STAR_ICONS.star, // ★
   },
   system: {
     label: 'System',
-    color: '#fbbf24', // warning/amber-400
     icon: STAR_ICONS.diamond, // ◇
   },
 };
 
 export function ChatMessage({ message }: ChatMessageProps) {
-  const { label, color, icon } = ROLE_DISPLAY[message.role];
+  const { theme } = useTheme();
+  const { label, icon } = ROLE_LABELS[message.role];
+  const color = ROLE_COLORS[message.role][theme];
   const timeAgo = formatDistanceToNow(new Date(message.timestamp), { addSuffix: true });
 
   return (
