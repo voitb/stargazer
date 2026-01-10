@@ -160,20 +160,12 @@ export {
 
 export {
   Divider,
-  StarDivider,
-  DotDivider,
-  LineDivider,
   type DividerProps,
   type DividerVariant,
 } from './components/divider.js';
 
 export {
   Badge,
-  SuccessBadge,
-  WarningBadge,
-  ErrorBadge,
-  InfoBadge,
-  BrandBadge,
   CountBadge,
   PillBadge,
   type BadgeProps,
@@ -184,7 +176,6 @@ export {
 
 export {
   KeyHint,
-  SingleKeyHint,
   KeyHintBar,
   FormattedKeyHint,
   formatKey,
@@ -270,10 +261,5 @@ export {
   getTerminalHeight,
   getBreakpoint,
   isAboveBreakpoint,
-  canShowFullLogo,
-  canShowTagline,
-  getCenterPadding,
-  getSafeWidth,
-  truncateToFit,
   DEFAULT_SIZE,
 } from './utils/terminal-size.js';

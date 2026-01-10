@@ -42,22 +42,3 @@ export const spacing = {
 
 export type SpacingToken = keyof typeof spacing;
 export type SpacingValue = (typeof spacing)[SpacingToken];
-
-/**
- * Get spacing value by token name
- */
-export function getSpacing(token: SpacingToken): SpacingValue {
-  return spacing[token];
-}
-
-/**
- * Default spacing for common use cases
- */
-export const spacingDefaults = {
-  /** Default component padding */
-  componentPadding: spacing.md,
-  /** Default gap between items */
-  itemGap: spacing.sm,
-  /** Default section margin */
-  sectionMargin: spacing.lg,
-} as const;

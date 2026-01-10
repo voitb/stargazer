@@ -8,7 +8,8 @@ import { Text } from 'ink';
 import { type ReactNode } from 'react';
 import { gradientLine } from '../gradient.js';
 import { STAR_ICONS, type PaletteName } from '../palettes.js';
-import { statusColors } from '../tokens/colors.js';
+import { statusColors, textColors, brandColors } from '../tokens/colors.js';
+import { useTheme } from '../primitives/theme-provider.js';
 
 export type BadgeVariant = 'default' | 'success' | 'warning' | 'error' | 'info' | 'brand';
 
@@ -36,16 +37,25 @@ const variantIcons: Record<BadgeVariant, string> = {
 };
 
 /**
- * Map variant to theme-aware hex color
+ * Get theme-aware color for badge variant
  */
-const variantColors: Record<BadgeVariant, string> = {
-  default: '#f8fafc',
-  success: statusColors.success.text,
-  warning: statusColors.warning.text,
-  error: statusColors.error.text,
-  info: statusColors.info.text,
-  brand: '#7dd3fc', // stellar cyan - brand color
-};
+function getVariantColor(variant: BadgeVariant, theme: 'dark' | 'light'): string {
+  switch (variant) {
+    case 'default':
+      return textColors[theme].primary;
+    case 'brand':
+      // brandColors[theme].primary comes from palette array, provide fallback
+      return brandColors[theme].primary ?? (theme === 'dark' ? '#7dd3fc' : '#3b82f6');
+    case 'success':
+      return statusColors.success.text;
+    case 'warning':
+      return statusColors.warning.text;
+    case 'error':
+      return statusColors.error.text;
+    case 'info':
+      return statusColors.info.text;
+  }
+}
 
 /**
  * Map variant to palette for gradients
@@ -70,8 +80,9 @@ export function Badge({
   showIcon = true,
   gradient = false,
 }: BadgeProps) {
+  const { theme } = useTheme();
   const icon = variantIcons[variant];
-  const color = variantColors[variant];
+  const color = getVariantColor(variant, theme);
   const palette = variantPalettes[variant];
 
   const content = showIcon ? `${icon} ${String(children)}` : String(children);
@@ -88,29 +99,6 @@ export function Badge({
 }
 
 /**
- * Shorthand badge components
- */
-export function SuccessBadge({ children, ...props }: Omit<BadgeProps, 'variant'>) {
-  return <Badge variant="success" {...props}>{children}</Badge>;
-}
-
-export function WarningBadge({ children, ...props }: Omit<BadgeProps, 'variant'>) {
-  return <Badge variant="warning" {...props}>{children}</Badge>;
-}
-
-export function ErrorBadge({ children, ...props }: Omit<BadgeProps, 'variant'>) {
-  return <Badge variant="error" {...props}>{children}</Badge>;
-}
-
-export function InfoBadge({ children, ...props }: Omit<BadgeProps, 'variant'>) {
-  return <Badge variant="info" {...props}>{children}</Badge>;
-}
-
-export function BrandBadge({ children, ...props }: Omit<BadgeProps, 'variant'>) {
-  return <Badge variant="brand" {...props}>{children}</Badge>;
-}
-
-/**
  * Status badge with count
  */
 export interface CountBadgeProps {
@@ -120,8 +108,9 @@ export interface CountBadgeProps {
 }
 
 export function CountBadge({ count, variant = 'default', label }: CountBadgeProps) {
+  const { theme } = useTheme();
   const icon = variantIcons[variant];
-  const color = variantColors[variant];
+  const color = getVariantColor(variant, theme);
 
   const text = label ? `${icon} ${count} ${label}` : `${icon} ${count}`;
 
@@ -137,8 +126,9 @@ export interface PillBadgeProps {
 }
 
 export function PillBadge({ children, variant = 'default' }: PillBadgeProps) {
+  const { theme } = useTheme();
   const icon = variantIcons[variant];
-  const color = variantColors[variant];
+  const color = getVariantColor(variant, theme);
 
   return (
     <Text color={color}>

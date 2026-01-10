@@ -18,12 +18,8 @@ export {
   getTerminalWidth,
   getTerminalHeight,
   getBreakpoint,
+  getLogoVariant,
   isAboveBreakpoint,
-  canShowFullLogo,
-  canShowTagline,
-  getCenterPadding,
-  getSafeWidth,
-  truncateToFit,
   DEFAULT_SIZE,
   type TerminalSize,
 } from './terminal-size.js';

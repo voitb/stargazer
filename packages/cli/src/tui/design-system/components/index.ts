@@ -12,20 +12,12 @@ export {
 
 export {
   Divider,
-  StarDivider,
-  DotDivider,
-  LineDivider,
   type DividerProps,
   type DividerVariant,
 } from './divider.js';
 
 export {
   Badge,
-  SuccessBadge,
-  WarningBadge,
-  ErrorBadge,
-  InfoBadge,
-  BrandBadge,
   CountBadge,
   PillBadge,
   type BadgeProps,
@@ -36,7 +28,6 @@ export {
 
 export {
   KeyHint,
-  SingleKeyHint,
   KeyHintBar,
   FormattedKeyHint,
   formatKey,

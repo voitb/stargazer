@@ -19,6 +19,7 @@ import type { ReactNode } from 'react';
 import { gradientLine } from '../gradient.js';
 import { STAR_ICONS } from '../palettes.js';
 import { useTheme } from '../primitives/theme-provider.js';
+import { statusColors } from '../tokens/colors.js';
 
 // ═══════════════════════════════════════════════════════════════
 // SCREEN & SECTION TITLES
@@ -281,17 +282,17 @@ export const MENU_ICONS = {
 export const DECISION_DISPLAY = {
   approve: {
     icon: STAR_ICONS.filled, // ✦
-    color: '#4ade80', // green
+    color: statusColors.success.text,
     label: 'Approved',
   },
   request_changes: {
     icon: STAR_ICONS.circle, // ○
-    color: '#f87171', // red
+    color: statusColors.error.text,
     label: 'Changes Requested',
   },
   comment: {
     icon: STAR_ICONS.diamond, // ◇
-    color: '#38bdf8', // blue
+    color: statusColors.info.text,
     label: 'Comment',
   },
 } as const;
