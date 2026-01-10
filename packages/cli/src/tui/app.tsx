@@ -5,7 +5,7 @@ import { StatusBar, Header, TUIErrorBoundary } from './components/index.js';
 import { AppProvider, useAppContext } from './state/app-context.js';
 import { hasApiKey } from './storage/api-key-store.js';
 import { ScreenRouter } from './screens/screen-router.js';
-import { useAppReview } from './hooks/use-app-review.js';
+import { useAppReview } from './hooks/index.js';
 import { useAppKeyboard } from './hooks/use-app-keyboard.js';
 import { useTokenTracking } from './hooks/use-token-tracking.js';
 import { ThemeProvider } from './design-system/index.js';

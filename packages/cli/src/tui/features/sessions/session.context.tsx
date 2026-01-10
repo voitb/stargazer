@@ -6,6 +6,7 @@ import {
   useState,
   useCallback,
   useMemo,
+  useEffect,
   type ReactNode,
 } from 'react';
 import type { SessionData, SessionIndexEntry } from '../../storage/types.js';
@@ -28,6 +29,7 @@ export interface SessionContextValue {
   clearMessages: () => Promise<void>;
   setActiveSession: (session: SessionData | null) => void;
   isLoading: boolean;
+  isLoadingSessions: boolean;
   error: string | null;
   setError: (error: string | null) => void;
 }
@@ -44,16 +46,24 @@ export function SessionProvider({ children, projectPath }: SessionProviderProps)
   const [activeSession, setActiveSession] = useState<SessionData | null>(null);
   const [sessions, setSessions] = useState<readonly SessionIndexEntry[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingSessions, setIsLoadingSessions] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const refreshSessions = useCallback(async () => {
+    setIsLoadingSessions(true);
     const result = await listAllSessions();
     if (result.ok) {
       setSessions(result.data);
     } else {
       setError(`Failed to load sessions: ${result.error.message}`);
     }
+    setIsLoadingSessions(false);
   }, []);
+
+  // Load sessions on mount
+  useEffect(() => {
+    refreshSessions();
+  }, [refreshSessions]);
 
   const startNewSession = useCallback(async () => {
     setIsLoading(true);
@@ -122,6 +132,7 @@ export function SessionProvider({ children, projectPath }: SessionProviderProps)
       clearMessages,
       setActiveSession,
       isLoading,
+      isLoadingSessions,
       error,
       setError,
     }),
@@ -135,6 +146,7 @@ export function SessionProvider({ children, projectPath }: SessionProviderProps)
       refreshSessions,
       clearMessages,
       isLoading,
+      isLoadingSessions,
       error,
     ]
   );

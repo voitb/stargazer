@@ -1,5 +1,6 @@
 // App-level hooks
-export { useAppReview, type UseAppReviewReturn } from './use-app-review.js';
+// Re-export from feature for backwards compatibility
+export { useAppReview, type UseAppReviewReturn } from '../features/review/hooks/use-app-review.js';
 export { useAppKeyboard } from './use-app-keyboard.js';
 
 // Utility hooks

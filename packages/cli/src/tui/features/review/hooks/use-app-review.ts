@@ -1,8 +1,8 @@
 import { useState, useCallback, useEffect } from 'react';
-import { useReview } from '../features/review/index.js';
-import { useNavigation } from '../state/navigation-context.js';
+import { useReview } from '../use-review.js';
+import { useNavigation } from '../../../state/navigation-context.js';
 import type { ReviewResult } from '@stargazer/core';
-import type { ReviewPhase } from '../features/review/types.js';
+import type { ReviewPhase } from '../types.js';
 
 interface UseAppReviewOptions {
   projectPath: string;

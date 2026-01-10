@@ -15,7 +15,8 @@ import { getUserFriendlyError } from '../utils/error-messages.js';
 import { StatusText, HintText, ProgressBar, UsageDisplay } from '../design-system/index.js';
 import type { Screen } from '../state/navigation-context.js';
 import type { ReviewResult } from '@stargazer/core';
-import type { ReviewPhase, ReviewActions } from '../features/review/types.js';
+import type { ReviewPhase } from '../features/review/types.js';
+import type { ReviewActions } from '../types/review.js';
 
 interface ScreenRouterProps {
   screen: Screen;

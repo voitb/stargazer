@@ -1,4 +1,5 @@
 import { Box, Text } from 'ink';
+import { Spinner } from '@inkjs/ui';
 import { formatDistanceToNow } from 'date-fns';
 import type { SessionIndexEntry } from '../../../storage/types.js';
 import { SelectWithArrows } from '../../../design-system/index.js';
@@ -7,9 +8,18 @@ interface SessionListProps {
   sessions: readonly SessionIndexEntry[];
   onSelect: (sessionId: string) => void;
   onBack: () => void;
+  isLoading?: boolean;
 }
 
-export function SessionList({ sessions, onSelect, onBack }: SessionListProps) {
+export function SessionList({ sessions, onSelect, onBack, isLoading = false }: SessionListProps) {
+  if (isLoading) {
+    return (
+      <Box flexDirection="column" padding={1}>
+        <Spinner label="Loading sessions..." />
+      </Box>
+    );
+  }
+
   if (sessions.length === 0) {
     return (
       <Box flexDirection="column" padding={1}>

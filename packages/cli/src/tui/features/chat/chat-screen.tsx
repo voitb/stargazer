@@ -6,8 +6,8 @@ import { EnhancedChatInput } from './components/enhanced-chat-input.js';
 import { useAppContext } from '../../state/app-context.js';
 import { StatusText } from '../../design-system/index.js';
 import { executeCommand, isCommand, type CommandContext } from './commands/index.js';
-import type { ReviewActions } from '../review/types.js';
-import { formatReviewResult } from '../review/utils/format-result.js';
+import type { ReviewActions } from '../../types/review.js';
+import { formatReviewResult } from '../../utils/format-review.js';
 
 interface ChatScreenProps {
   reviewActions: ReviewActions;

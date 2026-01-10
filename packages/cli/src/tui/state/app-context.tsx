@@ -41,6 +41,7 @@ export interface AppContextValue {
   // Shared
   projectPath: string;
   isLoading: boolean;
+  isLoadingSessions: boolean;
   error: string | null;
   setError: (error: string | null) => void;
 }
@@ -116,6 +117,7 @@ export function useAppContext(): AppContextValue {
     // Shared (from session context)
     projectPath: session.projectPath,
     isLoading: session.isLoading,
+    isLoadingSessions: session.isLoadingSessions,
     error: session.error,
     setError: session.setError,
   };

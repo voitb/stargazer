@@ -17,3 +17,4 @@ export {
   isTextFile,
   type FileMatch,
 } from './file-search.js';
+export { formatReviewResult } from './format-review.js';
