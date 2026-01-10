@@ -6,6 +6,7 @@
 
 import { Box, Text } from 'ink';
 import { gradientLine } from '../gradient.js';
+import { type PaletteName } from '../palettes.js';
 import { useTheme } from '../primitives/theme-provider.js';
 
 export interface ProgressBarProps {
@@ -20,7 +21,7 @@ export interface ProgressBarProps {
   /** Show percentage (default: true) */
   showPercentage?: boolean;
   /** Custom palette override */
-  palette?: 'stellar' | 'daylight' | 'success' | 'warning' | 'error';
+  palette?: PaletteName;
 }
 
 /**
