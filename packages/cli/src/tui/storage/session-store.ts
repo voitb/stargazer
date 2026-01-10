@@ -226,3 +226,35 @@ export async function listAllSessions(): Promise<Result<readonly SessionIndexEnt
   if (!indexResult.ok) return indexResult;
   return ok(indexResult.data.sessions);
 }
+
+export async function clearSessionMessages(sessionId: string): Promise<Result<void>> {
+  try {
+    const sessionDir = getSessionDir(sessionId);
+    const now = new Date().toISOString();
+
+    // Clear messages file
+    await writeFile(`${sessionDir}/messages.json`, JSON.stringify([], null, 2), 'utf-8');
+
+    // Update metadata
+    const metadataContent = await readFile(`${sessionDir}/metadata.json`, 'utf-8');
+    const metadata = JSON.parse(metadataContent);
+    metadata.updatedAt = now;
+    await writeFile(`${sessionDir}/metadata.json`, JSON.stringify(metadata, null, 2), 'utf-8');
+
+    // Update index
+    const indexResult = await loadSessionIndex();
+    if (indexResult.ok) {
+      const updatedSessions = indexResult.data.sessions.map((s) =>
+        s.id === sessionId ? { ...s, updatedAt: now, messageCount: 0 } : s
+      );
+      await saveSessionIndex({ sessions: updatedSessions });
+    }
+
+    return ok(undefined);
+  } catch (error) {
+    return err({
+      code: 'API_ERROR',
+      message: `Failed to clear session messages: ${error}`,
+    });
+  }
+}

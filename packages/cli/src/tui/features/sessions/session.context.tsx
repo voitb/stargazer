@@ -13,6 +13,7 @@ import {
   createSession,
   loadSession,
   listAllSessions,
+  clearSessionMessages,
 } from '../../storage/session-store.js';
 import { useNavigation } from '../../state/navigation-context.js';
 
@@ -24,6 +25,7 @@ export interface SessionContextValue {
   resumeSession: (sessionId: string) => Promise<void>;
   closeSession: () => void;
   refreshSessions: () => Promise<void>;
+  clearMessages: () => Promise<void>;
   setActiveSession: (session: SessionData | null) => void;
   isLoading: boolean;
   error: string | null;
@@ -92,6 +94,22 @@ export function SessionProvider({ children, projectPath }: SessionProviderProps)
     navigate('home');
   }, [navigate]);
 
+  const clearMessages = useCallback(async () => {
+    if (!activeSession) return;
+
+    const result = await clearSessionMessages(activeSession.metadata.id);
+    if (result.ok) {
+      // Reload the session to get fresh state
+      const reloadResult = await loadSession(activeSession.metadata.id);
+      if (reloadResult.ok) {
+        setActiveSession(reloadResult.data);
+      }
+      await refreshSessions();
+    } else {
+      setError(`Failed to clear messages: ${result.error.message}`);
+    }
+  }, [activeSession, refreshSessions]);
+
   const value = useMemo(
     () => ({
       projectPath,
@@ -101,6 +119,7 @@ export function SessionProvider({ children, projectPath }: SessionProviderProps)
       resumeSession,
       closeSession,
       refreshSessions,
+      clearMessages,
       setActiveSession,
       isLoading,
       error,
@@ -114,6 +133,7 @@ export function SessionProvider({ children, projectPath }: SessionProviderProps)
       resumeSession,
       closeSession,
       refreshSessions,
+      clearMessages,
       isLoading,
       error,
     ]

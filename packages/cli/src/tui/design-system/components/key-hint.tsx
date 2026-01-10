@@ -48,19 +48,6 @@ export function KeyHint({
 }
 
 /**
- * Single key with label
- */
-export interface SingleKeyHintProps {
-  keyName: string;
-  children?: ReactNode;
-  dimmed?: boolean;
-}
-
-export function SingleKeyHint({ keyName, children, dimmed }: SingleKeyHintProps) {
-  return <KeyHint keys={[keyName]} dimmed={dimmed}>{children}</KeyHint>;
-}
-
-/**
  * Key hint bar - horizontal list of hints
  */
 export interface KeyHintBarProps {

@@ -21,8 +21,6 @@
 
 export {
   spacing,
-  spacingDefaults,
-  getSpacing,
   type SpacingToken,
   type SpacingValue,
 } from './spacing.js';
@@ -33,7 +31,6 @@ export {
 
 export {
   typography,
-  getTypography,
   type TypographyStyle,
   type TypographyToken,
 } from './typography.js';
@@ -53,33 +50,18 @@ export {
 } from './borders.js';
 
 // ═══════════════════════════════════════════════════════════════
-// LAYERS
-// ═══════════════════════════════════════════════════════════════
-
-export {
-  layers,
-  getLayer,
-  isAbove,
-  sortByLayer,
-  type LayerToken,
-  type LayerValue,
-} from './layers.js';
-
-// ═══════════════════════════════════════════════════════════════
 // MOTION
 // ═══════════════════════════════════════════════════════════════
 
 export {
   motion,
   duration,
-  easing,
   spinnerConfig,
   typewriterConfig,
   pulseConfig,
   getSpinnerFrames,
   type DurationToken,
   type DurationValue,
-  type EasingToken,
   type SpinnerType,
 } from './motion.js';
 
@@ -122,7 +104,6 @@ export {
 import { spacing } from './spacing.js';
 import { typography } from './typography.js';
 import { borderStyles, borderColors } from './borders.js';
-import { layers } from './layers.js';
 import { motion } from './motion.js';
 import { colors, brandColors, PALETTES, STAR_ICONS, ROLE_COLORS } from './colors.js';
 
@@ -136,7 +117,6 @@ export const tokens = {
     styles: borderStyles,
     colors: borderColors,
   },
-  layers,
   motion,
   colors,
   brand: brandColors,

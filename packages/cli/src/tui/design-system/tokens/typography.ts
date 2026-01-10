@@ -84,10 +84,3 @@ export const typography = {
 } as const;
 
 export type TypographyToken = keyof typeof typography;
-
-/**
- * Get typography style by token name
- */
-export function getTypography(token: TypographyToken): TypographyStyle {
-  return typography[token];
-}

@@ -9,7 +9,7 @@ import { useReview } from '../review/index.js';
 import { StatusText } from '../../design-system/index.js';
 
 export function ChatScreen() {
-  const { activeSession, addMessage, closeSession, projectPath } = useAppContext();
+  const { activeSession, addMessage, closeSession, clearMessages, projectPath } = useAppContext();
   const { isReviewing, reviewStaged, reviewUnstaged } = useReview({ projectPath });
 
   const formatReviewResult = useCallback((reviewResult: ReviewResult): string => {
@@ -58,6 +58,11 @@ export function ChatScreen() {
       return;
     }
 
+    if (input === '/clear') {
+      await clearMessages();
+      return;
+    }
+
     if (input === '/review staged' || input === '/rs') {
       await addMessage({ role: 'system', content: 'Reviewing staged changes...' });
       const result = await reviewStaged();
@@ -84,7 +89,7 @@ export function ChatScreen() {
       role: 'system',
       content: `Unknown command: ${input}. Type /help for available commands.`,
     });
-  }, [activeSession, addMessage, closeSession, reviewStaged, reviewUnstaged, formatReviewResult]);
+  }, [activeSession, addMessage, closeSession, clearMessages, reviewStaged, reviewUnstaged, formatReviewResult]);
 
   useInput((input, key) => {
     if (key.escape) {

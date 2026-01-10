@@ -50,23 +50,6 @@ export type DurationToken = keyof typeof duration;
 export type DurationValue = (typeof duration)[DurationToken];
 
 /**
- * Easing functions (conceptual - terminals don't support CSS easing)
- * These describe the intended feel of animations
- */
-export const easing = {
-  /** Constant speed */
-  linear: 'linear',
-  /** Start slow, end fast */
-  easeIn: 'ease-in',
-  /** Start fast, end slow (most natural) */
-  easeOut: 'ease-out',
-  /** Slow at both ends */
-  easeInOut: 'ease-in-out',
-} as const;
-
-export type EasingToken = keyof typeof easing;
-
-/**
  * Spinner configuration
  */
 export const spinnerConfig = {
@@ -125,7 +108,6 @@ export const pulseConfig = {
  */
 export const motion = {
   duration,
-  easing,
   spinner: spinnerConfig,
   typewriter: typewriterConfig,
   pulse: pulseConfig,

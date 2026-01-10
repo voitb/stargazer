@@ -33,6 +33,7 @@ export interface AppContextValue {
   resumeSession: (sessionId: string) => Promise<void>;
   closeSession: () => void;
   refreshSessions: () => Promise<void>;
+  clearMessages: () => Promise<void>;
   // Chat
   addMessage: (message: Omit<ChatMessage, 'id' | 'timestamp'>) => Promise<void>;
   // Shared
@@ -86,6 +87,7 @@ export function useAppContext(): AppContextValue {
     resumeSession: session.resumeSession,
     closeSession: session.closeSession,
     refreshSessions: session.refreshSessions,
+    clearMessages: session.clearMessages,
     // Chat
     addMessage: chat.addMessage,
     // Shared (from session context)

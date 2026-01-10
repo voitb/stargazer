@@ -153,18 +153,3 @@ function getVariantChars(variant: DividerVariant) {
       };
   }
 }
-
-/**
- * Shorthand components for common divider types
- */
-export function StarDivider(props: Omit<DividerProps, 'variant'>) {
-  return <Divider {...props} variant="star" />;
-}
-
-export function DotDivider(props: Omit<DividerProps, 'variant'>) {
-  return <Divider {...props} variant="dots" />;
-}
-
-export function LineDivider(props: Omit<DividerProps, 'variant'>) {
-  return <Divider {...props} variant="line" />;
-}
