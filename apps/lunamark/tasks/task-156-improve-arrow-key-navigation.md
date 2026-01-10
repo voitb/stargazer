@@ -1,7 +1,7 @@
 ---
 id: task-156
 title: Improve arrow key navigation in TUI
-status: pending
+status: done
 priority: high
 labels:
   - cli

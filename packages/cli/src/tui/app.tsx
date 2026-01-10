@@ -7,6 +7,7 @@ import { hasApiKey } from './storage/api-key-store.js';
 import { ScreenRouter } from './screens/screen-router.js';
 import { useAppReview } from './hooks/use-app-review.js';
 import { useAppKeyboard } from './hooks/use-app-keyboard.js';
+import { useTokenTracking } from './hooks/use-token-tracking.js';
 import { ThemeProvider } from './design-system/index.js';
 
 interface AppContentProps {
@@ -23,9 +24,18 @@ function AppContent({ projectPath }: AppContentProps) {
     setError: setAppError,
     refreshSessions,
     sessions,
+    activeSession,
   } = useAppContext();
 
   const review = useAppReview({ projectPath });
+
+  // Track token usage for the active session
+  // Note: Sessions don't store model per-session yet, using default model
+  // TODO: Add model to SessionMetadata when multi-model support is added
+  const tokenUsage = useTokenTracking(
+    activeSession?.messages ?? [],
+    'gemini-1.5-pro'
+  );
 
   const [apiKeyStatus, setApiKeyStatus] = useState<boolean | undefined>(undefined);
 
@@ -75,6 +85,9 @@ function AppContent({ projectPath }: AppContentProps) {
         break;
       case 'review-unstaged':
         review.reviewUnstaged();
+        break;
+      case 'review-files':
+        navigate('fileSelect');
         break;
       case 'history':
         navigate('history');
@@ -128,7 +141,12 @@ function AppContent({ projectPath }: AppContentProps) {
           onMenuSelect={handleMenuSelect}
         />
       </Box>
-      <StatusBar message={statusMessage} sessionCount={sessions.length} hasApiKey={apiKeyStatus} />
+      <StatusBar
+        message={statusMessage}
+        sessionCount={sessions.length}
+        hasApiKey={apiKeyStatus}
+        tokenUsage={activeSession ? { current: tokenUsage.current, limit: tokenUsage.limit } : undefined}
+      />
     </Box>
   );
 }

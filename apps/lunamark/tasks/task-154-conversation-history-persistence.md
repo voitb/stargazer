@@ -1,7 +1,7 @@
 ---
 id: task-154
 title: Implement conversation history persistence
-status: pending
+status: done
 priority: critical
 labels:
   - cli

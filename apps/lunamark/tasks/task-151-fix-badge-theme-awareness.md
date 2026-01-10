@@ -1,7 +1,7 @@
 ---
 id: task-151
 title: Fix Badge component theme awareness
-status: pending
+status: done
 priority: critical
 labels:
   - cli

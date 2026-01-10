@@ -187,12 +187,14 @@ export {
 export {
   Toast,
   Notification,
-  useToast,
   type ToastProps,
   type ToastVariant,
   type ToastData,
   type NotificationProps,
 } from './components/toast.js';
+
+// Toast hook (extracted to hooks directory)
+export { useToast } from './hooks/use-toast.js';
 
 export {
   ProgressBar,
@@ -219,33 +221,38 @@ export {
   type SelectWithArrowsProps,
 } from './components/select-with-arrows.js';
 
+// Screen & Section titles
 export {
-  // Screen & Section titles
   ScreenTitle,
   SectionTitle,
   type ScreenTitleProps,
   type SectionTitleProps,
-  // Status text
+} from './components/titles.js';
+
+// Status text components
+export {
   StatusText,
+  SeverityText,
+  DecisionText,
+  DECISION_DISPLAY,
   type StatusTextProps,
   type StatusVariant,
-  // Label & hint text
+  type SeverityTextProps,
+  type SeverityLevel,
+  type DecisionTextProps,
+  type DecisionType,
+} from './components/status-text.js';
+
+// Label & hint text
+export {
   LabelText,
   HintText,
   CodeText,
   type LabelTextProps,
-  // Severity display
-  SeverityText,
-  type SeverityTextProps,
-  type SeverityLevel,
-  // Decision display
-  DecisionText,
-  type DecisionTextProps,
-  type DecisionType,
-  DECISION_DISPLAY,
-  // Menu icons
-  MENU_ICONS,
-} from './components/text.js';
+} from './components/labels.js';
+
+// Menu icons
+export { MENU_ICONS } from './components/icons.js';
 
 // ═══════════════════════════════════════════════════════════════
 // UTILITIES (new)

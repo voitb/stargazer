@@ -39,42 +39,49 @@ export {
 export {
   Toast,
   Notification,
-  useToast,
   type ToastProps,
   type ToastVariant,
   type ToastData,
   type NotificationProps,
 } from './toast.js';
 
+// Re-export useToast from hooks for backwards compatibility
+export { useToast } from '../hooks/use-toast.js';
+
 export * from './progress-bar.js';
 export * from './usage-display.js';
 export * from './input-field.js';
 export * from './select-with-arrows.js';
 
+// Screen & Section titles
 export {
-  // Screen & Section titles
   ScreenTitle,
   SectionTitle,
   type ScreenTitleProps,
   type SectionTitleProps,
-  // Status text
+} from './titles.js';
+
+// Status text components
+export {
   StatusText,
+  SeverityText,
+  DecisionText,
+  DECISION_DISPLAY,
   type StatusTextProps,
   type StatusVariant,
-  // Label & hint text
+  type SeverityTextProps,
+  type SeverityLevel,
+  type DecisionTextProps,
+  type DecisionType,
+} from './status-text.js';
+
+// Label & hint text
+export {
   LabelText,
   HintText,
   CodeText,
   type LabelTextProps,
-  // Severity display
-  SeverityText,
-  type SeverityTextProps,
-  type SeverityLevel,
-  // Decision display
-  DecisionText,
-  type DecisionTextProps,
-  type DecisionType,
-  DECISION_DISPLAY,
-  // Menu icons
-  MENU_ICONS,
-} from './text.js';
+} from './labels.js';
+
+// Menu icons
+export { MENU_ICONS } from './icons.js';

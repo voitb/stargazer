@@ -9,7 +9,7 @@ import {
   ModelSelectScreen,
   ApiKeySetupScreen,
 } from '../features/auth/index.js';
-import { ReviewView, ProgressPhases, PHASE_ORDER } from '../features/review/index.js';
+import { ReviewView, ProgressPhases, PHASE_ORDER, FileSelectScreen } from '../features/review/index.js';
 import { MainMenu } from '../components/index.js';
 import { getUserFriendlyError } from '../utils/error-messages.js';
 import { StatusText, HintText, ProgressBar, UsageDisplay } from '../design-system/index.js';
@@ -97,6 +97,9 @@ export function ScreenRouter({
 
     case 'modelSelect':
       return <ModelSelectScreen />;
+
+    case 'fileSelect':
+      return <FileSelectScreen />;
 
     case 'error': {
       const errorInfo = getUserFriendlyError(error || 'Unknown error');

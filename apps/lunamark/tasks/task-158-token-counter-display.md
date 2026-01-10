@@ -1,7 +1,7 @@
 ---
 id: task-158
 title: Implement token counter display in status bar
-status: pending
+status: done
 priority: high
 labels:
   - cli

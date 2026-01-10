@@ -1,7 +1,7 @@
 ---
 id: task-157
 title: Add functional chat input for LLM conversation
-status: pending
+status: done
 priority: high
 labels:
   - cli

@@ -1,7 +1,7 @@
 ---
 id: task-153
 title: Remove unused design system code
-status: pending
+status: done
 priority: medium
 labels:
   - cli

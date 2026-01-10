@@ -11,7 +11,8 @@ export type Screen =
   | 'error'
   | 'providerSelect'
   | 'apiKeySetup'
-  | 'modelSelect';
+  | 'modelSelect'
+  | 'fileSelect';
 
 export interface NavigationContextValue {
   screen: Screen;

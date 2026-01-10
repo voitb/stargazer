@@ -1,7 +1,7 @@
 ---
 id: task-159
 title: Implement slash commands (/) system
-status: pending
+status: done
 priority: high
 labels:
   - cli

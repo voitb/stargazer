@@ -1,7 +1,7 @@
 ---
 id: task-161
 title: Implement single file review mode
-status: pending
+status: done
 priority: high
 labels:
   - cli

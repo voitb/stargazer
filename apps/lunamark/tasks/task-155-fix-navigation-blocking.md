@@ -1,7 +1,7 @@
 ---
 id: task-155
 title: Fix navigation blocking after review completes
-status: pending
+status: done
 priority: critical
 labels:
   - cli

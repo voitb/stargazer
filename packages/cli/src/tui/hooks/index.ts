@@ -10,3 +10,4 @@ export { useAppKeyboard } from './use-app-keyboard.js';
 // Utility hooks
 export { useTerminalCapabilities, type TerminalCapabilities } from './use-terminal-capabilities.js';
 export { useGracefulExit } from './use-graceful-exit.js';
+export { useTokenTracking, type TokenUsage } from './use-token-tracking.js';

@@ -18,6 +18,7 @@ interface MenuOption {
 const menuOptions: MenuOption[] = [
   { label: `${MENU_ICONS.review} Review staged changes`, value: 'review-staged' },
   { label: `${MENU_ICONS.review} Review unstaged changes`, value: 'review-unstaged' },
+  { label: `${MENU_ICONS.review} Review specific files`, value: 'review-files' },
   { label: `${MENU_ICONS.discover} Discover conventions`, value: 'discover' },
   { label: `${MENU_ICONS.continue} Continue previous session`, value: 'continue' },
   { label: `${MENU_ICONS.history} Browse history`, value: 'history' },

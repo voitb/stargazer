@@ -1,7 +1,7 @@
 ---
 id: task-152
 title: Fix hardcoded colors in text.tsx DECISION_DISPLAY
-status: pending
+status: done
 priority: critical
 labels:
   - cli

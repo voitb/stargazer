@@ -1,16 +1,17 @@
-import { useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { Box, useInput } from 'ink';
 import { Spinner } from '@inkjs/ui';
 import type { ReviewResult } from '@stargazer/core';
 import { ChatView } from './components/chat-view.js';
-import { ChatInput } from './components/chat-input.js';
+import { EnhancedChatInput } from './components/enhanced-chat-input.js';
 import { useAppContext } from '../../state/app-context.js';
 import { useReview } from '../review/index.js';
 import { StatusText } from '../../design-system/index.js';
 
 export function ChatScreen() {
-  const { activeSession, addMessage, closeSession, clearMessages, projectPath } = useAppContext();
+  const { activeSession, addMessage, closeSession, clearMessages, projectPath, isLoading } = useAppContext();
   const { isReviewing, reviewStaged, reviewUnstaged } = useReview({ projectPath });
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const formatReviewResult = useCallback((reviewResult: ReviewResult): string => {
     const lines: string[] = [];
@@ -31,7 +32,7 @@ export function ChatScreen() {
     return lines.join('\n');
   }, []);
 
-  const handleCommand = useCallback(async (input: string) => {
+  const handleSubmit = useCallback(async (input: string) => {
     if (!activeSession) return;
 
     await addMessage({
@@ -40,6 +41,27 @@ export function ChatScreen() {
       command: input.startsWith('/') ? input : undefined,
     });
 
+    // Handle commands
+    if (input.startsWith('/')) {
+      await handleCommand(input);
+      return;
+    }
+
+    // For non-command messages, we could integrate LLM here
+    // For now, show a placeholder response
+    setIsProcessing(true);
+    try {
+      // TODO: Integrate with actual LLM provider
+      await addMessage({
+        role: 'system',
+        content: 'Chat with LLM is not yet implemented. Use /help for available commands.',
+      });
+    } finally {
+      setIsProcessing(false);
+    }
+  }, [activeSession, addMessage]);
+
+  const handleCommand = useCallback(async (input: string) => {
     if (input === '/exit' || input === '/quit') {
       closeSession();
       return;
@@ -65,22 +87,32 @@ export function ChatScreen() {
 
     if (input === '/review staged' || input === '/rs') {
       await addMessage({ role: 'system', content: 'Reviewing staged changes...' });
-      const result = await reviewStaged();
-      if (result) {
-        await addMessage({ role: 'assistant', content: formatReviewResult(result) });
-      } else {
-        await addMessage({ role: 'system', content: 'Review failed. Please check your API key and try again.' });
+      setIsProcessing(true);
+      try {
+        const result = await reviewStaged();
+        if (result) {
+          await addMessage({ role: 'assistant', content: formatReviewResult(result) });
+        } else {
+          await addMessage({ role: 'system', content: 'Review failed. Please check your API key and try again.' });
+        }
+      } finally {
+        setIsProcessing(false);
       }
       return;
     }
 
     if (input === '/review unstaged' || input === '/ru') {
       await addMessage({ role: 'system', content: 'Reviewing unstaged changes...' });
-      const result = await reviewUnstaged();
-      if (result) {
-        await addMessage({ role: 'assistant', content: formatReviewResult(result) });
-      } else {
-        await addMessage({ role: 'system', content: 'Review failed. Please check your API key and try again.' });
+      setIsProcessing(true);
+      try {
+        const result = await reviewUnstaged();
+        if (result) {
+          await addMessage({ role: 'assistant', content: formatReviewResult(result) });
+        } else {
+          await addMessage({ role: 'system', content: 'Review failed. Please check your API key and try again.' });
+        }
+      } finally {
+        setIsProcessing(false);
       }
       return;
     }
@@ -89,7 +121,7 @@ export function ChatScreen() {
       role: 'system',
       content: `Unknown command: ${input}. Type /help for available commands.`,
     });
-  }, [activeSession, addMessage, closeSession, clearMessages, reviewStaged, reviewUnstaged, formatReviewResult]);
+  }, [addMessage, closeSession, clearMessages, reviewStaged, reviewUnstaged, formatReviewResult]);
 
   useInput((input, key) => {
     if (key.escape) {
@@ -105,6 +137,8 @@ export function ChatScreen() {
     );
   }
 
+  const showLoading = isReviewing || isProcessing || isLoading;
+
   return (
     <Box flexDirection="column" flexGrow={1}>
       <Box flexDirection="column" flexGrow={1} overflow="hidden">
@@ -115,7 +149,12 @@ export function ChatScreen() {
           </Box>
         )}
       </Box>
-      <ChatInput onSubmit={handleCommand} placeholder="Type /help for commands..." />
+      <EnhancedChatInput
+        onSubmit={handleSubmit}
+        isLoading={showLoading}
+        disabled={showLoading}
+        placeholder="Type /help for commands..."
+      />
     </Box>
   );
 }

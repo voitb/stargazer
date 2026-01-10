@@ -1,7 +1,7 @@
 ---
 id: task-160
 title: Implement file tagging with @ symbol
-status: pending
+status: done
 priority: high
 labels:
   - cli
