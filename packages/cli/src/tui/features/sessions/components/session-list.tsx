@@ -1,7 +1,7 @@
 import { Box, Text } from 'ink';
-import { Select } from '@inkjs/ui';
 import { formatDistanceToNow } from 'date-fns';
 import type { SessionIndexEntry } from '../../../storage/types.js';
+import { SelectWithArrows } from '../../../design-system/index.js';
 
 interface SessionListProps {
   sessions: readonly SessionIndexEntry[];
@@ -15,7 +15,7 @@ export function SessionList({ sessions, onSelect, onBack }: SessionListProps) {
       <Box flexDirection="column" padding={1}>
         <Text dimColor>No previous sessions found.</Text>
         <Box marginTop={1}>
-          <Text dimColor>Press ESC to go back</Text>
+          <Text dimColor>←/ESC to go back</Text>
         </Box>
       </Box>
     );
@@ -41,7 +41,10 @@ export function SessionList({ sessions, onSelect, onBack }: SessionListProps) {
     <Box flexDirection="column" padding={1}>
       <Text bold>Previous Sessions</Text>
       <Box marginTop={1}>
-        <Select options={options} onChange={handleSelect} />
+        <SelectWithArrows options={options} onSelect={handleSelect} />
+      </Box>
+      <Box marginTop={1}>
+        <Text dimColor>↑↓ navigate • →/Enter select • ←/ESC back</Text>
       </Box>
     </Box>
   );

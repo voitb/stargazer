@@ -29,3 +29,14 @@ export {
   getTimeoutLabel,
   type TimeoutOption,
 } from './settings.js';
+
+// Keymaps
+export {
+  DEFAULT_KEYMAP,
+  QUICK_SELECT_KEYS,
+  matchesAction,
+  getQuickSelectIndex,
+  type KeyAction,
+  type KeyBinding,
+  type KeymapConfig,
+} from './keymaps.js';

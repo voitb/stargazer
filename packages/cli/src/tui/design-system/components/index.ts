@@ -49,6 +49,7 @@ export {
 export * from './progress-bar.js';
 export * from './usage-display.js';
 export * from './input-field.js';
+export * from './select-with-arrows.js';
 
 export {
   // Screen & Section titles
