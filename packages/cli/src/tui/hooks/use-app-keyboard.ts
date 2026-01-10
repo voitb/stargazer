@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { useApp, useInput } from 'ink';
 import type { Screen } from '../state/navigation-context.js';
+import { matchesAction } from '../config/keymaps.js';
 
 interface UseAppKeyboardOptions {
   screen: Screen;
@@ -13,7 +14,11 @@ interface UseAppKeyboardOptions {
 
 /**
  * Centralized keyboard handling for the app.
- * Handles Ctrl+C, Q to quit, ESC/B for navigation.
+ *
+ * Supports both standard and vim-style navigation:
+ * - Ctrl+C: Exit (global)
+ * - Q: Quit (home screen only)
+ * - ESC/B/←/h: Back navigation
  */
 export function useAppKeyboard({
   screen,
@@ -28,26 +33,26 @@ export function useAppKeyboard({
   useInput(
     useCallback(
       (input, key) => {
-        // Global: Ctrl+C exits
+        // Global: Ctrl+C always exits
         if (input === 'c' && key.ctrl) {
           exit();
           return;
         }
 
-        // Home screen: Q exits
-        if (screen === 'home' && input === 'q') {
+        // Home screen: Q exits (using matchesAction for consistency)
+        if (screen === 'home' && matchesAction(input, key, 'app.quit')) {
           exit();
           return;
         }
 
         // Loading screen: ESC cancels review
-        if (screen === 'loading' && key.escape) {
+        if (screen === 'loading' && matchesAction(input, key, 'app.cancel')) {
           onCancelReview();
           return;
         }
 
-        // Error screen: ESC/B goes back (context-dependent)
-        if (screen === 'error' && (key.escape || input === 'b')) {
+        // Error screen: Back navigation (context-dependent destination)
+        if (screen === 'error' && matchesAction(input, key, 'nav.back')) {
           if (apiKeyStatus) {
             onGoToMenu();
           } else {
@@ -56,9 +61,9 @@ export function useAppKeyboard({
           return;
         }
 
-        // Standard screens: ESC/B goes back in history
-        const backScreens: Screen[] = ['review', 'settings', 'help', 'history'];
-        if (backScreens.includes(screen) && (key.escape || input === 'b')) {
+        // Standard screens: Back navigation (ESC/B/←/h)
+        const backScreens: Screen[] = ['review', 'settings', 'help', 'history', 'chat'];
+        if (backScreens.includes(screen) && matchesAction(input, key, 'nav.back')) {
           onGoBack();
           return;
         }

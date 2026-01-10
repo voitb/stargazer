@@ -214,6 +214,12 @@ export {
 } from './components/input-field.js';
 
 export {
+  SelectWithArrows,
+  type SelectOption,
+  type SelectWithArrowsProps,
+} from './components/select-with-arrows.js';
+
+export {
   // Screen & Section titles
   ScreenTitle,
   SectionTitle,

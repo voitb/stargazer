@@ -124,7 +124,7 @@ export function useReview({ projectPath }: UseReviewOptions): UseReviewReturn {
 
   const cancel = useCallback(() => {
     abortControllerRef.current?.abort();
-    dispatch({ type: 'CANCEL' });
+    dispatch({ type: 'RESET' });
   }, []);
 
   const reviewStaged = useCallback(() => runReview(true), [runReview]);

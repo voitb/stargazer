@@ -1,6 +1,11 @@
 import { Box, Text } from 'ink';
-import { Select } from '@inkjs/ui';
-import { gradientLine, Divider, MENU_ICONS, useTheme } from '../../design-system/index.js';
+import {
+  gradientLine,
+  Divider,
+  MENU_ICONS,
+  useTheme,
+  SelectWithArrows,
+} from '../../design-system/index.js';
 
 interface MenuOption {
   label: string;
@@ -50,7 +55,10 @@ export function MainMenu({ onSelect }: MainMenuProps) {
       <Box marginY={1}>
         <Divider variant="dots" dimmed />
       </Box>
-      <Select options={menuOptions} onChange={onSelect} />
+      <SelectWithArrows options={menuOptions} onSelect={onSelect} />
+      <Box marginTop={1}>
+        <Text dimColor>↑↓/jk navigate • →/Enter/l select • ←/ESC/h back • 1-9 quick • Q quit</Text>
+      </Box>
     </Box>
   );
 }
@@ -69,7 +77,7 @@ export function CompactMenu({ onSelect }: MainMenuProps) {
 
   return (
     <Box flexDirection="column" paddingX={1}>
-      <Select options={compactOptions} onChange={onSelect} />
+      <SelectWithArrows options={compactOptions} onSelect={onSelect} />
     </Box>
   );
 }
