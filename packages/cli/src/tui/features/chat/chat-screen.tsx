@@ -1,36 +1,59 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { Box, useInput } from 'ink';
 import { Spinner } from '@inkjs/ui';
-import type { ReviewResult } from '@stargazer/core';
 import { ChatView } from './components/chat-view.js';
 import { EnhancedChatInput } from './components/enhanced-chat-input.js';
 import { useAppContext } from '../../state/app-context.js';
-import { useReview } from '../review/index.js';
 import { StatusText } from '../../design-system/index.js';
+import { executeCommand, isCommand, type CommandContext } from './commands/index.js';
+import type { ReviewActions } from '../review/types.js';
+import { formatReviewResult } from '../review/utils/format-result.js';
 
-export function ChatScreen() {
-  const { activeSession, addMessage, closeSession, clearMessages, projectPath, isLoading } = useAppContext();
-  const { isReviewing, reviewStaged, reviewUnstaged } = useReview({ projectPath });
+interface ChatScreenProps {
+  reviewActions: ReviewActions;
+}
+
+export function ChatScreen({ reviewActions }: ChatScreenProps) {
+  const { activeSession, addMessage, closeSession, clearMessages, isLoading, navigate, projectPath } = useAppContext();
+  const { isReviewing, reviewStaged, reviewUnstaged } = reviewActions;
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const formatReviewResult = useCallback((reviewResult: ReviewResult): string => {
-    const lines: string[] = [];
-    if (reviewResult.decision) lines.push(`Decision: ${reviewResult.decision}`);
-    if (reviewResult.summary) lines.push(`Summary: ${reviewResult.summary}`);
+  // Create command context for the executor
+  const commandContext: CommandContext = useMemo(() => ({
+    navigate,
+    clearMessages,
+    addSystemMessage: async (content: string) => {
+      await addMessage({ role: 'system', content });
+    },
+    closeSession,
+    projectPath,
+  }), [navigate, clearMessages, addMessage, closeSession, projectPath]);
 
-    if (reviewResult.issues && reviewResult.issues.length > 0) {
-      lines.push(`\nIssues found: ${reviewResult.issues.length}`);
-      reviewResult.issues.forEach((issue, i) => {
-        lines.push(`\n${i + 1}. [${issue.severity || 'info'}] ${issue.file || 'unknown'}:${issue.line || 0}`);
-        if (issue.message) lines.push(`   ${issue.message}`);
-        if (issue.suggestion) lines.push(`   Suggestion: ${issue.suggestion}`);
-      });
-    } else {
-      lines.push('\nNo issues found!');
+  // Handle special command outputs (e.g., __COMMAND__:review:staged)
+  const handleSpecialCommand = useCallback(async (output: string): Promise<boolean> => {
+    if (!output.startsWith('__COMMAND__:')) return false;
+
+    const [, action, param] = output.split(':');
+
+    if (action === 'review') {
+      const reviewFn = param === 'unstaged' ? reviewUnstaged : reviewStaged;
+      await addMessage({ role: 'system', content: `Reviewing ${param || 'staged'} changes...` });
+      setIsProcessing(true);
+      try {
+        const result = await reviewFn();
+        if (result) {
+          await addMessage({ role: 'assistant', content: formatReviewResult(result) });
+        } else {
+          await addMessage({ role: 'system', content: 'Review failed. Please check your API key and try again.' });
+        }
+      } finally {
+        setIsProcessing(false);
+      }
+      return true;
     }
 
-    return lines.join('\n');
-  }, []);
+    return false;
+  }, [reviewStaged, reviewUnstaged, addMessage]);
 
   const handleSubmit = useCallback(async (input: string) => {
     if (!activeSession) return;
@@ -38,17 +61,26 @@ export function ChatScreen() {
     await addMessage({
       role: 'user',
       content: input,
-      command: input.startsWith('/') ? input : undefined,
+      command: isCommand(input) ? input : undefined,
     });
 
-    // Handle commands
-    if (input.startsWith('/')) {
-      await handleCommand(input);
+    // Handle commands using the command system
+    if (isCommand(input)) {
+      const result = await executeCommand(input, commandContext);
+
+      if (result.success && result.output) {
+        // Check for special command outputs
+        const wasSpecial = await handleSpecialCommand(result.output);
+        if (!wasSpecial) {
+          await addMessage({ role: 'system', content: result.output });
+        }
+      } else if (!result.success && result.error) {
+        await addMessage({ role: 'system', content: result.error });
+      }
       return;
     }
 
     // For non-command messages, we could integrate LLM here
-    // For now, show a placeholder response
     setIsProcessing(true);
     try {
       // TODO: Integrate with actual LLM provider
@@ -59,69 +91,7 @@ export function ChatScreen() {
     } finally {
       setIsProcessing(false);
     }
-  }, [activeSession, addMessage]);
-
-  const handleCommand = useCallback(async (input: string) => {
-    if (input === '/exit' || input === '/quit') {
-      closeSession();
-      return;
-    }
-
-    if (input === '/help') {
-      await addMessage({
-        role: 'system',
-        content: `Available commands:
-/review staged - Review staged git changes
-/review unstaged - Review unstaged git changes
-/clear - Clear chat history
-/exit - Exit to main menu
-/help - Show this help`,
-      });
-      return;
-    }
-
-    if (input === '/clear') {
-      await clearMessages();
-      return;
-    }
-
-    if (input === '/review staged' || input === '/rs') {
-      await addMessage({ role: 'system', content: 'Reviewing staged changes...' });
-      setIsProcessing(true);
-      try {
-        const result = await reviewStaged();
-        if (result) {
-          await addMessage({ role: 'assistant', content: formatReviewResult(result) });
-        } else {
-          await addMessage({ role: 'system', content: 'Review failed. Please check your API key and try again.' });
-        }
-      } finally {
-        setIsProcessing(false);
-      }
-      return;
-    }
-
-    if (input === '/review unstaged' || input === '/ru') {
-      await addMessage({ role: 'system', content: 'Reviewing unstaged changes...' });
-      setIsProcessing(true);
-      try {
-        const result = await reviewUnstaged();
-        if (result) {
-          await addMessage({ role: 'assistant', content: formatReviewResult(result) });
-        } else {
-          await addMessage({ role: 'system', content: 'Review failed. Please check your API key and try again.' });
-        }
-      } finally {
-        setIsProcessing(false);
-      }
-      return;
-    }
-
-    await addMessage({
-      role: 'system',
-      content: `Unknown command: ${input}. Type /help for available commands.`,
-    });
-  }, [addMessage, closeSession, clearMessages, reviewStaged, reviewUnstaged, formatReviewResult]);
+  }, [activeSession, addMessage, commandContext, handleSpecialCommand]);
 
   useInput((input, key) => {
     if (key.escape) {

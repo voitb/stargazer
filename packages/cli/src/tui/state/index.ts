@@ -1,4 +1,17 @@
-// Global state - used by all screens
+/**
+ * Global State Module
+ *
+ * Provides app-level state management for the TUI:
+ * - AppProvider: Combined provider for all app state
+ * - useAppContext: Primary hook for accessing app state
+ *
+ * For performance-critical components, use individual hooks:
+ * - useNavigation() - only re-renders on navigation changes
+ * - useSession() - only re-renders on session changes (from features/sessions)
+ * - useChat() - only re-renders on message changes (from features/chat)
+ */
+
+// Navigation context
 export {
   NavigationProvider,
   useNavigation,
@@ -6,26 +19,9 @@ export {
   type Screen,
 } from './navigation-context.js';
 
-// Backwards-compatible combined exports
+// Combined provider and hook (primary API)
 export {
   AppProvider,
   useAppContext,
   type AppContextValue,
 } from './app-context.js';
-
-// Feature contexts are now exported from their features:
-// import { useChat } from '../features/chat';
-// import { useSession } from '../features/sessions';
-
-// Re-exports for backwards compatibility (deprecated - use feature imports)
-export {
-  SessionProvider,
-  useSession,
-  type SessionContextValue,
-} from '../features/sessions/session.context.js';
-
-export {
-  ChatProvider,
-  useChat,
-  type ChatContextValue,
-} from '../features/chat/chat.context.js';

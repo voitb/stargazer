@@ -10,6 +10,7 @@ import { gradientLine } from '../gradient.js';
 import { useTheme } from '../primitives/theme-provider.js';
 import { STAR_ICONS } from '../palettes.js';
 import { ProgressBar } from './progress-bar.js';
+import { formatTokenCount } from '../../utils/token-counter.js';
 
 export interface UsageDisplayProps {
   /** Current usage value */
@@ -36,7 +37,7 @@ export interface UsageDisplayProps {
  * ```tsx
  * <UsageDisplay current={1500} limit={4000} label="tokens" />
  * // Output:
- * // ✦ 1,500 / 4,000 tokens
+ * // ✦ 1.5K / 4K tokens
  * // ████████████░░░░░░░░░░░░ 38%
  * ```
  */
@@ -58,9 +59,9 @@ export function UsageDisplay({
     return (
       <Box gap={1}>
         <Text>
-          {gradientLine(`${STAR_ICONS.filled} ${current.toLocaleString()}`, { palette: usagePalette })}
+          {gradientLine(`${STAR_ICONS.filled} ${formatTokenCount(current)}`, { palette: usagePalette })}
         </Text>
-        <Text dimColor>/ {limit.toLocaleString()}</Text>
+        <Text dimColor>/ {formatTokenCount(limit)}</Text>
         <ProgressBar
           current={current}
           total={limit}
@@ -77,9 +78,9 @@ export function UsageDisplay({
     <Box flexDirection="column" gap={0}>
       <Box gap={1}>
         <Text>
-          {gradientLine(`${STAR_ICONS.filled} ${current.toLocaleString()}`, { palette: usagePalette })}
+          {gradientLine(`${STAR_ICONS.filled} ${formatTokenCount(current)}`, { palette: usagePalette })}
         </Text>
-        <Text dimColor>/ {limit.toLocaleString()} {label}</Text>
+        <Text dimColor>/ {formatTokenCount(limit)} {label}</Text>
       </Box>
       {showProgress && (
         <ProgressBar
@@ -104,7 +105,7 @@ export function TokenBadge({ current, limit }: Pick<UsageDisplayProps, 'current'
 
   return (
     <Text>
-      {gradientLine(`${STAR_ICONS.outline} ${current.toLocaleString()}`, { palette })}
+      {gradientLine(`${STAR_ICONS.outline} ${formatTokenCount(current)}`, { palette })}
     </Text>
   );
 }

@@ -48,10 +48,30 @@ export {
 // Re-export useToast from hooks for backwards compatibility
 export { useToast } from '../hooks/use-toast.js';
 
-export * from './progress-bar.js';
-export * from './usage-display.js';
-export * from './input-field.js';
-export * from './select-with-arrows.js';
+export {
+  ProgressBar,
+  CompactProgressBar,
+  ProgressPercent,
+  type ProgressBarProps,
+} from './progress-bar.js';
+
+export {
+  UsageDisplay,
+  TokenBadge,
+  type UsageDisplayProps,
+} from './usage-display.js';
+
+export {
+  InputField,
+  InlineInput,
+  type InputFieldProps,
+} from './input-field.js';
+
+export {
+  SelectWithArrows,
+  type SelectOption,
+  type SelectWithArrowsProps,
+} from './select-with-arrows.js';
 
 // Screen & Section titles
 export {

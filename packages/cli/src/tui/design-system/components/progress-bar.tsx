@@ -8,6 +8,7 @@ import { Box, Text } from 'ink';
 import { gradientLine } from '../gradient.js';
 import { type PaletteName } from '../palettes.js';
 import { useTheme } from '../primitives/theme-provider.js';
+import { formatTokenCount } from '../../utils/token-counter.js';
 
 export interface ProgressBarProps {
   /** Current value */
@@ -61,7 +62,7 @@ export function ProgressBar({
     <Box gap={1}>
       {showLabel && (
         <Text dimColor>
-          {safeCurrent.toLocaleString()}/{safeTotal.toLocaleString()}
+          {formatTokenCount(safeCurrent)}/{formatTokenCount(safeTotal)}
         </Text>
       )}
       <Text>{gradientLine(filledBar, { palette: activePalette })}</Text>

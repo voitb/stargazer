@@ -48,7 +48,74 @@
 // TOKENS
 // ═══════════════════════════════════════════════════════════════
 
-export * from './tokens/index.js';
+// Spacing
+export {
+  spacing,
+  type SpacingToken,
+  type SpacingValue,
+} from './tokens/spacing.js';
+
+// Typography
+export {
+  typography,
+  type TypographyStyle,
+  type TypographyToken,
+} from './tokens/typography.js';
+
+// Borders
+export {
+  borderStyles,
+  borderColors,
+  borderPresets,
+  dividerChars,
+  createDivider,
+  type BorderStyle,
+  type BorderColor,
+} from './tokens/borders.js';
+
+// Motion
+export {
+  motion,
+  duration,
+  spinnerConfig,
+  typewriterConfig,
+  pulseConfig,
+  getSpinnerFrames,
+  type DurationToken,
+  type DurationValue,
+  type SpinnerType,
+} from './tokens/motion.js';
+
+// Colors
+export {
+  colors,
+  surfaceColors,
+  textColors,
+  borderColorsMap,
+  statusColors,
+  brandColors,
+  getThemeColors,
+  ROLE_COLORS,
+  getRoleColor,
+  type ThemeColors,
+  type StatusType,
+  type MessageRole,
+  PALETTES,
+  THEMES,
+  DEFAULT_PALETTE,
+  STAR_ICONS,
+  STELLAR,
+  MOONLIGHT,
+  DAYLIGHT,
+  DUSK,
+  type Palette,
+  type PaletteName,
+  type ThemeName,
+  type RGB,
+} from './tokens/colors.js';
+
+// Combined tokens object
+export { tokens, type Tokens } from './tokens/index.js';
 
 // ═══════════════════════════════════════════════════════════════
 // PRIMITIVES (existing + new)

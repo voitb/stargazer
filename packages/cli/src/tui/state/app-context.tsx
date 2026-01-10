@@ -10,15 +10,17 @@ import { SessionProvider, useSession } from '../features/sessions/session.contex
 import { ChatProvider, useChat } from '../features/chat/chat.context.js';
 import type { SessionData, SessionIndexEntry, ChatMessage } from '../storage/types.js';
 
-// Re-export types for backwards compatibility
 export type { Screen };
 
 /**
- * Combined context value for backwards compatibility.
- * New code should use the individual hooks:
- * - useNavigation() for screen navigation
- * - useSession() for session management
- * - useChat() for chat messages
+ * Combined context value providing unified access to all app state.
+ *
+ * This is the primary API for accessing app state throughout the TUI.
+ * For performance-critical components that need selective re-renders,
+ * consider using the individual hooks instead:
+ * - useNavigation() - only re-renders on navigation changes
+ * - useSession() - only re-renders on session changes
+ * - useChat() - only re-renders on message changes
  */
 export interface AppContextValue {
   // Navigation
@@ -49,22 +51,43 @@ interface AppProviderProps {
 }
 
 /**
- * Combined provider that wraps all three focused providers.
- * This maintains backwards compatibility with existing code.
+ * Internal wrapper that passes session data to ChatProvider.
+ * This bridges the session and chat contexts without cross-feature imports.
+ */
+function ChatProviderWrapper({ children }: { children: ReactNode }) {
+  const session = useSession();
+  return (
+    <ChatProvider
+      session={{
+        activeSession: session.activeSession,
+        setActiveSession: session.setActiveSession,
+        setError: session.setError,
+      }}
+    >
+      {children}
+    </ChatProvider>
+  );
+}
+
+/**
+ * Combined provider that composes navigation, session, and chat contexts.
+ * Use this at the app root to provide state to all screens.
  */
 export function AppProvider({ children, projectPath }: AppProviderProps) {
   return (
     <NavigationProvider>
       <SessionProvider projectPath={projectPath}>
-        <ChatProvider>{children}</ChatProvider>
+        <ChatProviderWrapper>{children}</ChatProviderWrapper>
       </SessionProvider>
     </NavigationProvider>
   );
 }
 
 /**
- * Combined hook for backwards compatibility.
- * New code should prefer the individual hooks for better performance:
+ * Primary hook for accessing app state.
+ *
+ * Provides unified access to navigation, session, and chat state.
+ * For performance-critical components, use individual hooks instead:
  * - useNavigation() - only re-renders on navigation changes
  * - useSession() - only re-renders on session changes
  * - useChat() - only re-renders on message changes

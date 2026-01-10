@@ -7,9 +7,8 @@ import {
   useMemo,
   type ReactNode,
 } from 'react';
-import type { ChatMessage } from '../../storage/types.js';
+import type { ChatMessage, SessionData } from '../../storage/types.js';
 import { addMessageToSession, loadSession } from '../../storage/session-store.js';
-import { useSession } from '../sessions/session.context.js';
 
 export interface ChatContextValue {
   messages: readonly ChatMessage[];
@@ -18,12 +17,23 @@ export interface ChatContextValue {
 
 const ChatContext = createContext<ChatContextValue | null>(null);
 
-interface ChatProviderProps {
-  children: ReactNode;
+/**
+ * Session interface that ChatProvider needs.
+ * Passed from the app layer to avoid cross-feature imports.
+ */
+interface SessionInterface {
+  activeSession: SessionData | null;
+  setActiveSession: (session: SessionData | null) => void;
+  setError: (error: string | null) => void;
 }
 
-export function ChatProvider({ children }: ChatProviderProps) {
-  const { activeSession, setActiveSession, setError } = useSession();
+interface ChatProviderProps {
+  children: ReactNode;
+  session: SessionInterface;
+}
+
+export function ChatProvider({ children, session }: ChatProviderProps) {
+  const { activeSession, setActiveSession, setError } = session;
 
   const messages = activeSession?.messages ?? [];
 

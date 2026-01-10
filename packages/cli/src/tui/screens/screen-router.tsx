@@ -15,7 +15,7 @@ import { getUserFriendlyError } from '../utils/error-messages.js';
 import { StatusText, HintText, ProgressBar, UsageDisplay } from '../design-system/index.js';
 import type { Screen } from '../state/navigation-context.js';
 import type { ReviewResult } from '@stargazer/core';
-import type { ReviewPhase } from '../features/review/types.js';
+import type { ReviewPhase, ReviewActions } from '../features/review/types.js';
 
 interface ScreenRouterProps {
   screen: Screen;
@@ -26,6 +26,7 @@ interface ScreenRouterProps {
     elapsedTime: number;
     timeout: number;
   };
+  reviewActions: ReviewActions;
   error: string | null;
   onMenuSelect: (value: string) => void;
 }
@@ -33,6 +34,7 @@ interface ScreenRouterProps {
 export function ScreenRouter({
   screen,
   review,
+  reviewActions,
   error,
   onMenuSelect,
 }: ScreenRouterProps) {
@@ -41,7 +43,7 @@ export function ScreenRouter({
       return <HomeScreen onSelect={onMenuSelect} />;
 
     case 'chat':
-      return <ChatScreen />;
+      return <ChatScreen reviewActions={reviewActions} />;
 
     case 'loading': {
       const completedCount = review.completedPhases.length;

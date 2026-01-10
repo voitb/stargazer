@@ -4,8 +4,10 @@
  * Defines all available slash commands and their handlers.
  */
 
+import type { Screen } from '../../../state/navigation-context.js';
+
 export interface CommandContext {
-  navigate: (screen: string) => void;
+  navigate: (screen: Screen) => void;
   clearMessages: () => Promise<void>;
   addSystemMessage: (content: string) => Promise<void>;
   closeSession: () => void;

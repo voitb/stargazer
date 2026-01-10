@@ -1,6 +1,16 @@
 import type { ReviewResult } from '@stargazer/core';
 
 /**
+ * Actions available for triggering code reviews.
+ * Used by chat-screen and screen-router to pass review capabilities.
+ */
+export interface ReviewActions {
+  reviewStaged: () => Promise<ReviewResult | null>;
+  reviewUnstaged: () => Promise<ReviewResult | null>;
+  isReviewing: boolean;
+}
+
+/**
  * Phases of the review process.
  */
 export type ReviewPhase = 'preparing' | 'fetching-diff' | 'analyzing' | 'parsing';
