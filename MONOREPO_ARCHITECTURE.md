@@ -3,7 +3,7 @@
 Architectural guidelines for the Stargazer monorepo. Optimized for AI agents and developer onboarding.
 
 > For React/TypeScript patterns, see [ARCHITECTURE_RULES.md](./ARCHITECTURE_RULES.md)
-> For CLI/TUI patterns, see [packages/cli/CLI_ARCHITECTURE.md](./packages/cli/CLI_ARCHITECTURE.md)
+> For CLI/TUI patterns, see [apps/cli/CLI_ARCHITECTURE.md](./apps/cli/CLI_ARCHITECTURE.md)
 
 ---
 
@@ -68,7 +68,7 @@ stargazer-monorepo/
 │   │   ├── package.json
 │   │   └── tsconfig.json
 │   │
-│   ├── cli/                        # @stargazer/cli - Interactive TUI
+│   ├── cli/                        # cli - Interactive TUI
 │   │   ├── src/
 │   │   │   ├── commands/           # Non-interactive commands
 │   │   │   └── tui/                # Ink-based interactive UI
@@ -103,7 +103,7 @@ stargazer-monorepo/
 │
 ├── ARCHITECTURE_RULES.md           # React/TypeScript patterns
 ├── MONOREPO_ARCHITECTURE.md        # This file - monorepo patterns
-└── CLI_ARCHITECTURE.md             # (in packages/cli) TUI patterns
+└── CLI_ARCHITECTURE.md             # (in apps/cli) TUI patterns
 ```
 
 ### Directory Naming Conventions
@@ -146,7 +146,7 @@ Reusable libraries shared across apps. **May be published** to npm.
 | Package | npm Name | Purpose | Publishable |
 |---------|----------|---------|-------------|
 | `core` | `@stargazer/core` | Core business logic, API clients, utilities | Yes |
-| `cli` | `@stargazer/cli` | Interactive TUI with Ink | Yes |
+| `cli` | `cli` | Interactive TUI with Ink | Yes |
 | `action` | `@stargazer/action` | GitHub Action entrypoint | No (bundled) |
 | `tooling/typescript` | `@repo/typescript` | Shared TypeScript configs | No (internal) |
 
@@ -189,7 +189,7 @@ Packages that are never published, used only within the monorepo.
                             ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │                        packages/                                 │
-│              @stargazer/core, @stargazer/cli, etc.              │
+│              @stargazer/core, cli, etc.              │
 │                 Shared libraries, importable                     │
 └───────────────────────────┬─────────────────────────────────────┘
                             │ imports from
@@ -234,7 +234,7 @@ Each package should have ONE clear purpose:
 ```
 # GOOD: Clear boundaries
 @stargazer/core     → Business logic, API clients
-@stargazer/cli      → Terminal UI, user interaction
+cli      → Terminal UI, user interaction
 @stargazer/action   → GitHub Action integration
 
 # BAD: Mixed responsibilities
@@ -486,12 +486,12 @@ Each package extends the base:
 The `^` prefix means "run this task in dependencies first":
 
 ```
-@stargazer/cli depends on @stargazer/core
+cli depends on @stargazer/core
                     │
                     ▼
         turbo build runs:
         1. Build @stargazer/core first
-        2. Then build @stargazer/cli
+        2. Then build cli
 ```
 
 ### Cache Behavior
@@ -522,7 +522,7 @@ pnpm test               # Test all packages
 pnpm dev                # Dev mode for all
 
 # Single package (via filter)
-pnpm --filter @stargazer/cli build
+pnpm --filter cli build
 pnpm --filter lunamark dev
 pnpm --filter @stargazer/core test
 
@@ -537,7 +537,7 @@ pnpm lunamark           # Dev lunamark app
 
 | Pattern | Matches |
 |---------|---------|
-| `@stargazer/cli` | Exact package name |
+| `cli` | Exact package name |
 | `@stargazer/*` | All packages in namespace |
 | `lunamark...` | Package and its dependencies |
 | `...lunamark` | Package and its dependents |
@@ -547,13 +547,13 @@ pnpm lunamark           # Dev lunamark app
 
 ```bash
 # Add to specific package
-pnpm --filter @stargazer/cli add ink
+pnpm --filter cli add ink
 
 # Add as dev dependency
-pnpm --filter @stargazer/cli add -D @types/node
+pnpm --filter cli add -D @types/node
 
 # Add internal dependency
-pnpm --filter @stargazer/cli add @stargazer/core
+pnpm --filter cli add @stargazer/core
 
 # Add to root (workspace tools only)
 pnpm add -D -w turbo
@@ -835,8 +835,8 @@ import { helper } from "@stargazer/core";
 ### ❌ Circular Dependencies
 
 ```
-@stargazer/core imports from @stargazer/cli
-@stargazer/cli imports from @stargazer/core
+@stargazer/core imports from cli
+cli imports from @stargazer/core
               ↑___________________________|
 
 // This will break builds and cause infinite loops
@@ -938,7 +938,7 @@ pnpm --filter lunamark dev        # Start specific app
 
 # Building
 pnpm build                        # Build all
-pnpm --filter @stargazer/cli build
+pnpm --filter cli build
 
 # Testing
 pnpm test                         # Test all
@@ -965,6 +965,6 @@ pnpm install                      # Install/link all
 | Document | Scope | Location |
 |----------|-------|----------|
 | `ARCHITECTURE_RULES.md` | React/TypeScript patterns | Root |
-| `CLI_ARCHITECTURE.md` | CLI/TUI patterns | `packages/cli/` |
+| `CLI_ARCHITECTURE.md` | CLI/TUI patterns | `apps/cli/` |
 | `CLAUDE.md` | UI component patterns | `apps/lunamark/packages/ui/` |
 | `MONOREPO_ARCHITECTURE.md` | Monorepo structure (this file) | Root |
